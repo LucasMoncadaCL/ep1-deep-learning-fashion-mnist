@@ -35,10 +35,17 @@ def load_config(config_path: str | Path) -> dict:
         "experiment_id", "seed", "validation_fraction", "hidden_layers",
         "hidden_activation", "dropout", "batch_normalization", "l2_strength",
         "optimizer", "learning_rate", "loss", "batch_size", "epochs",
+        "output_units", "output_activation", "label_encoding",
     }
     missing = required.difference(config)
     if missing:
         raise ValueError(f"Configuración incompleta; faltan: {', '.join(sorted(missing))}")
+    if config["output_units"] != 10 or config["output_activation"] != "softmax":
+        raise ValueError("La configuración requiere 10 salidas Softmax para Fashion-MNIST")
+    if config["label_encoding"] != "one_hot":
+        raise ValueError("El pipeline actual requiere etiquetas one-hot")
+    if config["loss"] not in {"categorical_crossentropy", "mse"}:
+        raise ValueError("La loss debe ser categorical_crossentropy o mse en este pipeline")
     return config
 
 
@@ -66,6 +73,23 @@ def plot_history(history: dict[str, list[float]], *, experiment_id: str, output_
         axis.grid(alpha=0.25)
     figure.suptitle(f"{experiment_id} — curvas de entrenamiento")
     figure.tight_layout()
+    figure.savefig(output_path, dpi=160, bbox_inches="tight")
+    plt.close(figure)
+
+
+def plot_validation_comparison(
+    histories: dict[str, str | Path], *, metric: str, output_path: str | Path
+) -> None:
+    """Compara una métrica de validation desde historiales CSV identificados."""
+    figure, axis = plt.subplots(figsize=(8, 4.5))
+    for experiment_id, history_path in histories.items():
+        history = pd.read_csv(history_path)
+        axis.plot(history["epoch"] + 1, history[f"val_{metric}"], label=experiment_id)
+    axis.set(xlabel="Época", ylabel=f"Validation {metric}")
+    figure.suptitle(f"Comparación de validation — {metric}")
+    axis.legend()
+    axis.grid(alpha=0.25)
+    figure.tight_layout(rect=(0, 0, 1, 0.95))
     figure.savefig(output_path, dpi=160, bbox_inches="tight")
     plt.close(figure)
 

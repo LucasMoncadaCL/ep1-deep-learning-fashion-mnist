@@ -262,3 +262,23 @@ Versionar `pyproject.toml` y `uv.lock`; centralizar la preparación en `ep1_fash
 ### Evidencia
 
 La carga efectiva mediante Keras validó los splits oficiales y el contrato. El código produce la partición estratificada 54.000/6.000 con seed 42 y las pruebas automatizadas pasan dentro de `.venv`. E0 se construye con 235.146 parámetros y salida de diez probabilidades; todavía no se ha entrenado ni evaluado sobre test.
+
+---
+
+## D-013 - Funciones de control posteriores a E1/E2
+
+**Estado:** aceptada
+
+**Fecha:** 16-09-2026
+
+### Situación
+
+Se debía comparar activaciones y función de pérdida sin modificar simultáneamente arquitectura, partición, optimizador, learning rate, batch size ni épocas.
+
+### Decisión
+
+Mantener ReLU en las capas ocultas y categorical crossentropy como control para los experimentos posteriores.
+
+### Evidencia
+
+Con seed 42 y las restantes condiciones de E0, ReLU obtuvo accuracy de validation 0,8722; Tanh 0,8643 y Sigmoid 0,7535. Con ReLU fija, categorical crossentropy obtuvo 0,8722 frente a 0,7370 de MSE. La tabla `results/tables/E1_E2_validation_comparison.md` y las figuras E1/E2 conservan los resultados. Esta decisión selecciona un control, no el modelo final y no utilizó test.

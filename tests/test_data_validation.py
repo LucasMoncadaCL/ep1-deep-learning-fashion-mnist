@@ -1,4 +1,5 @@
 import unittest
+from pathlib import Path
 
 import numpy as np
 
@@ -8,6 +9,8 @@ from ep1_fashion_mnist.data_validation import (
     validate_train_validation_partition,
 )
 from ep1_fashion_mnist.data import normalize_images, one_hot_encode, prepare_fashion_mnist
+from ep1_fashion_mnist.experiment import load_config
+from ep1_fashion_mnist.model import build_mlp, compile_model
 
 
 class ValidateImageClassificationSplitTests(unittest.TestCase):
@@ -159,6 +162,27 @@ class PrepareFashionMnistTests(unittest.TestCase):
                 np.array([3], dtype=np.int64),
                 source_count=4,
             )
+
+
+class ModelAndConfigurationTests(unittest.TestCase):
+    def test_e0_builds_ten_probabilities_and_compiles(self):
+        model = compile_model(
+            build_mlp([256, 128], seed=42),
+            optimizer="sgd", learning_rate=0.01, loss="categorical_crossentropy",
+        )
+        probabilities = model(np.zeros((2, 28, 28), dtype=np.float32), training=False).numpy()
+
+        self.assertEqual(model.count_params(), 235_146)
+        self.assertEqual(probabilities.shape, (2, 10))
+        np.testing.assert_allclose(probabilities.sum(axis=1), np.ones(2), atol=1e-6)
+
+    def test_e0_config_matches_the_supported_label_output_loss_contract(self):
+        root = Path(__file__).resolve().parents[1]
+        config = load_config(root / "configs" / "baseline.json")
+
+        self.assertEqual(config["label_encoding"], "one_hot")
+        self.assertEqual(config["output_activation"], "softmax")
+        self.assertEqual(config["loss"], "categorical_crossentropy")
 
 
 if __name__ == "__main__":
