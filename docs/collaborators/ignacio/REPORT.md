@@ -53,6 +53,9 @@
 |---|---|---|---|---|
 | D0 | Carga Keras + split estratificado 90/10, seed 42 | Validar contrato y preprocesamiento | Correcto: 54.000/6.000, 5.400/600 por clase, `float32 [0,1]` | ejecución de `prepare_fashion_mnist()`, tests y figuras D0 |
 | E0 | `[256,128]`, ReLU, Softmax, CCE, SGD 0,01, batch 128, 20 épocas | Establecer control reproducible | Accuracy val. 0,8722; Precision pond. 0,8737; Recall pond. 0,8722; F1 pond. 0,8726 | `E0_curves.png`, tabla E0 y notebook ejecutado |
+| E1_tanh | Solo activación: Tanh | Comparar activación con E0 como control | Accuracy val. 0,8643; F1 pond. 0,8647 | `configs/E1_tanh.json` y corrida local trazable |
+| E1_sigmoid | Solo activación: Sigmoid | Comparar activación con E0 como control | Accuracy val. 0,7535; F1 pond. 0,7490 | `configs/E1_sigmoid.json` y corrida local trazable |
+| E2_mse | Solo loss: MSE | Contrastar loss con CCE manteniendo ReLU | Accuracy val. 0,7370; F1 pond. 0,7168 | `configs/E2_mse.json` y corrida local trazable |
 
 ## Reproducción y verificaciones
 
@@ -74,7 +77,7 @@ Pendiente.
 
 ## Asuntos abiertos
 
-- Evaluar comparaciones controladas de activación y pérdida después de revisar el baseline. El test sigue sin evaluación.
+- Generar curvas comparativas de activación y pérdida para integrar la narrativa del notebook. El test sigue sin evaluación.
 - Confirmar el manifiesto en Colab durante la validación final del proyecto.
 
 ## Resumen para el handoff a Lucas
