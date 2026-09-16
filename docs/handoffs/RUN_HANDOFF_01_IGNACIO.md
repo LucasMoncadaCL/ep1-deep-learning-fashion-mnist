@@ -1,6 +1,6 @@
 # Run Handoff 01 - Ignacio Silva
 
-**Estado:** READY_TO_START  
+**Estado:** READY_FOR_REVIEW
 **Responsable:** Ignacio Silva  
 **Revisor de salida:** Cesar Rojas  
 **Siguiente responsable:** Lucas Moncada

@@ -1,6 +1,6 @@
 # Informe de colaborador - Ignacio Silva
 
-**Estado:** IN_PROGRESS
+**Estado:** READY_FOR_REVIEW
 
 ## Metas orientativas
 
@@ -30,6 +30,7 @@
 - `notebooks/01_ignacio_data_baseline.ipynb`.
 - `results/figures/D0_train_examples.png`, `results/figures/D0_train_class_distribution.png` y `results/figures/E0_curves.png`.
 - `results/tables/E0_validation_summary.md`.
+- `results/tables/E1_E2_validation_comparison.md`.
 
 ## Evidencia del entorno uv
 
@@ -69,17 +70,20 @@ Para cargar y validar el dataset real, ejecutar `prepare_fashion_mnist()` desde 
 
 ## Desviaciones respecto del plan
 
-Pendiente.
+No se evaluó L2: las curvas de E0 no muestran un gap train/validation que justifique introducir regularización en este bloque. Se deja esa decisión para una comparación explícita posterior si aparece evidencia de sobreajuste al cambiar capacidad u optimización.
 
 ## Limitaciones y resultados negativos
 
-Pendiente.
+- Sigmoid alcanzó accuracy de validation 0,7535; bajo este control fue claramente inferior a ReLU.
+- MSE alcanzó accuracy de validation 0,7370 y F1 ponderado 0,7168; no se recomienda como loss de control para esta clasificación multiclase.
+- La ejecución nativa de Windows usó CPU; TensorFlow moderno informó que la GPU requiere WSL2. Esto no afecta las verificaciones funcionales, pero debe declararse al comparar tiempos.
 
 ## Asuntos abiertos
 
-- Generar curvas comparativas de activación y pérdida para integrar la narrativa del notebook. El test sigue sin evaluación.
+- Cesar debe revisar este bloque antes de que Lucas tome sus decisiones como base aceptada.
+- Generar curvas comparativas de activación y pérdida para integrar la narrativa del notebook final. El test sigue sin evaluación.
 - Confirmar el manifiesto en Colab durante la validación final del proyecto.
 
 ## Resumen para el handoff a Lucas
 
-Pendiente.
+Usar E0 como control reproducible, no como selección final. La evidencia actual favorece conservar ReLU y categorical crossentropy mientras se estudian learning rate, batch size y capacidad. Para cada comparación, partir de `configs/baseline.json`, crear otro ID y cambiar una sola variable. Ejecutar con `run_validation_experiment` y conservar las métricas de validation; no invocar evaluación sobre test.
