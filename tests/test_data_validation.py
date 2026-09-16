@@ -155,6 +155,16 @@ class PrepareFashionMnistTests(unittest.TestCase):
         self.assertEqual(float(data.X_train.min()), 0.0)
         self.assertEqual(float(data.X_train.max()), 1.0)
 
+    def test_preparation_repeats_the_same_partition_with_the_same_seed(self):
+        first = prepare_fashion_mnist(loader=self._official_like_loader, seed=42)
+        first_train_indices = first.train_indices.copy()
+        first_validation_indices = first.validation_indices.copy()
+        del first
+        second = prepare_fashion_mnist(loader=self._official_like_loader, seed=42)
+
+        np.testing.assert_array_equal(first_train_indices, second.train_indices)
+        np.testing.assert_array_equal(first_validation_indices, second.validation_indices)
+
     def test_rejects_an_incomplete_partition(self):
         with self.assertRaisesRegex(DataContractError, "partición completa"):
             validate_train_validation_partition(

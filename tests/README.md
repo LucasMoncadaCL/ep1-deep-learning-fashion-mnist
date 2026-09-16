@@ -24,6 +24,12 @@ Los tests no sustituyen el análisis experimental; protegen sus supuestos.
 - aceptación de una partición train/validation completa y disjunta;
 - rechazo de solapamiento entre train y validation;
 - rechazo de particiones que omitan casos del conjunto de origen.
+- normalización a `float32` en `[0, 1]` y codificación one-hot;
+- repetibilidad del split estratificado con seed fija;
+- construcción de E0 con 235.146 parámetros y diez probabilidades Softmax;
+- coherencia de configuración entre salida Softmax, etiquetas one-hot y categorical crossentropy.
+
+El total actual es 13 pruebas.
 
 Ejecución:
 

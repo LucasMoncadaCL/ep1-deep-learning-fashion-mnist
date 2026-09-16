@@ -4,7 +4,9 @@ Proyecto colaborativo para estudiar cómo la arquitectura, las funciones, los hi
 
 ## Estado
 
-El repositorio se encuentra en la fase de diseño metodológico. La guía, la auditoría, el checklist y los handoffs están definidos; todavía no se declara ningún resultado experimental.
+La etapa inicial de Ignacio está implementada y `READY_FOR_REVIEW`: contrato de datos, EDA, baseline E0 y comparaciones E1/E2 se ejecutaron exclusivamente sobre train/validation. El conjunto oficial de test continúa sellado. La guía, auditoría, checklist y handoffs siguen siendo documentos vivos para las etapas de Lucas, Cesar e integración.
+
+El punto de entrada para revisar o continuar este bloque es [`docs/IGNACIO_DELIVERY_INDEX.md`](docs/IGNACIO_DELIVERY_INDEX.md).
 
 ## Principios
 

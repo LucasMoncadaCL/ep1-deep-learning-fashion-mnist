@@ -42,7 +42,7 @@
 - `sys.executable`: `C:\\Users\\yvl\\Documents\\GitHub\\ep1-deep-learning-fashion-mnist\\.venv\\Scripts\\python.exe`.
 - comandos ejecutados: `uv venv --python 3.12 .venv`, `uv sync` y `uv lock --check`.
 - versiones resueltas: TensorFlow 2.21.0, NumPy 2.5.3, Pandas 3.0.5 y scikit-learn 1.9.1.
-- pruebas dentro de `.venv`: 12/12 correctas con `python -m unittest discover -s tests -v` y `PYTHONPATH=src`.
+- pruebas dentro de `.venv`: 13/13 correctas con `python -m unittest discover -s tests -v` y `PYTHONPATH=src`.
 - disponibilidad computacional comprobada: CPU detectada (`/physical_device:CPU:0`); GPU no disponible en TensorFlow nativo de Windows, por lo que las ejecuciones usaron CPU.
 
 ## Decisiones técnicas
