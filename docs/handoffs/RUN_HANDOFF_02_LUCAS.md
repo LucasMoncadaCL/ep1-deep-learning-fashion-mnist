@@ -9,7 +9,7 @@
 
 Esta sección debe ser completada al cerrar el Handoff 01:
 
-- estado o commit revisado: revisar el tip de `codex/ignacio-data-baseline` mediante `git log --oneline main..HEAD`; la validación integral quedó registrada hasta `447a939` y los commits posteriores de esta misma rama documentan cualquier ajuste de handoff;
+- estado o commit revisado: revisar el tip de `feature/ignacio-data-baseline` mediante `git log --oneline main..HEAD`; la validación integral quedó registrada hasta `447a939` y los commits posteriores de esta misma rama documentan cualquier ajuste de handoff;
 - entorno probado: `uv 0.12.10`, Python 3.12.14 en `.venv`; reconstruir con `uv sync --frozen`;
 - contrato de datos: `prepare_fashion_mnist()` en `src/ep1_fashion_mnist/data.py`; split estratificado seed 42 de 54.000/6.000, imágenes `float32 [0,1]`, test oficial sellado;
 - módulos públicos: `data.py` (carga/preprocesamiento), `model.py` (MLP/compilación), `experiment.py` (entrenamiento y métricas de validation) y `visualization.py`;
