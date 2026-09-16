@@ -30,6 +30,7 @@ Thumbs.db
 # Artefactos temporales
 tmp/
 *.log
+superpowers/
 
 # Material académico y documentación de uso exclusivamente local
 docs/material-ea1/
