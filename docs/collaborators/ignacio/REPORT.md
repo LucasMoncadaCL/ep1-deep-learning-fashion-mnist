@@ -17,14 +17,19 @@
 - Se implementó la carga reutilizable de Fashion-MNIST, validación del contrato, split estratificado desde índices y preprocesamiento.
 - Se verificó la carga efectiva del dataset oficial: train `(60000, 28, 28)`, test `(10000, 28, 28)`, `uint8`, píxeles `[0, 255]` y distribución balanceada de 6.000/1.000 casos por clase.
 - El split con seed 42 produjo 54.000 ejemplos de train y 6.000 de validation, con 5.400/600 ejemplos por clase, sin solapamiento y con cobertura completa del train oficial.
-- Se implementó la construcción y compilación de la MLP E0. Aún no se ha entrenado E0.
+- Se entrenó E0 durante 20 épocas exclusivamente con train/validation; el test oficial no fue evaluado.
+- Se creó y ejecutó desde kernel limpio `notebooks/01_ignacio_data_baseline.ipynb`, con EDA, contrato de datos y E0.
 
 ## Archivos creados o modificados
 
 - `pyproject.toml` y `uv.lock`.
 - `src/ep1_fashion_mnist/data.py`.
 - `src/ep1_fashion_mnist/model.py`.
+- `src/ep1_fashion_mnist/experiment.py` y `src/ep1_fashion_mnist/visualization.py`.
 - `tests/test_data_validation.py`.
+- `notebooks/01_ignacio_data_baseline.ipynb`.
+- `results/figures/D0_train_examples.png`, `results/figures/D0_train_class_distribution.png` y `results/figures/E0_curves.png`.
+- `results/tables/E0_validation_summary.md`.
 
 ## Evidencia del entorno uv
 
@@ -46,7 +51,8 @@
 
 | ID | Configuración | Objetivo | Resultado | Evidencia |
 |---|---|---|---|---|
-| D0 | Carga Keras + split estratificado 90/10, seed 42 | Validar contrato y preprocesamiento | Correcto: 54.000/6.000, 5.400/600 por clase, `float32 [0,1]` | ejecución de `prepare_fashion_mnist()` y tests |
+| D0 | Carga Keras + split estratificado 90/10, seed 42 | Validar contrato y preprocesamiento | Correcto: 54.000/6.000, 5.400/600 por clase, `float32 [0,1]` | ejecución de `prepare_fashion_mnist()`, tests y figuras D0 |
+| E0 | `[256,128]`, ReLU, Softmax, CCE, SGD 0,01, batch 128, 20 épocas | Establecer control reproducible | Accuracy val. 0,8722; Precision pond. 0,8737; Recall pond. 0,8722; F1 pond. 0,8726 | `E0_curves.png`, tabla E0 y notebook ejecutado |
 
 ## Reproducción y verificaciones
 
@@ -68,8 +74,7 @@ Pendiente.
 
 ## Asuntos abiertos
 
-- Crear el notebook de Ignacio con EDA y narrativa reproducible.
-- Entrenar E0 y registrar curvas y métricas de validation. El test sigue sin evaluación.
+- Evaluar comparaciones controladas de activación y pérdida después de revisar el baseline. El test sigue sin evaluación.
 - Confirmar el manifiesto en Colab durante la validación final del proyecto.
 
 ## Resumen para el handoff a Lucas

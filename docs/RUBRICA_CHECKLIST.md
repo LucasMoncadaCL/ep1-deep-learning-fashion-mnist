@@ -12,20 +12,20 @@ Este archivo no declara cumplimiento por intención. Un indicador solo se marca 
 
 ### IEE 1.1 - Datos, entrenamiento y ajustes
 
-- [ ] **IEE 1.1.1 (2%) - Carga y preprocesamiento.** Evidencia: sección del notebook con formas, tipos, rango, normalización, división de datos y justificación Markdown.
+- [~] **IEE 1.1.1 (2%) - Carga y preprocesamiento.** Evidencia: `01_ignacio_data_baseline.ipynb` ejecutado, contrato validado y figuras D0; pendiente de revisión cruzada.
 - [ ] **IEE 1.1.2 (2%) - Épocas, learning rate y batch size.** Evidencia: configuración registrada y explicación técnica de los tres parámetros.
 - [ ] **IEE 1.1.3 (2%) - Experimentos controlados.** Evidencia: comparaciones variando un parámetro por vez, datos precisos y visualizaciones.
 - [ ] **IEE 1.1.4 (1%) - Ajustes según resultados.** Evidencia: secuencia observación, hipótesis, cambio, resultado y conclusión.
 
 ### IEE 1.2 - Funciones de la red
 
-- [ ] **IEE 1.2.1 (1%) - Activación, pérdida y salida.** Evidencia: implementación pertinente y justificación técnica para el problema multiclase.
+- [~] **IEE 1.2.1 (1%) - Activación, pérdida y salida.** Evidencia: E0 implementa ReLU, Softmax y categorical crossentropy; pendiente de comparación y revisión.
 - [ ] **IEE 1.2.2 (2%) - Comparación de funciones.** Evidencia: tabla comparativa, curvas y análisis de ventajas, limitaciones e impacto.
 - [ ] **IEE 1.2.3 (1%) - Pertinencia para el caso.** Evidencia: selección final conectada con Fashion-MNIST y resultados observados.
 
 ### IEE 1.3 - Arquitectura, optimización y regularización
 
-- [ ] **IEE 1.3.1 (1%) - Arquitectura MLP.** Evidencia: diagrama o resumen de capas, parámetros y justificación de cada decisión estructural.
+- [~] **IEE 1.3.1 (1%) - Arquitectura MLP.** Evidencia: E0 `[256,128]` con 235.146 parámetros y curvas seleccionadas; pendiente de revisión cruzada.
 - [ ] **IEE 1.3.2 (2%) - Optimización y regularización.** Evidencia: comparación con/sin técnica y análisis de estabilidad, convergencia y generalización.
 - [ ] **IEE 1.3.3 (2%) - Ajuste de hiperparámetros.** Evidencia: configuraciones comparadas y selección final fundamentada.
 

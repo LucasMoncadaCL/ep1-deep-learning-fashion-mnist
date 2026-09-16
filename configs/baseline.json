@@ -1,6 +1,6 @@
 {
   "experiment_id": "E0",
-  "status": "proposed",
+  "status": "validated_on_validation",
   "seed": 42,
   "dataset": "fashion_mnist",
   "validation_fraction": 0.1,
