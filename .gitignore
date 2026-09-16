@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Entornos virtuales y configuración local
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# Jupyter
+.ipynb_checkpoints/
+notebooks/sandbox/
+notebooks/scratch/
+
+# IDE y sistema operativo
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Artefactos temporales
+tmp/
+*.log
+
+# Material académico y documentación de uso exclusivamente local
+docs/material-ea1/
+docs/ref/
+docs/local/
+docs/private/
+notes/
+*.local.md
+
+# Datos: nunca versionar copias descargadas o procesadas
+data/*
+!data/README.md
+
+# Ejecuciones y artefactos pesados
+results/runs/
+results/raw/
+results/models/
+models/
+checkpoints/
+artifacts/
+*.h5
+*.keras
+*.ckpt
+*.weights.h5
+
+# Sí se versionan las figuras y tablas seleccionadas que respaldan el informe
