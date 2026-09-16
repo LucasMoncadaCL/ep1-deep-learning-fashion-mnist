@@ -1,0 +1,15 @@
+[project]
+name = "ep1-fashion-mnist"
+version = "0.1.0"
+description = "Experimentos reproducibles de una MLP para Fashion-MNIST."
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "matplotlib",
+    "numpy",
+    "pandas",
+    "scikit-learn",
+    "tensorflow",
+]
+
+[tool.uv]
+package = false

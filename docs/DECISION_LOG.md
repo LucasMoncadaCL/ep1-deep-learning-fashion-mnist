@@ -242,3 +242,23 @@ TensorFlow soporta Python 3.9–3.12 y los runtimes actuales de Colab utilizan P
 ### Evidencia de validación
 
 El 15-09-2026, `uv 0.11.8` creó `.venv` con CPython 3.12.13. Las 8 pruebas automatizadas existentes pasaron usando el intérprete de ese entorno. Las versiones del stack científico se decidirán y bloquearán por separado.
+
+---
+
+## D-012 - Stack inicial bloqueado y carga reutilizable
+
+**Estado:** aceptada
+
+**Fecha:** 16-09-2026
+
+### Situación
+
+La primera etapa necesitaba un entorno reproducible, una única implementación de carga/preprocesamiento y una forma comprobable de construir E0 antes de ejecutar experimentos.
+
+### Decisión
+
+Versionar `pyproject.toml` y `uv.lock`; centralizar la preparación en `ep1_fashion_mnist.data` y la MLP en `ep1_fashion_mnist.model`. El stack resuelto inicialmente es TensorFlow 2.21.0, NumPy 2.5.3, Pandas 3.0.5 y scikit-learn 1.9.1 con Python 3.12.14.
+
+### Evidencia
+
+La carga efectiva mediante Keras validó los splits oficiales y el contrato. El código produce la partición estratificada 54.000/6.000 con seed 42 y las pruebas automatizadas pasan dentro de `.venv`. E0 se construye con 235.146 parámetros y salida de diez probabilidades; todavía no se ha entrenado ni evaluado sobre test.

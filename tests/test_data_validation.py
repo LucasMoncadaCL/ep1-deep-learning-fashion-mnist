@@ -7,6 +7,7 @@ from ep1_fashion_mnist.data_validation import (
     validate_image_classification_split,
     validate_train_validation_partition,
 )
+from ep1_fashion_mnist.data import normalize_images, one_hot_encode, prepare_fashion_mnist
 
 
 class ValidateImageClassificationSplitTests(unittest.TestCase):
@@ -109,6 +110,47 @@ class ValidateTrainValidationPartitionTests(unittest.TestCase):
                 np.array([2, 3], dtype=np.int64),
                 source_count=4,
             )
+
+
+class PrepareFashionMnistTests(unittest.TestCase):
+    @staticmethod
+    def _official_like_loader():
+        """Genera arrays con el contrato oficial sin descargar el dataset en el test."""
+        train_images = np.zeros((60_000, 28, 28), dtype=np.uint8)
+        test_images = np.zeros((10_000, 28, 28), dtype=np.uint8)
+        train_images[:, 0, 0] = 255
+        test_images[:, 0, 0] = 255
+        train_labels = np.repeat(np.arange(10, dtype=np.uint8), 6_000)
+        test_labels = np.repeat(np.arange(10, dtype=np.uint8), 1_000)
+        return train_images, train_labels, test_images, test_labels
+
+    def test_normalization_and_one_hot_encoding(self):
+        images = np.array([[[0, 255]]], dtype=np.uint8)
+        labels = np.array([2], dtype=np.uint8)
+
+        normalized = normalize_images(images)
+        encoded = one_hot_encode(labels, num_classes=3)
+
+        self.assertEqual(normalized.dtype, np.float32)
+        self.assertEqual(normalized.tolist(), [[[0.0, 1.0]]])
+        self.assertEqual(encoded.dtype, np.float32)
+        self.assertEqual(encoded.tolist(), [[0.0, 0.0, 1.0]])
+
+    def test_preparation_makes_the_required_stratified_partition(self):
+        data = prepare_fashion_mnist(loader=self._official_like_loader)
+
+        self.assertEqual(data.X_train.shape, (54_000, 28, 28))
+        self.assertEqual(data.X_val.shape, (6_000, 28, 28))
+        self.assertEqual(data.X_test.shape, (10_000, 28, 28))
+        self.assertEqual(data.y_train.shape, (54_000, 10))
+        self.assertEqual(data.y_val.shape, (6_000, 10))
+        self.assertEqual(data.y_test.shape, (10_000, 10))
+        self.assertEqual(data.partition_summary.train_count, 54_000)
+        self.assertEqual(data.partition_summary.validation_count, 6_000)
+        self.assertTrue(np.all(data.y_train.sum(axis=0) == 5_400))
+        self.assertTrue(np.all(data.y_val.sum(axis=0) == 600))
+        self.assertEqual(float(data.X_train.min()), 0.0)
+        self.assertEqual(float(data.X_train.max()), 1.0)
 
     def test_rejects_an_incomplete_partition(self):
         with self.assertRaisesRegex(DataContractError, "partición completa"):
