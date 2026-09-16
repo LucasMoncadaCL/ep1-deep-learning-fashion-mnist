@@ -19,6 +19,7 @@
 - El split con seed 42 produjo 54.000 ejemplos de train y 6.000 de validation, con 5.400/600 ejemplos por clase, sin solapamiento y con cobertura completa del train oficial.
 - Se entrenó E0 durante 20 épocas exclusivamente con train/validation; el test oficial no fue evaluado.
 - Se creó y ejecutó desde kernel limpio `notebooks/01_ignacio_data_baseline.ipynb`, con EDA, contrato de datos y E0.
+- Se añadió un informe formal en LaTeX con resultados, figuras y rutas relativas verificadas; no se generó PDF porque este equipo no tiene instalado un motor LaTeX.
 
 ## Archivos creados o modificados
 
@@ -28,6 +29,7 @@
 - `src/ep1_fashion_mnist/experiment.py` y `src/ep1_fashion_mnist/visualization.py`.
 - `tests/test_data_validation.py`.
 - `notebooks/01_ignacio_data_baseline.ipynb`.
+- `docs/latex/collaborators/ignacio/main.tex` y su guía de compilación.
 - `results/figures/D0_train_examples.png`, `results/figures/D0_train_class_distribution.png` y `results/figures/E0_curves.png`.
 - `results/figures/E1_activation_validation_accuracy.png` y `results/figures/E2_loss_validation_accuracy.png`.
 - `results/tables/E0_validation_summary.md`.
@@ -82,6 +84,7 @@ El repositorio no tenía una rama `develop` al iniciar; la rama de Ignacio se cr
 - Sigmoid alcanzó accuracy de validation 0,7535; bajo este control fue claramente inferior a ReLU.
 - MSE alcanzó accuracy de validation 0,7370 y F1 ponderado 0,7168; no se recomienda como loss de control para esta clasificación multiclase.
 - La ejecución nativa de Windows usó CPU; TensorFlow moderno informó que la GPU requiere WSL2. Esto no afecta las verificaciones funcionales, pero debe declararse al comparar tiempos.
+- El informe LaTeX está validado como fuente y sus figuras se resolvieron por ruta relativa; no se compiló a PDF porque no se detectó `pdflatex` ni `latexmk` en el equipo. No se versiona PDF sin revisión formal.
 
 ## Análisis del baseline
 

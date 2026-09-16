@@ -2,6 +2,7 @@
 
 import json
 import random
+from argparse import ArgumentParser
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -135,3 +136,16 @@ def run_validation_experiment(
                    "metrics": asdict(metrics)}, metrics_file, indent=2)
     plot_history(history, experiment_id=experiment_id, output_path=output_path / f"{experiment_id}_curves.png")
     return metrics
+
+
+def main() -> None:
+    """Expone la ejecución reproducible como comando para los colaboradores."""
+    parser = ArgumentParser(description="Ejecuta un experimento sobre validation de Fashion-MNIST")
+    parser.add_argument("config", help="Ruta al archivo JSON de configuración")
+    parser.add_argument("--output", required=True, help="Directorio local para historia, métricas y curva")
+    arguments = parser.parse_args()
+    print(run_validation_experiment(arguments.config, output_directory=arguments.output))
+
+
+if __name__ == "__main__":
+    main()
