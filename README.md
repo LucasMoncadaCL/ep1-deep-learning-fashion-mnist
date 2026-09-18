@@ -75,4 +75,4 @@ uv venv --python 3.12 .venv
 
 No se permite desarrollar con Python global, `python -m venv`, Conda, Poetry ni instalaciones directas con `pip`.
 
-La rama menor queda fijada en `.python-version`; `uv` resuelve el parche estable disponible. Las dependencias se bloquearán en `uv.lock` después de comprobarlas conjuntamente. El procedimiento y la justificación completa están en [`docs/ENVIRONMENT.md`](docs/ENVIRONMENT.md).
+La rama menor queda fijada en `.python-version`; `uv` resuelve el parche estable disponible. Las dependencias declaradas en `pyproject.toml` ya están resueltas con versiones exactas en `uv.lock`; reconstruirlas con `uv sync --frozen`. El procedimiento y la justificación completa están en [`docs/ENVIRONMENT.md`](docs/ENVIRONMENT.md).

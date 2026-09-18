@@ -20,6 +20,7 @@
 - Se entrenó E0 durante 20 épocas exclusivamente con train/validation; el test oficial no fue evaluado.
 - Se creó y ejecutó desde kernel limpio `notebooks/01_ignacio_data_baseline.ipynb`, con EDA, contrato de datos y E0.
 - Se añadió un informe formal en LaTeX con resultados, figuras y rutas relativas verificadas; no se generó PDF porque este equipo no tiene instalado un motor LaTeX.
+- Se incorporaron Precision, Recall y F1 macro al contrato de métricas, conservando también las métricas ponderadas.
 
 ## Archivos creados o modificados
 
@@ -42,7 +43,7 @@
 - `sys.executable`: `C:\\Users\\yvl\\Documents\\GitHub\\ep1-deep-learning-fashion-mnist\\.venv\\Scripts\\python.exe`.
 - comandos ejecutados: `uv venv --python 3.12 .venv`, `uv sync` y `uv lock --check`.
 - versiones resueltas: TensorFlow 2.21.0, NumPy 2.5.3, Pandas 3.0.5 y scikit-learn 1.9.1.
-- pruebas dentro de `.venv`: 13/13 correctas con `python -m unittest discover -s tests -v` y `PYTHONPATH=src`.
+- pruebas dentro de `.venv`: 14/14 correctas con `uv run python -m unittest discover -s tests -v` y `PYTHONPATH=src`.
 - disponibilidad computacional comprobada: CPU detectada (`/physical_device:CPU:0`); GPU no disponible en TensorFlow nativo de Windows, por lo que las ejecuciones usaron CPU.
 
 ## Decisiones técnicas
@@ -58,20 +59,32 @@
 | ID | Configuración | Objetivo | Resultado | Evidencia |
 |---|---|---|---|---|
 | D0 | Carga Keras + split estratificado 90/10, seed 42 | Validar contrato y preprocesamiento | Correcto: 54.000/6.000, 5.400/600 por clase, `float32 [0,1]` | ejecución de `prepare_fashion_mnist()`, tests y figuras D0 |
-| E0 | `[256,128]`, ReLU, Softmax, CCE, SGD 0,01, batch 128, 20 épocas | Establecer control reproducible | Accuracy val. 0,8722; Precision pond. 0,8737; Recall pond. 0,8722; F1 pond. 0,8726 | `E0_curves.png`, tabla E0 y notebook ejecutado |
-| E1_tanh | Solo activación: Tanh | Comparar activación con E0 como control | Accuracy val. 0,8643; F1 pond. 0,8647 | `configs/E1_tanh.json` y corrida local trazable |
-| E1_sigmoid | Solo activación: Sigmoid | Comparar activación con E0 como control | Accuracy val. 0,7535; F1 pond. 0,7490 | `configs/E1_sigmoid.json` y corrida local trazable |
-| E2_mse | Solo loss: MSE | Contrastar loss con CCE manteniendo ReLU | Accuracy val. 0,7370; F1 pond. 0,7168 | `configs/E2_mse.json` y corrida local trazable |
+| E0 | `[256,128]`, ReLU, Softmax, CCE, SGD 0,01, batch 128, 20 épocas | Establecer control reproducible | Accuracy val. 0,8722; F1 macro/pond. 0,8726 | `E0_curves.png`, tabla E0 y notebook ejecutado |
+| E1_tanh | Solo activación: Tanh | Comparar activación con E0 como control | Accuracy val. 0,8643; F1 macro/pond. 0,8647 | `configs/E1_tanh.json` y corrida local trazable |
+| E1_sigmoid | Solo activación: Sigmoid | Comparar activación con E0 como control | Accuracy val. 0,7535; F1 macro/pond. 0,7490 | `configs/E1_sigmoid.json` y corrida local trazable |
+| E2_mse | Solo loss: MSE | Contrastar loss con CCE manteniendo ReLU | Accuracy val. 0,7370; F1 macro/pond. 0,7168 | `configs/E2_mse.json` y corrida local trazable |
 
 ## Reproducción y verificaciones
 
 ```powershell
 uv sync --frozen
 $env:PYTHONPATH = "src"
-.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+uv run python -m unittest discover -s tests -v
+$env:MPLCONFIGDIR = "$PWD\tmp\matplotlib"
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks\01_ignacio_data_baseline.ipynb --ExecutePreprocessor.timeout=120
 ```
 
-Para cargar y validar el dataset real, ejecutar `prepare_fashion_mnist()` desde `ep1_fashion_mnist.data`. La descarga queda en la caché local de Keras; los datos no se versionan.
+Para reproducir los cuatro experimentos y sus artefactos locales en `results/runs/`, ejecutar:
+
+```powershell
+$env:PYTHONPATH = "src"
+uv run python -m ep1_fashion_mnist.experiment configs\baseline.json --output results\runs\E0
+uv run python -m ep1_fashion_mnist.experiment configs\E1_tanh.json --output results\runs\E1_tanh
+uv run python -m ep1_fashion_mnist.experiment configs\E1_sigmoid.json --output results\runs\E1_sigmoid
+uv run python -m ep1_fashion_mnist.experiment configs\E2_mse.json --output results\runs\E2_mse
+```
+
+Cada directorio contiene historia CSV, métricas JSON (macro y ponderadas) y curvas de su ID. Para cargar y validar el dataset real, ejecutar `prepare_fashion_mnist()` desde `ep1_fashion_mnist.data`. La descarga queda en la caché local de Keras; los datos no se versionan.
 
 ## Desviaciones respecto del plan
 
@@ -82,7 +95,7 @@ El repositorio no tenía una rama `develop` al iniciar; la rama de Ignacio se cr
 ## Limitaciones y resultados negativos
 
 - Sigmoid alcanzó accuracy de validation 0,7535; bajo este control fue claramente inferior a ReLU.
-- MSE alcanzó accuracy de validation 0,7370 y F1 ponderado 0,7168; no se recomienda como loss de control para esta clasificación multiclase.
+- MSE alcanzó accuracy de validation 0,7370 y F1 macro/ponderado 0,7168; no se recomienda como loss de control para esta clasificación multiclase.
 - La ejecución nativa de Windows usó CPU; TensorFlow moderno informó que la GPU requiere WSL2. Esto no afecta las verificaciones funcionales, pero debe declararse al comparar tiempos.
 - El informe LaTeX está validado como fuente y sus figuras se resolvieron por ruta relativa; no se compiló a PDF porque no se detectó `pdflatex` ni `latexmk` en el equipo. No se versiona PDF sin revisión formal.
 
@@ -93,8 +106,9 @@ Durante E0, la accuracy de validation aumentó de 0,7592 a 0,8722 y la loss de v
 ## Asuntos abiertos
 
 - Cesar debe revisar este bloque antes de que Lucas tome sus decisiones como base aceptada.
-- Generar curvas comparativas de activación y pérdida para integrar la narrativa del notebook final. El test sigue sin evaluación.
+- Las curvas comparativas de activación y pérdida ya están versionadas en `results/figures/` y se muestran en el notebook; el test sigue sin evaluación.
 - Confirmar el manifiesto en Colab durante la validación final del proyecto.
+- La política de mensajes de commit en español requiere que Lucas decida si se reescribe el historial de esta rama o si la integración final se hará mediante squash con mensaje completo en español. No se reescribió historial sin esa coordinación.
 
 ## Resumen para el handoff a Lucas
 

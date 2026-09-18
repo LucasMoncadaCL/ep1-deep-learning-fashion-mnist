@@ -44,7 +44,7 @@ La salida debe comenzar con `Python 3.12.`.
 
 ### Validación inicial del repositorio
 
-El 15-09-2026 se recreó correctamente `.venv` con `uv 0.11.8`; `uv` resolvió CPython 3.12.13. La validación posterior del bloque inicial actualizó el entorno a `uv 0.12.10` y CPython 3.12.14, con TensorFlow 2.21.0, NumPy 2.5.3, Pandas 3.0.5 y scikit-learn 1.9.1 bloqueados en `pyproject.toml` y `uv.lock`. Las 13 pruebas automatizadas pasan con ese entorno.
+El 15-09-2026 se recreó correctamente `.venv` con `uv 0.11.8`; `uv` resolvió CPython 3.12.13. La validación posterior del bloque inicial actualizó el entorno a `uv 0.12.10` y CPython 3.12.14, con TensorFlow 2.21.0, NumPy 2.5.3, Pandas 3.0.5 y scikit-learn 1.9.1 bloqueados en `pyproject.toml` y `uv.lock`. Las 14 pruebas automatizadas pasan con ese entorno.
 
 ### Activación en Windows PowerShell
 
@@ -68,21 +68,15 @@ La ruta mostrada debe apuntar a `.venv` dentro de este repositorio.
 
 ## 3. Instalación de dependencias
 
-Mientras no exista un manifiesto oficial de dependencias, ningún colaborador debe inventar o fijar versiones por su cuenta.
+El manifiesto oficial ya es `pyproject.toml` y el bloqueo reproducible ya es `uv.lock`. `pyproject.toml` declara las dependencias de nivel superior sin fijar cada versión de tránsito; `uv.lock` registra las versiones exactas resueltas para reconstruir el mismo entorno. No se deben editar ni sustituir esas versiones manualmente.
 
-Las instalaciones exploratorias autorizadas deben realizarse con `uv`, nunca con `pip` directo:
-
-```powershell
-uv pip install --python .\.venv\Scripts\python.exe <paquete>
-```
-
-Cuando el equipo adopte `pyproject.toml` y `uv.lock`, el flujo oficial pasará a ser:
+El flujo oficial es:
 
 ```powershell
 uv sync --frozen
 ```
 
-Todo cambio permanente de dependencias deberá actualizar el manifiesto y el lock en el mismo cambio de Git.
+Todo cambio permanente de dependencias deberá actualizar el manifiesto y el lock en el mismo cambio de Git. Las exploraciones temporales no deben alterar el entorno compartido ni instalarse con `pip` directo.
 
 ## 4. Comandos del proyecto
 
@@ -113,9 +107,9 @@ No es necesario copiar listas extensas de paquetes si ya existe un `uv.lock` ver
 | Elemento | Política |
 |---|---|
 | `.venv/` | Local, ignorado por Git |
-| `.python-version` | Versionado cuando se acuerde Python |
-| `pyproject.toml` | Versionado cuando se definan dependencias |
-| `uv.lock` | Versionado y obligatorio después de crearse |
+| `.python-version` | Versionado; fija Python 3.12 |
+| `pyproject.toml` | Versionado; declara dependencias de nivel superior |
+| `uv.lock` | Versionado; fija las versiones resueltas y es obligatorio |
 | caché global de uv | Local |
 | comandos de reproducción | Versionados en README/documentación |
 

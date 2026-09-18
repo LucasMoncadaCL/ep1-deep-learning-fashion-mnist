@@ -5,6 +5,20 @@
 **Revisor de salida:** Cesar Rojas  
 **Siguiente responsable:** Lucas Moncada
 
+## Corrección posterior a revisión
+
+La revisión de la entrega solicitó reforzar reproducibilidad, trazabilidad y el contrato de métricas. Se corrigieron los comandos para usar `uv run`, se documentó la reproducción de E0/E1/E2, se añadieron métricas macro junto a las ponderadas, se actualizaron las referencias documentales y se corrigieron observaciones de Ruff. El estado permanece `READY_FOR_REVIEW`: esta actualización no convierte el handoff en aceptado.
+
+La política de commits en español queda como decisión de Lucas: debe acordar si reescribe los mensajes de esta rama con `--force-with-lease` o si la integración final a `main` se realizará por squash con un título y cuerpo completos en español. No se reescribió historial sin esa coordinación.
+
+### Evidencia de la corrección
+
+- Archivos de implementación: `src/ep1_fashion_mnist/experiment.py`, `src/ep1_fashion_mnist/data.py` y `tests/test_data_validation.py`.
+- Documentación actualizada: índice de entrega, informe de Ignacio, informe LaTeX, entorno, README y handoff a Lucas.
+- `ValidationMetrics` y los JSON de cada corrida ahora contienen Accuracy, Precision, Recall y F1 tanto `macro` como `weighted`. En E0--E2 coinciden porque validation tiene 600 ejemplos por clase.
+- Reproducción confirmada: `uv sync --frozen`; 14 pruebas unitarias correctas; `uvx ruff check src tests` sin observaciones; notebook ejecutado mediante `uv run jupyter nbconvert --to notebook --execute --inplace notebooks\01_ignacio_data_baseline.ipynb --ExecutePreprocessor.timeout=120`.
+- E0, E1_tanh, E1_sigmoid y E2_mse se regeneraron desde sus JSON versionados. Sus métricas se mantuvieron, respectivamente, en accuracy 0,8722; 0,8643; 0,7535; y 0,7370. Los artefactos regenerables quedaron bajo `tmp/revision_runs/` durante la verificación y no se versionan.
+
 ## 1. Misión
 
 Construir una base reproducible y técnicamente defendible para todo el proyecto: contrato de datos, exploración, preprocesamiento y baseline. El objetivo no es encontrar todavía el mejor modelo, sino entregar una referencia confiable sobre la que Lucas pueda ejecutar comparaciones controladas.

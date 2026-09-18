@@ -23,6 +23,9 @@ class ValidationMetrics:
     """Métricas agregadas de una ejecución sobre validation, nunca sobre test."""
 
     accuracy: float
+    precision_macro: float
+    recall_macro: float
+    f1_macro: float
     precision_weighted: float
     recall_weighted: float
     f1_weighted: float
@@ -95,6 +98,23 @@ def plot_validation_comparison(
     plt.close(figure)
 
 
+def calculate_validation_metrics(actual: np.ndarray, predicted: np.ndarray) -> ValidationMetrics:
+    """Calcula métricas macro y ponderadas sin consultar el conjunto de test.
+
+    Las macro dan el mismo peso a cada clase; las ponderadas conservan el peso de
+    su soporte. Ambas se registran para que el contrato de resultados sea explícito.
+    """
+    return ValidationMetrics(
+        accuracy=float(accuracy_score(actual, predicted)),
+        precision_macro=float(precision_score(actual, predicted, average="macro", zero_division=0)),
+        recall_macro=float(recall_score(actual, predicted, average="macro", zero_division=0)),
+        f1_macro=float(f1_score(actual, predicted, average="macro", zero_division=0)),
+        precision_weighted=float(precision_score(actual, predicted, average="weighted", zero_division=0)),
+        recall_weighted=float(recall_score(actual, predicted, average="weighted", zero_division=0)),
+        f1_weighted=float(f1_score(actual, predicted, average="weighted", zero_division=0)),
+    )
+
+
 def run_validation_experiment(
     config_path: str | Path,
     *,
@@ -122,12 +142,7 @@ def run_validation_experiment(
     probabilities = model.predict(data.X_val, verbose=0)
     actual = data.y_val.argmax(axis=1)
     predicted = probabilities.argmax(axis=1)
-    metrics = ValidationMetrics(
-        accuracy=float(accuracy_score(actual, predicted)),
-        precision_weighted=float(precision_score(actual, predicted, average="weighted", zero_division=0)),
-        recall_weighted=float(recall_score(actual, predicted, average="weighted", zero_division=0)),
-        f1_weighted=float(f1_score(actual, predicted, average="weighted", zero_division=0)),
-    )
+    metrics = calculate_validation_metrics(actual, predicted)
     output_path = Path(output_directory)
     output_path.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(history).rename_axis("epoch").to_csv(output_path / f"{experiment_id}_history.csv")

@@ -40,6 +40,9 @@ E0 usa una MLP con \texttt{Flatten}, capas Dense de 256 y 128 neuronas con ReLU,
 Métrica de validation & Resultado \\
 \midrule
 Accuracy & 0,8722 \\
+Precision macro & 0,8737 \\
+Recall macro & 0,8722 \\
+F1 macro & 0,8726 \\
 Precision ponderada & 0,8737 \\
 Recall ponderado & 0,8722 \\
 F1 ponderado & 0,8726 \\
@@ -63,7 +66,7 @@ Se mantuvieron fijas partición, seed, arquitectura, optimizador, learning rate,
 \centering
 \begin{tabular}{llrr}
 \toprule
-ID & Único cambio & Accuracy validation & F1 ponderado \\
+ID & Único cambio & Accuracy validation & F1 macro / ponderado \\
 \midrule
 E0 & ReLU + categorical crossentropy & 0,8722 & 0,8726 \\
 E1\_tanh & Tanh & 0,8643 & 0,8647 \\
@@ -77,6 +80,6 @@ E2\_mse & MSE & 0,7370 & 0,7168 \\
 ReLU y categorical crossentropy quedan seleccionados como control para la siguiente etapa. Esto no constituye una selección final y no habilita evaluación sobre test.
 
 \section{Reproducción y handoff}
-Las 12 pruebas automatizadas pasan dentro de \texttt{.venv}; incluyen contrato de datos, partición, normalización, construcción de E0, salida Softmax y coherencia de configuración. El notebook \texttt{notebooks/01\_ignacio\_data\_baseline.ipynb} ejecuta desde un kernel limpio. Lucas debe reutilizar E0 exclusivamente como control para estudiar learning rate, batch size, capacidad y Early Stopping; Cesar debe revisar este bloque antes de aceptarlo.
+Las 14 pruebas automatizadas pasan dentro de \texttt{.venv}; incluyen contrato de datos, partición, normalización, construcción de E0, salida Softmax, coherencia de configuración y el contrato explícito de métricas macro y ponderadas. El notebook \texttt{notebooks/01\_ignacio\_data\_baseline.ipynb} ejecuta desde un kernel limpio. Dado que validation tiene 600 ejemplos por clase, las métricas macro y ponderadas coinciden en E0--E2, pero ambas se almacenan para conservar un esquema completo. Lucas debe reutilizar E0 exclusivamente como control para estudiar learning rate, batch size, capacidad y Early Stopping; Cesar debe revisar este bloque antes de aceptarlo.
 
 \end{document}

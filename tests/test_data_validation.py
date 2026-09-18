@@ -3,13 +3,17 @@ from pathlib import Path
 
 import numpy as np
 
+from ep1_fashion_mnist.data import (
+    normalize_images,
+    one_hot_encode,
+    prepare_fashion_mnist,
+)
 from ep1_fashion_mnist.data_validation import (
     DataContractError,
     validate_image_classification_split,
     validate_train_validation_partition,
 )
-from ep1_fashion_mnist.data import normalize_images, one_hot_encode, prepare_fashion_mnist
-from ep1_fashion_mnist.experiment import load_config
+from ep1_fashion_mnist.experiment import calculate_validation_metrics, load_config
 from ep1_fashion_mnist.model import build_mlp, compile_model
 
 
@@ -193,6 +197,23 @@ class ModelAndConfigurationTests(unittest.TestCase):
         self.assertEqual(config["label_encoding"], "one_hot")
         self.assertEqual(config["output_activation"], "softmax")
         self.assertEqual(config["loss"], "categorical_crossentropy")
+
+
+class ValidationMetricsTests(unittest.TestCase):
+    def test_reports_macro_and_weighted_metrics(self):
+        actual = np.array([0, 0, 0, 1])
+        predicted = np.array([0, 0, 1, 1])
+
+        metrics = calculate_validation_metrics(actual, predicted)
+
+        self.assertAlmostEqual(metrics.accuracy, 0.75)
+        self.assertAlmostEqual(metrics.precision_macro, 0.75)
+        self.assertAlmostEqual(metrics.recall_macro, 5 / 6)
+        self.assertAlmostEqual(metrics.f1_macro, 11 / 15)
+        self.assertAlmostEqual(metrics.precision_weighted, 0.875)
+        self.assertAlmostEqual(metrics.recall_weighted, 0.75)
+        self.assertAlmostEqual(metrics.f1_weighted, 23 / 30)
+        self.assertNotEqual(metrics.f1_macro, metrics.f1_weighted)
 
 
 if __name__ == "__main__":

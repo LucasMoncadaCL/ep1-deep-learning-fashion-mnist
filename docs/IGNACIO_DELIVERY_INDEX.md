@@ -1,7 +1,7 @@
 # Índice de entrega — Ignacio Silva
 
 **Estado:** `READY_FOR_REVIEW`  
-**Rama:** `codex/ignacio-data-baseline`  
+**Rama:** `feature/ignacio-data-baseline`
 **Revisor requerido:** Cesar Rojas
 
 Este archivo es la puerta de entrada para reproducir, revisar y continuar el bloque inicial sin depender de conversaciones previas.
@@ -29,11 +29,12 @@ Ejecutar desde la raíz del repositorio, dentro de la rama de Ignacio:
 ```powershell
 uv sync --frozen
 $env:PYTHONPATH = "src"
-.\.venv\Scripts\python.exe -m unittest discover -s tests -v
-.\.venv\Scripts\jupyter.exe nbconvert --to notebook --execute --inplace notebooks\01_ignacio_data_baseline.ipynb --ExecutePreprocessor.timeout=120
+uv run python -m unittest discover -s tests -v
+$env:MPLCONFIGDIR = "$PWD\tmp\matplotlib"
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks\01_ignacio_data_baseline.ipynb --ExecutePreprocessor.timeout=120
 ```
 
-Resultado esperado: 12 pruebas correctas; notebook ejecutado sin traceback; E0 cercano a accuracy validation 0,8722. Pequeñas variaciones numéricas solo deben investigarse si cambian la conclusión experimental.
+Resultado esperado: 14 pruebas correctas; notebook ejecutado sin traceback; E0 cercano a accuracy validation 0,8722. Pequeñas variaciones numéricas solo deben investigarse si cambian la conclusión experimental.
 
 ## Control que debe usar Lucas
 
@@ -43,8 +44,21 @@ Comando para reproducirlo sin modificar el notebook:
 
 ```powershell
 $env:PYTHONPATH = "src"
-.\.venv\Scripts\python.exe -m ep1_fashion_mnist.experiment configs\baseline.json --output results\runs\e0_reproduced
+uv run python -m ep1_fashion_mnist.experiment configs\baseline.json --output results\runs\E0
 ```
+
+## Reproducción de comparaciones E1/E2
+
+Las comparaciones se vuelven a generar desde las configuraciones versionadas. Cada comando entrena solo con train/validation y escribe en el directorio indicado tres artefactos locales: `<ID>_history.csv`, `<ID>_validation_metrics.json` y `<ID>_curves.png`. `results/runs/` está ignorado deliberadamente porque es evidencia regenerable; las tablas y figuras seleccionadas sí se versionan.
+
+```powershell
+$env:PYTHONPATH = "src"
+uv run python -m ep1_fashion_mnist.experiment configs\E1_tanh.json --output results\runs\E1_tanh
+uv run python -m ep1_fashion_mnist.experiment configs\E1_sigmoid.json --output results\runs\E1_sigmoid
+uv run python -m ep1_fashion_mnist.experiment configs\E2_mse.json --output results\runs\E2_mse
+```
+
+El JSON de cada corrida contiene Accuracy, Precision, Recall y F1 tanto macro como ponderadas. Dado que validation conserva 600 ejemplos por clase, ambas familias de métricas coinciden en las corridas E0--E2; se mantienen ambas para que el contrato siga siendo válido si una futura partición no fuera balanceada.
 
 ## Límites que no se deben cruzar
 

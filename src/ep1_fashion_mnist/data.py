@@ -1,7 +1,7 @@
 """Carga y preprocesamiento reproducible de Fashion-MNIST."""
 
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable
 
 import numpy as np
 from sklearn.model_selection import train_test_split
