@@ -1,8 +1,12 @@
 # Índice de entrega — Ignacio Silva
 
-**Estado:** `READY_FOR_REVIEW`  
+**Estado:** `ACCEPTED`
+
 **Rama:** `feature/ignacio-data-baseline`
-**Revisor requerido:** Cesar Rojas
+
+**Aceptado por:** Lucas Moncada, como dueño del repositorio
+
+**Fecha de aceptación:** 18-09-2026
 
 Este archivo es la puerta de entrada para reproducir, revisar y continuar el bloque inicial sin depender de conversaciones previas.
 

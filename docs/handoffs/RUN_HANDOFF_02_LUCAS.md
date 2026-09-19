@@ -1,21 +1,22 @@
 # Run Handoff 02 - Lucas Moncada
 
-**Estado:** WAITING_ON_PREDECESSOR  
+**Estado:** READY_TO_START
+
 **Responsable:** Lucas Moncada  
 **Revisor de salida:** Ignacio Silva  
 **Siguiente responsable:** Cesar Rojas
 
-## Entrada obligatoria desde Ignacio
+## Entrada aceptada desde Ignacio
 
-Esta sección debe ser completada al cerrar el Handoff 01:
+El Handoff 01 fue aceptado por Lucas Moncada, como dueño del repositorio, el 18-09-2026. La entrada disponible para esta etapa es:
 
-- estado o commit revisado: revisar el tip vigente de `feature/ignacio-data-baseline` mediante `git log --oneline main..HEAD` y registrar su hash al aceptar el Handoff 01; no usar hashes anteriores a la reescritura del historial;
+- estado revisado: la fuente aceptada es el tip de `feature/ignacio-data-baseline` registrado en la PR #1; después de su integración, `main` pasa a ser la fuente de verdad para iniciar este handoff;
 - entorno probado: `uv 0.12.10`, Python 3.12.14 en `.venv`; reconstruir con `uv sync --frozen`;
 - contrato de datos: `prepare_fashion_mnist()` en `src/ep1_fashion_mnist/data.py`; split estratificado seed 42 de 54.000/6.000, imágenes `float32 [0,1]`, test oficial sellado;
 - módulos públicos: `data.py` (carga/preprocesamiento), `model.py` (MLP/compilación), `experiment.py` (entrenamiento y métricas de validation) y `visualization.py`;
 - baseline de control: E0 en `configs/baseline.json`: `[256,128]`, ReLU, Softmax, categorical crossentropy, SGD 0,01, batch 128, 20 épocas, sin regularización;
 - métricas de referencia: E0 obtuvo accuracy validation 0,8722 y F1 macro/ponderado 0,8726; usar `results/tables/E0_validation_summary.md` y `results/figures/E0_curves.png`. Las métricas JSON incluyen Precision, Recall y F1 macro y ponderadas;
-- riesgos y decisiones abiertas: no usar test para ajuste; ReLU + categorical crossentropy queda como control (no modelo final); comparar learning rate, batch y capacidad con una variable por vez. Validación final de portabilidad en Colab pendiente. Lucas puede explorar en paralelo, pero Cesar debe aceptar Handoff 01 antes de adoptar decisiones definitivas sobre esta base.
+- riesgos y decisiones abiertas: no usar test para ajuste; ReLU + categorical crossentropy queda como control (no modelo final); comparar learning rate, batch y capacidad con una variable por vez. La validación final de portabilidad en Colab continúa pendiente.
 
 ### Comandos de reproducción recibidos
 

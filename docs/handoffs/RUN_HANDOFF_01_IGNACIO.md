@@ -1,13 +1,18 @@
 # Run Handoff 01 - Ignacio Silva
 
-**Estado:** READY_FOR_REVIEW
+**Estado:** ACCEPTED
 **Responsable:** Ignacio Silva  
-**Revisor de salida:** Cesar Rojas  
+**Revisor de salida:** Lucas Moncada, como dueño del repositorio
+
 **Siguiente responsable:** Lucas Moncada
+
+## Cierre de revisión
+
+Lucas Moncada aceptó este handoff el 18-09-2026 como dueño del repositorio, después de reproducir el entorno, las 14 pruebas, el notebook y los experimentos E0, E1 y E2; revisar el contrato de métricas; y comprobar las correcciones documentales. Esta aceptación habilita el Handoff 02 sin convertir E0 en modelo final ni autorizar el uso del conjunto de test para ajuste.
 
 ## Corrección posterior a revisión
 
-La revisión de la entrega solicitó reforzar reproducibilidad, trazabilidad y el contrato de métricas. Se corrigieron los comandos para usar `uv run`, se documentó la reproducción de E0/E1/E2, se añadieron métricas macro junto a las ponderadas, se actualizaron las referencias documentales y se corrigieron observaciones de Ruff. El estado permanece `READY_FOR_REVIEW`: esta actualización no convierte el handoff en aceptado.
+La revisión de la entrega solicitó reforzar reproducibilidad, trazabilidad y el contrato de métricas. Se corrigieron los comandos para usar `uv run`, se documentó la reproducción de E0/E1/E2, se añadieron métricas macro junto a las ponderadas, se actualizaron las referencias documentales y se corrigieron observaciones de Ruff. Tras verificar estas correcciones, el estado cambió de `READY_FOR_REVIEW` a `ACCEPTED`.
 
 El historial de la rama se reescribió mediante `--force-with-lease`. Todos los títulos y cuerpos de los commits quedaron en español; no quedan decisiones pendientes respecto de esta política.
 
@@ -170,7 +175,7 @@ El handoff puede pasar a `READY_FOR_REVIEW` cuando:
 - las desviaciones y preguntas abiertas están explícitas;
 - Lucas puede identificar exactamente qué configuración usar como control.
 
-El estado cambia a `ACCEPTED` cuando Cesar revisa la documentación, ejecuta las verificaciones acordadas y puede explicar cómo continuar.
+El estado cambia a `ACCEPTED` cuando el revisor de salida designado o el dueño del repositorio revisa la documentación, ejecuta las verificaciones acordadas y puede explicar cómo continuar.
 
 ## 8. Condiciones que obligan a detenerse y documentar
 

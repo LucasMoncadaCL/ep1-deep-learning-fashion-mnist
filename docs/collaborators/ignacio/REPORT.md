@@ -1,6 +1,8 @@
 # Informe de colaborador - Ignacio Silva
 
-**Estado:** READY_FOR_REVIEW
+**Estado:** ACCEPTED
+
+**Aceptado por:** Lucas Moncada, como dueño del repositorio, el 18-09-2026
 
 ## Metas orientativas
 
@@ -106,7 +108,6 @@ Durante E0, la accuracy de validation aumentó de 0,7592 a 0,8722 y la loss de v
 
 ## Asuntos abiertos
 
-- Cesar debe revisar este bloque antes de que Lucas tome sus decisiones como base aceptada.
 - Las curvas comparativas de activación y pérdida ya están versionadas en `results/figures/` y se muestran en el notebook; el test sigue sin evaluación.
 - Confirmar el manifiesto en Colab durante la validación final del proyecto.
 
