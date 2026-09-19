@@ -306,3 +306,27 @@ Con 20 épocas, `0.001`, `0.01` y `0.1` obtuvieron respectivamente accuracy de v
 ### Riesgo y seguimiento
 
 Con `0.1`, el gap final de accuracy fue 0,0298 y el de loss 0,0885; la mejor accuracy de validation apareció en la época 13 y la menor loss en la 18. E4 y E5 deberán comprobar si esta separación aumenta, y la etapa condicional de Early Stopping retomará estas curvas. El conjunto oficial de test permaneció sellado.
+
+---
+
+## D-015 - Batch size candidato después de E4
+
+**Estado:** aceptada
+
+**Fecha:** 18-09-2026
+
+### Situación
+
+Después de seleccionar `learning_rate=0.1`, la etapa E4 debía comparar batch sizes sin modificar arquitectura, activación, pérdida, optimizador, épocas, partición ni seed.
+
+### Decisión
+
+Mantener `batch_size=128` como control para el experimento E5 de capacidad. La decisión es provisional para la cadena de hiperparámetros y no selecciona el modelo final.
+
+### Evidencia
+
+Con 20 épocas, los batch sizes 32, 128 y 512 obtuvieron respectivamente accuracy de validation 0,8860, 0,8933 y 0,8745; sus F1 Macro fueron 0,8864, 0,8936 y 0,8771. Las duraciones por CPU fueron 57,46, 20,98 y 10,01 segundos. Batch 128 logró el mejor desempeño con costo intermedio.
+
+### Alternativas y seguimiento
+
+Batch 32 presentó gaps finales de accuracy y loss de 0,0534 y 0,2022, además de deterioro de `val_loss` después de la época 9, por lo que se descarta por costo y sobreajuste. Batch 512 fue el más rápido y mostró los menores gaps, pero perdió 1,88 puntos porcentuales de accuracy frente a 128; queda como alternativa si el costo computacional se vuelve prioritario. E5 deberá comprobar si cambiar la capacidad modifica la separación train-validation. El conjunto oficial de test permaneció sellado.

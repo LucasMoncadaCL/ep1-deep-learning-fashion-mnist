@@ -99,7 +99,7 @@ Seleccionar el valor que entregue el mejor equilibrio entre métricas de validat
 
 ## Etapa 3 — E4: batch size
 
-**Estado:** LISTA PARA INICIAR
+**Estado:** COMPLETADA
 
 ### Comparación inicial
 
@@ -113,9 +113,17 @@ Se utilizará el learning rate seleccionado en E3 y se mantendrán fijas las dem
 
 Comparar métricas, estabilidad, tiempo total, tiempo por época y costo computacional. Una mejora marginal no justifica automáticamente un batch más costoso.
 
+### Evidencia y decisión
+
+- `32`: accuracy `0,8860`, F1 Macro `0,8864` y 57,46 segundos; presentó el mayor gap y deterioro de `val_loss` después de la época 9.
+- `128`: accuracy `0,8933`, F1 Macro `0,8936` y 20,98 segundos; obtuvo el mejor desempeño con costo intermedio.
+- `512`: accuracy `0,8745`, F1 Macro `0,8771` y 10,01 segundos; fue el más rápido y con menor gap, pero perdió 1,88 puntos porcentuales de accuracy frente a 128.
+- Se mantiene `batch_size=128` para E5 por su mejor equilibrio entre desempeño, generalización y costo.
+- `512` queda documentado como alternativa de eficiencia, mientras que `32` se descarta por mayor costo y sobreajuste.
+
 ## Etapa 4 — E5: capacidad
 
-**Estado:** PENDIENTE
+**Estado:** LISTA PARA INICIAR
 
 ### Comparación inicial
 

@@ -247,6 +247,29 @@ class ModelAndConfigurationTests(unittest.TestCase):
                 self.assertEqual(config["experiment_id"], experiment_id)
                 self.assertEqual(config["learning_rate"], expected_learning_rate)
 
+    def test_e4_configs_change_only_the_batch_size(self):
+        root = Path(__file__).resolve().parents[1]
+        e3_control = load_config(root / "configs" / "E3_lr_0_1.json")
+        expected_batch_sizes = {
+            "E4_batch_32": 32,
+            "E4_batch_128": 128,
+            "E4_batch_512": 512,
+        }
+        ignored_fields = {"experiment_id", "status", "batch_size"}
+        baseline_control = {
+            key: value for key, value in e3_control.items() if key not in ignored_fields
+        }
+
+        for experiment_id, expected_batch_size in expected_batch_sizes.items():
+            with self.subTest(experiment_id=experiment_id):
+                config = load_config(root / "configs" / f"{experiment_id}.json")
+                controlled_fields = {
+                    key: value for key, value in config.items() if key not in ignored_fields
+                }
+                self.assertEqual(controlled_fields, baseline_control)
+                self.assertEqual(config["experiment_id"], experiment_id)
+                self.assertEqual(config["batch_size"], expected_batch_size)
+
 
 class ValidationMetricsTests(unittest.TestCase):
     def test_reports_macro_and_weighted_metrics(self):

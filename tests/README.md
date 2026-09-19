@@ -33,8 +33,9 @@ Los tests no sustituyen el análisis experimental; protegen sus supuestos.
 - resumen de convergencia, costo y gaps a partir del historial de entrenamiento.
 - construcción de un registro autocontenido con configuración, entrenamiento y métricas.
 - control de que las configuraciones E3 modifiquen únicamente learning rate.
+- control de que las configuraciones E4 modifiquen únicamente batch size respecto del control seleccionado en E3.
 
-El total actual es 19 pruebas.
+El total actual es 20 pruebas.
 
 Ejecución:
 
