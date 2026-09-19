@@ -123,7 +123,7 @@ Comparar métricas, estabilidad, tiempo total, tiempo por época y costo computa
 
 ## Etapa 4 — E5: capacidad
 
-**Estado:** LISTA PARA INICIAR
+**Estado:** COMPLETADA
 
 ### Comparación inicial
 
@@ -137,17 +137,28 @@ Se utilizarán el learning rate y batch seleccionados en las etapas anteriores.
 
 Comparar capacidad de ajuste, métricas de validation, gap, cantidad de parámetros y duración. Una red mayor solo será candidata si su mejora compensa su complejidad y no introduce sobreajuste relevante.
 
+### Evidencia y decisión
+
+- `[64]`: 50.890 parámetros, accuracy `0,8873`, F1 Macro `0,8881` y 12,09 segundos; fue eficiente, pero perdió desempeño frente al control.
+- `[256, 128]`: 235.146 parámetros, accuracy `0,8933`, F1 Macro `0,8936` y 19,52 segundos; mantiene el mejor equilibrio.
+- `[512, 256, 128]`: 567.434 parámetros, accuracy `0,8990`, F1 Macro `0,8989` y 31,32 segundos; mejoró solo 0,57 puntos de accuracy frente al control, con 2,41 veces más parámetros y mayores gaps.
+- Se selecciona `[256, 128]` como candidata para Cesar. La red grande queda como alternativa si se prioriza desempeño absoluto sobre eficiencia y generalización.
+
 ## Etapa 5 — Evaluación de Early Stopping
 
-**Estado:** PENDIENTE Y CONDICIONAL
+**Estado:** COMPLETADA SIN ACTIVAR EXPERIMENTO ADICIONAL
 
 Early Stopping se incorporará únicamente después de interpretar las curvas sin callback. Si corresponde, se comparará la configuración candidata con y sin la técnica, documentando `monitor`, `patience`, `min_delta`, máximo de épocas y restauración de pesos.
 
 Esta evaluación es preliminar respecto de E10: Cesar podrá repetirla después de estudiar optimizadores y regularización si esas decisiones cambian sustancialmente la dinámica de entrenamiento.
 
+### Decisión condicional
+
+No se ejecuta una comparación adicional con callback. En la candidata `[256, 128]`, la menor `val_loss` aparece en la época 18 (`0,3009`) y la final es `0,3015`; la diferencia es aproximadamente `0,0006` y no existe deterioro material de accuracy. El ahorro potencial sería de dos épocas dentro de un presupuesto corto. Cesar deberá reevaluar Early Stopping si sus cambios generan deterioro sostenido o desplazan la mejor época de forma relevante.
+
 ## Etapa 6 — Consolidación y handoff
 
-**Estado:** PENDIENTE
+**Estado:** LISTA PARA INICIAR
 
 ### Entregables
 

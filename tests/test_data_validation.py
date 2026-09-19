@@ -270,6 +270,29 @@ class ModelAndConfigurationTests(unittest.TestCase):
                 self.assertEqual(config["experiment_id"], experiment_id)
                 self.assertEqual(config["batch_size"], expected_batch_size)
 
+    def test_e5_configs_change_only_the_hidden_layers(self):
+        root = Path(__file__).resolve().parents[1]
+        e4_control = load_config(root / "configs" / "E4_batch_128.json")
+        expected_hidden_layers = {
+            "E5_capacity_64": [64],
+            "E5_capacity_256_128": [256, 128],
+            "E5_capacity_512_256_128": [512, 256, 128],
+        }
+        ignored_fields = {"experiment_id", "status", "hidden_layers"}
+        baseline_control = {
+            key: value for key, value in e4_control.items() if key not in ignored_fields
+        }
+
+        for experiment_id, hidden_layers in expected_hidden_layers.items():
+            with self.subTest(experiment_id=experiment_id):
+                config = load_config(root / "configs" / f"{experiment_id}.json")
+                controlled_fields = {
+                    key: value for key, value in config.items() if key not in ignored_fields
+                }
+                self.assertEqual(controlled_fields, baseline_control)
+                self.assertEqual(config["experiment_id"], experiment_id)
+                self.assertEqual(config["hidden_layers"], hidden_layers)
+
 
 class ValidationMetricsTests(unittest.TestCase):
     def test_reports_macro_and_weighted_metrics(self):

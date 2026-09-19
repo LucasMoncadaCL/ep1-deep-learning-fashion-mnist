@@ -330,3 +330,51 @@ Con 20 épocas, los batch sizes 32, 128 y 512 obtuvieron respectivamente accurac
 ### Alternativas y seguimiento
 
 Batch 32 presentó gaps finales de accuracy y loss de 0,0534 y 0,2022, además de deterioro de `val_loss` después de la época 9, por lo que se descarta por costo y sobreajuste. Batch 512 fue el más rápido y mostró los menores gaps, pero perdió 1,88 puntos porcentuales de accuracy frente a 128; queda como alternativa si el costo computacional se vuelve prioritario. E5 deberá comprobar si cambiar la capacidad modifica la separación train-validation. El conjunto oficial de test permaneció sellado.
+
+---
+
+## D-016 - Capacidad candidata después de E5
+
+**Estado:** aceptada
+
+**Fecha:** 18-09-2026
+
+### Situación
+
+E5 debía comparar capacidad manteniendo fijos datos, funciones, optimizador, `learning_rate=0.1`, batch 128, 20 épocas y seed 42.
+
+### Decisión
+
+Entregar `[256, 128]` como arquitectura candidata equilibrada para la etapa de Cesar. Esta decisión no congela el modelo final y puede revisarse con evidencia posterior.
+
+### Evidencia
+
+Las arquitecturas `[64]`, `[256, 128]` y `[512, 256, 128]` utilizaron 50.890, 235.146 y 567.434 parámetros; obtuvieron accuracy de validation 0,8873, 0,8933 y 0,8990, y F1 Macro 0,8881, 0,8936 y 0,8989. La red grande mejoró 0,57 puntos porcentuales de accuracy frente a la candidata, pero usó 2,41 veces más parámetros, tardó 1,60 veces más y aumentó los gaps finales a 0,0379 de accuracy y 0,1215 de loss.
+
+### Alternativas y seguimiento
+
+`[64]` queda como alternativa compacta y `[512, 256, 128]` como alternativa de desempeño absoluto. Cesar recibirá `[256, 128]` para estudiar optimizadores y regularización sin asumir que sea una arquitectura definitiva. El conjunto oficial de test permaneció sellado.
+
+---
+
+## D-017 - Early Stopping no activado en la etapa de Lucas
+
+**Estado:** aceptada
+
+**Fecha:** 18-09-2026
+
+### Situación
+
+El plan permitía incorporar Early Stopping solo si las curvas sin callback mostraban una oportunidad material de controlar sobreajuste o costo.
+
+### Decisión
+
+No ejecutar una comparación adicional con Early Stopping sobre la candidata actual. Cesar deberá reevaluar la técnica si sus cambios de optimizador o regularización alteran sustancialmente la convergencia.
+
+### Evidencia
+
+Para `[256, 128]`, la menor `val_loss` fue 0,3009 en la época 18 y la final fue 0,3015; la diferencia aproximada de 0,0006 no representa deterioro material. La mejor accuracy fue 0,8938 en la época 13 y la final 0,8933. Con un máximo de 20 épocas, detener en la época 18 aportaría un ahorro pequeño.
+
+### Alcance
+
+La decisión evita añadir un callback sin evidencia suficiente y no sostiene que Early Stopping sea inútil. Si una configuración posterior presenta deterioro sostenido, deberá compararse con y sin callback, documentando `monitor`, `patience`, `min_delta`, restauración de pesos y presupuesto máximo.

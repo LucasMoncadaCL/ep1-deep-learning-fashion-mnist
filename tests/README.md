@@ -34,8 +34,9 @@ Los tests no sustituyen el análisis experimental; protegen sus supuestos.
 - construcción de un registro autocontenido con configuración, entrenamiento y métricas.
 - control de que las configuraciones E3 modifiquen únicamente learning rate.
 - control de que las configuraciones E4 modifiquen únicamente batch size respecto del control seleccionado en E3.
+- control de que las configuraciones E5 modifiquen únicamente las capas ocultas respecto del control seleccionado en E4.
 
-El total actual es 20 pruebas.
+El total actual es 21 pruebas.
 
 Ejecución:
 
