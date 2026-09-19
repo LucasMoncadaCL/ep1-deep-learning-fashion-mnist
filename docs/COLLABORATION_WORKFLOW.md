@@ -85,6 +85,8 @@ Lucas revisa a Cesar
 
 El revisor no certifica que el modelo sea óptimo. Certifica que el trabajo es comprensible, reproducible y suficientemente respaldado para continuar.
 
+La revisión cruzada no reemplaza la aprobación del dueño del repositorio. Lucas revisa además que cada handoff respete el alcance global y autoriza su integración; ambas funciones deben quedar diferenciadas para evitar que un colaborador figure como único revisor de su propia entrega.
+
 ## 8. Actualización de handoffs posteriores
 
 Los handoffs de Lucas y Cesar comienzan como guías orientativas. El colaborador anterior debe completarlos con:

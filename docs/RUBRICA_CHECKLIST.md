@@ -15,7 +15,7 @@ Este archivo no declara cumplimiento por intención. Un indicador solo se marca 
 - [~] **IEE 1.1.1 (2%) - Carga y preprocesamiento.** Evidencia: `01_ignacio_data_baseline.ipynb` ejecutado, contrato validado y figuras D0; pendiente de revisión cruzada.
 - [~] **IEE 1.1.2 (2%) - Épocas, learning rate y batch size.** Evidencia: E3 y E4 comparan tres learning rates y tres batch sizes mediante configuraciones, tablas, curvas y decisiones D-014/D-015; integrado en el notebook de Lucas y pendiente del notebook final.
 - [~] **IEE 1.1.3 (2%) - Experimentos controlados.** Evidencia: E1/E2 varían exclusivamente activación o loss; tabla y figuras comparativas seleccionadas, pendiente de revisión.
-- [~] **IEE 1.1.4 (1%) - Ajustes según resultados.** Evidencia: E3–E5 seleccionan learning rate 0,1, batch 128 y capacidad `[256,128]`; D-017 descarta condicionalmente Early Stopping por falta de beneficio material. Integrado en el notebook de Lucas y pendiente del cierre grupal.
+- [~] **IEE 1.1.4 (1%) - Ajustes según resultados.** Evidencia: E3–E5 seleccionan learning rate 0,1, batch 128 y capacidad `[256,128]`; D-017 no activa Early Stopping por falta de beneficio material y D-018 impide declararlo sin implementación. Integrado en el notebook de Lucas y pendiente del cierre grupal.
 
 ### IEE 1.2 - Funciones de la red
 
@@ -31,7 +31,7 @@ Este archivo no declara cumplimiento por intención. Un indicador solo se marca 
 
 ### IEE 1.4 - Evaluación
 
-- [ ] **IEE 1.4.1 (2%) - Métricas pertinentes.** Evidencia: Accuracy, Precision, Recall y F1 correctamente calculadas e interpretadas.
+- [~] **IEE 1.4.1 (2%) - Métricas pertinentes.** Evidencia: E3–E5 conservan Accuracy, Precision, Recall y F1 macro y ponderadas en una tabla versionada y en el notebook de Lucas; pendiente del análisis final por clase.
 - [ ] **IEE 1.4.2 (1%) - Uso de métricas para mejorar.** Evidencia: propuestas o decisiones derivadas de métricas globales y por clase.
 - [ ] **IEE 1.4.3 (1%) - Comparación y solución final.** Evidencia: tabla global y elección de configuración basada en evidencia experimental.
 
@@ -65,8 +65,8 @@ Este archivo no declara cumplimiento por intención. Un indicador solo se marca 
 
 - [ ] Notebook final ejecutado de principio a fin en Google Colab.
 - [~] Markdown antes y después de E0–E5 en los notebooks de Ignacio y Lucas; pendiente de verificar el notebook final.
-- [ ] Código modularizado y sin duplicación innecesaria.
-- [ ] Tabla maestra de configuraciones y resultados.
+- [~] Código reutilizable centralizado en `src/ep1_fashion_mnist/`; pendiente de revisar los módulos que añada Cesar.
+- [~] Tabla consolidada de métricas E3–E5 disponible; pendiente de incorporar optimización, regularización y evaluación final.
 - [ ] Test utilizado solo después de congelar decisiones.
 - [~] Instrucciones reproducibles en entorno, informes y handoffs; pendiente de validar la ruta final de Colab.
 - [ ] Historial Git con contribuciones trazables.

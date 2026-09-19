@@ -378,3 +378,23 @@ Para `[256, 128]`, la menor `val_loss` fue 0,3009 en la época 18 y la final fue
 ### Alcance
 
 La decisión evita añadir un callback sin evidencia suficiente y no sostiene que Early Stopping sea inútil. Si una configuración posterior presenta deterioro sostenido, deberá compararse con y sin callback, documentando `monitor`, `patience`, `min_delta`, restauración de pesos y presupuesto máximo.
+
+---
+
+## D-018 - Rechazo explícito de Early Stopping no implementado
+
+**Estado:** aceptada
+
+**Fecha:** 19-09-2026
+
+### Situación
+
+El esquema contenía el campo booleano `early_stopping`, pero el ejecutor no construía callbacks. Aceptar `true` habría permitido registrar una técnica que no se aplicaba realmente.
+
+### Decisión
+
+Mientras no exista una implementación completa, `validate_config` rechaza `early_stopping=true` mediante un error explícito. Las configuraciones actuales, todas con `false`, mantienen su comportamiento y resultados.
+
+### Justificación técnica
+
+Fallar anticipadamente preserva la correspondencia entre configuración efectiva y evidencia. Si Cesar encuentra justificación para Early Stopping, deberá implementar y probar el callback junto con `monitor`, `patience`, `min_delta`, máximo de épocas y restauración de pesos antes de aceptar una configuración activa.

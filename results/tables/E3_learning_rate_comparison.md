@@ -18,6 +18,7 @@ La selección conserva una advertencia: el gap final de accuracy aumentó a 2,98
 
 ## Evidencia
 
+- `results/tables/E3_E5_validation_metrics.md` — Accuracy, Precision, Recall y F1, macro y ponderadas.
 - `results/figures/E3_learning_rate_validation_accuracy.png`
 - `results/figures/E3_learning_rate_validation_loss.png`
 - Registros regenerables locales bajo `results/runs/E3_lr_*`

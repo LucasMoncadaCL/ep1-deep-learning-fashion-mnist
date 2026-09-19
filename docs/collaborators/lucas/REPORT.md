@@ -27,6 +27,8 @@
 - Se evaluó la condición de Early Stopping y no se activó un experimento adicional porque la candidata no mostró deterioro material al final de 20 épocas.
 - Se creó y ejecutó `notebooks/02_lucas_hyperparameters.ipynb`, que reproduce E3–E5 y presenta tablas, curvas y decisiones técnicas sin consultar test.
 - Se completaron el cierre del Handoff 02 y la entrada técnica del Handoff 03 para Cesar.
+- La auditoría posterior cerró el contrato silencioso de Early Stopping, validó los metadatos efectivos de configuración y añadió evidencia versionada de Precision y Recall.
+- Ruff quedó bloqueado en `uv.lock` y se añadió un workflow de calidad para pruebas y lint en PR y `main`.
 
 ## Archivos creados o modificados
 
@@ -44,6 +46,7 @@
 - `results/figures/E4_batch_size_validation_accuracy.png` y `results/figures/E4_batch_size_validation_loss.png`.
 - `configs/E5_capacity_64.json`, `configs/E5_capacity_256_128.json` y `configs/E5_capacity_512_256_128.json`.
 - `results/tables/E5_capacity_comparison.md`.
+- `results/tables/E3_E5_validation_metrics.md`, con Accuracy, Precision, Recall y F1 macro y ponderadas.
 - `results/figures/E5_capacity_validation_accuracy.png` y `results/figures/E5_capacity_validation_loss.png`.
 - `docs/DECISION_LOG.md` y `docs/RUBRICA_CHECKLIST.md`.
 - `notebooks/02_lucas_hyperparameters.ipynb`.
@@ -55,7 +58,7 @@
 - `python --version` dentro de `.venv`: `Python 3.12.13`.
 - `sys.executable`: `C:\Users\lucas\Documents\Deep-Learning-ev1\.venv\Scripts\python.exe`.
 - comando de sincronización: `uv sync --frozen`.
-- resultado de pruebas dentro de `.venv`: 21/21 correctas.
+- resultado de pruebas dentro de `.venv`: 22/22 correctas.
 
 ## Decisiones técnicas
 
@@ -68,6 +71,7 @@
 | Mantener batch size 128 para E5 | 32 y 512 | Entregó la mejor accuracy y F1 Macro, con menor costo y gaps que 32; 512 fue más rápido, pero perdió desempeño relevante | Tabla y figuras E4; D-015 |
 | Seleccionar capacidad `[256, 128]` para Cesar | `[64]` y `[512, 256, 128]` | Conserva un mejor equilibrio que la red grande: 58,6 % menos parámetros y 37,7 % menos tiempo a cambio de 0,57 puntos de accuracy | Tabla y figuras E5; D-016 |
 | No activar Early Stopping en esta etapa | Ejecutar una comparación adicional con callback | La candidata solo empeoró `val_loss` en aproximadamente 0,0006 entre su mínimo y el final; el ahorro potencial es de dos épocas y no hay degradación material de accuracy | Curvas E5; D-017 |
+| Rechazar `early_stopping=true` mientras no exista callback | Aceptar el campo como indicador sin efecto | Evita que una corrida declare una técnica que el ejecutor no aplicó | Prueba de contrato; D-018 |
 
 ## Experimentos
 
@@ -91,7 +95,7 @@ uv lock --check
 uv sync --frozen
 $env:PYTHONPATH = "src"
 uv run python -m unittest discover -s tests -v
-uvx ruff check src tests
+uv run ruff check src tests
 uv run python -m ep1_fashion_mnist.experiment configs\baseline.json --output results\runs\stage1_e0_contract
 uv run python -m ep1_fashion_mnist.experiment configs\E3_lr_0_001.json --output results\runs\E3_lr_0_001
 uv run python -m ep1_fashion_mnist.experiment configs\E3_lr_0_01.json --output results\runs\E3_lr_0_01
@@ -130,4 +134,4 @@ No hubo desviaciones materiales. La etapa de Early Stopping era condicional y no
 
 ## Resumen para el handoff a Cesar
 
-Cesar recibe como control una MLP `[256, 128]`, ReLU, Softmax, categorical crossentropy, SGD con `learning_rate=0.1`, batch 128, 20 épocas, seed 42 y sin regularización. En validation obtuvo accuracy `0,8933` y F1 Macro `0,8936` con 235.146 parámetros. La configuración es candidata, no definitiva: debe usarse como control para comparar optimizadores y regularización. Si esas técnicas cambian la convergencia, corresponde reevaluar learning rate y Early Stopping en etapas separadas. El test oficial continúa sellado hasta congelar configuración y protocolo final.
+Cesar recibe como control una MLP `[256, 128]`, ReLU, Softmax, categorical crossentropy, SGD con `learning_rate=0.1`, batch 128, 20 épocas, seed 42 y sin regularización. En validation obtuvo Accuracy `0,8933`, Precision Macro `0,8949`, Recall Macro `0,8933` y F1 Macro `0,8936` con 235.146 parámetros. La configuración es candidata, no definitiva: debe usarse como control para comparar optimizadores y regularización. Si esas técnicas cambian la convergencia, corresponde reevaluar learning rate y Early Stopping en etapas separadas. El test oficial continúa sellado hasta congelar configuración y protocolo final.

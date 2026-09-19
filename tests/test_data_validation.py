@@ -208,6 +208,9 @@ class ModelAndConfigurationTests(unittest.TestCase):
         root = Path(__file__).resolve().parents[1]
         baseline = load_config(root / "configs" / "baseline.json")
         invalid_cases = (
+            ("dataset", "mnist", ValueError, "dataset"),
+            ("input_shape", [32, 32], ValueError, "input_shape"),
+            ("stratified_split", False, ValueError, "stratified_split"),
             ("learning_rate", 0, ValueError, "learning_rate"),
             ("batch_size", 0, ValueError, "batch_size"),
             ("epochs", 0, ValueError, "epochs"),
@@ -223,6 +226,14 @@ class ModelAndConfigurationTests(unittest.TestCase):
                 config = dict(baseline)
                 config[field] = invalid_value
                 validate_config(config)
+
+    def test_rejects_early_stopping_until_the_callback_is_implemented(self):
+        root = Path(__file__).resolve().parents[1]
+        config = load_config(root / "configs" / "baseline.json")
+        config["early_stopping"] = True
+
+        with self.assertRaisesRegex(NotImplementedError, "Early Stopping"):
+            validate_config(config)
 
     def test_e3_configs_change_only_the_learning_rate(self):
         root = Path(__file__).resolve().parents[1]

@@ -22,6 +22,7 @@ No se activa una comparación adicional de Early Stopping en esta etapa. Para la
 
 ## Evidencia
 
+- `results/tables/E3_E5_validation_metrics.md` — Accuracy, Precision, Recall y F1, macro y ponderadas.
 - `results/figures/E5_capacity_validation_accuracy.png`
 - `results/figures/E5_capacity_validation_loss.png`
 - Registros regenerables locales bajo `results/runs/E5_capacity_*`

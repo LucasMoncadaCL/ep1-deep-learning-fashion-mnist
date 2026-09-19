@@ -174,9 +174,9 @@ No se ejecuta una comparación adicional con callback. En la candidata `[256, 12
 
 - `notebooks/02_lucas_hyperparameters.ipynb` ejecutado de principio a fin desde `.venv`: 6/6 celdas de código con contador y cero errores.
 - Las nueve corridas E3–E5 reprodujeron sus métricas, 20 épocas y cantidades de parámetros.
-- Informe individual y decisiones D-014–D-017 actualizados.
+- Informe individual y decisiones D-014–D-018 actualizados.
 - Handoff 02 listo para revisión y Handoff 03 preparado, condicionado a la aceptación e integración de esta rama.
-- 21 pruebas correctas, Ruff limpio y lock verificado.
+- 22 pruebas correctas, Ruff 0.16.8 bloqueado, workflow de calidad preparado y lock verificado.
 
 ## Verificación general
 
@@ -185,7 +185,7 @@ uv lock --check
 uv sync --frozen
 $env:PYTHONPATH = "src"
 uv run python -m unittest discover -s tests -v
-uvx ruff check src tests
+uv run ruff check src tests
 ```
 
 Cada etapa añadirá sus comandos de reproducción y resultados observados al informe de Lucas. La evaluación sobre test continuará prohibida hasta la etapa final definida para Cesar e integración.

@@ -18,6 +18,7 @@ El batch 32 alcanzó su menor `val_loss` en la época 9 y luego se deterioró ha
 
 ## Evidencia
 
+- `results/tables/E3_E5_validation_metrics.md` — Accuracy, Precision, Recall y F1, macro y ponderadas.
 - `results/figures/E4_batch_size_validation_accuracy.png`
 - `results/figures/E4_batch_size_validation_loss.png`
 - Registros regenerables locales bajo `results/runs/E4_batch_*`

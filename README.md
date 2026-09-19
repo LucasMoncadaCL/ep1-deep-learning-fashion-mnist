@@ -4,9 +4,9 @@ Proyecto colaborativo para estudiar cómo la arquitectura, las funciones, los hi
 
 ## Estado
 
-La etapa inicial de Ignacio está implementada y `READY_FOR_REVIEW`: contrato de datos, EDA, baseline E0 y comparaciones E1/E2 se ejecutaron exclusivamente sobre train/validation. El conjunto oficial de test continúa sellado. La guía, auditoría, checklist y handoffs siguen siendo documentos vivos para las etapas de Lucas, Cesar e integración.
+La etapa inicial de Ignacio fue aceptada e integrada. La etapa de Lucas completó la infraestructura experimental y las comparaciones E3–E5; permanece `READY_FOR_REVIEW` antes de integrarse y habilitar el trabajo de Cesar. Todos los ajustes se ejecutaron exclusivamente sobre train/validation y el conjunto oficial de test continúa sellado.
 
-El punto de entrada para revisar o continuar este bloque es [`docs/IGNACIO_DELIVERY_INDEX.md`](docs/IGNACIO_DELIVERY_INDEX.md).
+Los puntos de entrada actuales son [`docs/handoffs/RUN_HANDOFF_02_LUCAS.md`](docs/handoffs/RUN_HANDOFF_02_LUCAS.md) para revisar la entrega de Lucas y [`docs/handoffs/RUN_HANDOFF_03_CESAR.md`](docs/handoffs/RUN_HANDOFF_03_CESAR.md) para preparar la etapa siguiente una vez aceptada la integración.
 
 ## Principios
 

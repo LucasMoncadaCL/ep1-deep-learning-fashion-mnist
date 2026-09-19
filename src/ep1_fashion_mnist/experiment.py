@@ -53,7 +53,8 @@ class TrainingSummary:
 def validate_config(config: dict) -> dict:
     """Valida anticipadamente el contrato estructural y numérico de una corrida."""
     required = {
-        "experiment_id", "seed", "validation_fraction", "hidden_layers",
+        "experiment_id", "dataset", "input_shape", "stratified_split",
+        "seed", "validation_fraction", "hidden_layers",
         "hidden_activation", "dropout", "batch_normalization", "l2_strength",
         "optimizer", "learning_rate", "loss", "batch_size", "epochs",
         "output_units", "output_activation", "label_encoding", "early_stopping",
@@ -65,6 +66,12 @@ def validate_config(config: dict) -> dict:
         raise TypeError("experiment_id debe ser texto")
     if not config["experiment_id"].strip():
         raise ValueError("experiment_id debe ser un texto no vacío")
+    if config["dataset"] != "fashion_mnist":
+        raise ValueError("dataset debe ser fashion_mnist")
+    if config["input_shape"] != [28, 28]:
+        raise ValueError("input_shape debe ser [28, 28]")
+    if config["stratified_split"] is not True:
+        raise ValueError("stratified_split debe ser true")
     if not isinstance(config["seed"], int) or isinstance(config["seed"], bool):
         raise TypeError("seed debe ser un entero")
     if not isinstance(config["validation_fraction"], (int, float)) or isinstance(
@@ -108,6 +115,11 @@ def validate_config(config: dict) -> dict:
     for field in ("batch_normalization", "early_stopping"):
         if not isinstance(config[field], bool):
             raise TypeError(f"{field} debe ser booleano")
+    if config["early_stopping"]:
+        raise NotImplementedError(
+            "Early Stopping aún no está implementado en el ejecutor; "
+            "no se acepta una configuración que lo declare activo"
+        )
     if config["output_units"] != 10 or config["output_activation"] != "softmax":
         raise ValueError("La configuración requiere 10 salidas Softmax para Fashion-MNIST")
     if config["label_encoding"] != "one_hot":

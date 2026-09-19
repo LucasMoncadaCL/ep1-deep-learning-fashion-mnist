@@ -10,7 +10,7 @@
 
 ## Condición de inicio
 
-Este handoff contiene el contexto técnico necesario, pero Cesar no debe comenzar hasta que Lucas revise y acepte el Handoff 02 e integre la rama correspondiente. Al comenzar, la fuente de verdad será `main` actualizado, no una rama intermedia.
+Este handoff contiene el contexto técnico necesario, pero Cesar no debe comenzar hasta que Ignacio complete la revisión cruzada, Lucas apruebe el alcance e integre la rama correspondiente. Al comenzar, la fuente de verdad será `main` actualizado, no una rama intermedia.
 
 Las metas siguientes son **mínimas y orientativas, ampliables con justificación técnica**. No constituyen una lista exhaustiva ni inmutable. Cualquier ampliación debe respetar la guía maestra, mantener el test sellado durante el ajuste y quedar respaldada en el informe de Cesar.
 
@@ -21,7 +21,7 @@ Las metas siguientes son **mínimas y orientativas, ampliables con justificació
 - SGD con `learning_rate=0.1`, batch 128, 20 épocas y seed 42;
 - sin Dropout, Batch Normalization, L2 ni Early Stopping;
 - 235.146 parámetros;
-- accuracy validation `0,8933` y F1 Macro `0,8936`;
+- Accuracy `0,8933`, Precision Macro `0,8949`, Recall Macro `0,8933` y F1 Macro `0,8936` sobre validation;
 - test oficial no evaluado.
 
 La candidata es un control trazable, no una arquitectura definitiva. La alternativa `[512, 256, 128]` obtuvo accuracy `0,8990`, pero no fue seleccionada porque la mejora de 0,57 puntos implicó 2,41 veces más parámetros, 1,60 veces más tiempo y mayores gaps.
@@ -43,7 +43,8 @@ Los registros locales bajo `results/runs/` son regenerables e ignorados. Las con
 - `results/tables/E3_learning_rate_comparison.md`.
 - `results/tables/E4_batch_size_comparison.md`.
 - `results/tables/E5_capacity_comparison.md`.
-- decisiones D-014–D-017 en `docs/DECISION_LOG.md`.
+- `results/tables/E3_E5_validation_metrics.md`.
+- decisiones D-014–D-018 en `docs/DECISION_LOG.md`.
 - informe `docs/collaborators/lucas/REPORT.md`.
 
 ## Misión
@@ -58,7 +59,7 @@ Cesar debe sincronizar el entorno con `uv sync --frozen` y trabajar dentro del `
 2. Comparar SGD, RMSProp y Adam modificando solo el optimizador bajo un presupuesto común.
 3. Si el optimizador seleccionado exige otro learning rate, realizar una etapa separada y explícita; no mezclar ambos efectos.
 4. Evaluar Dropout, Batch Normalization y L2 mediante comparaciones controladas con/sin técnica.
-5. Reevaluar Early Stopping solo después de observar las nuevas curvas. Documentar `monitor`, `patience`, `min_delta`, máximo de épocas y restauración de pesos si se activa.
+5. Reevaluar Early Stopping solo después de observar las nuevas curvas. El ejecutor actualmente rechaza `early_stopping=true`; si se justifica la técnica, implementar y probar el callback documentando `monitor`, `patience`, `min_delta`, máximo de épocas y restauración de pesos.
 6. Seleccionar y congelar configuración y protocolo mediante métricas de validation, costo, estabilidad y generalización.
 7. Solo entonces ejecutar test una vez, calcular métricas finales, matriz de confusión y análisis visual de errores.
 
@@ -81,6 +82,7 @@ Cesar debe sincronizar el entorno con `uv sync --frozen` y trabajar dentro del `
 - Adam y RMSProp pueden necesitar learning rates distintos; comparar y retunear deben ser etapas separadas.
 - Batch Normalization, Dropout y L2 no deben activarse simultáneamente en la primera comparación.
 - Early Stopping no fue descartado globalmente; quedó condicionado a nueva evidencia.
+- `early_stopping=true` falla anticipadamente hasta que se implemente un callback real; no eliminar esta protección sin pruebas.
 - Los tiempos locales de Lucas fueron medidos por CPU y no deben compararse directamente con GPU o Colab.
 
 ## Comandos iniciales
@@ -89,7 +91,7 @@ Cesar debe sincronizar el entorno con `uv sync --frozen` y trabajar dentro del `
 uv sync --frozen
 $env:PYTHONPATH = "src"
 uv run python -m unittest discover -s tests -v
-uvx ruff check src tests
+uv run ruff check src tests
 uv run python -m ep1_fashion_mnist.experiment configs\E5_capacity_256_128.json --output results\runs\cesar_control_recibido
 ```
 

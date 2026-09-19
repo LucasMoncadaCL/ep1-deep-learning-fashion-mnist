@@ -4,7 +4,9 @@
 
 **Responsable:** Lucas Moncada
 
-**Revisor de salida:** Lucas Moncada, como dueño del repositorio
+**Revisor técnico de salida:** Ignacio Silva
+
+**Aprobación de alcance e integración:** Lucas Moncada, como dueño del repositorio
 
 **Siguiente responsable:** Cesar Rojas
 
@@ -42,6 +44,8 @@ Archivo: `configs/E5_capacity_256_128.json`.
 | Regularización | ninguna |
 | Parámetros | 235.146 |
 | Accuracy validation | 0,8933 |
+| Precision Macro validation | 0,8949 |
+| Recall Macro validation | 0,8933 |
 | F1 Macro validation | 0,8936 |
 
 Esta configuración es una candidata equilibrada para el siguiente control, no el modelo final.
@@ -52,6 +56,7 @@ Esta configuración es una candidata equilibrada para el siguiente control, no e
 - D-015 mantiene batch 128: batch 32 fue más lento y sobreajustó más; 512 fue eficiente, pero perdió 1,88 puntos de accuracy.
 - D-016 selecciona `[256, 128]`: la red grande mejoró 0,57 puntos, pero usó 2,41 veces más parámetros, tardó 1,60 veces más y aumentó los gaps.
 - D-017 no activa Early Stopping: en la candidata, la diferencia entre la mejor `val_loss` y la final fue aproximadamente 0,0006 y el ahorro potencial era de dos épocas.
+- D-018 hace que el ejecutor rechace `early_stopping=true` hasta que exista un callback real y probado.
 
 ## Evidencia verificable
 
@@ -59,9 +64,10 @@ Esta configuración es una candidata equilibrada para el siguiente control, no e
 - `results/tables/E3_learning_rate_comparison.md`.
 - `results/tables/E4_batch_size_comparison.md`.
 - `results/tables/E5_capacity_comparison.md`.
+- `results/tables/E3_E5_validation_metrics.md`, con métricas macro y ponderadas completas.
 - Figuras comparativas E3–E5 bajo `results/figures/`.
 - `docs/collaborators/lucas/REPORT.md`.
-- Decisiones D-014–D-017 en `docs/DECISION_LOG.md`.
+- Decisiones D-014–D-018 en `docs/DECISION_LOG.md`.
 
 ## Verificación y reproducción
 
@@ -69,11 +75,11 @@ Esta configuración es una candidata equilibrada para el siguiente control, no e
 uv sync --frozen
 $env:PYTHONPATH = "src"
 uv run python -m unittest discover -s tests -v
-uvx ruff check src tests
+uv run ruff check src tests
 uv run jupyter nbconvert --to notebook --execute --inplace notebooks\02_lucas_hyperparameters.ipynb --ExecutePreprocessor.timeout=600
 ```
 
-La verificación de cierre debe confirmar `uv lock --check`, 21/21 pruebas, Ruff limpio, ejecución completa del notebook y ausencia de consultas al test.
+La verificación de cierre debe confirmar `uv lock --check`, 22/22 pruebas, Ruff 0.16.8 limpio, ejecución completa del notebook y ausencia de consultas al test.
 
 ## Límites y riesgos
 
@@ -81,8 +87,9 @@ La verificación de cierre debe confirmar `uv lock --check`, 21/21 pruebas, Ruff
 - Las duraciones corresponden a CPU local y solo son comparables dentro del mismo entorno.
 - La red grande conserva el mayor desempeño absoluto y puede revisitarse si el equipo decide priorizar métricas sobre costo y generalización.
 - Early Stopping debe reevaluarse si un nuevo optimizador o técnica de regularización cambia la dinámica de las curvas.
+- El ejecutor rechazará `early_stopping=true`; habilitarlo exige implementar primero el callback y ampliar su contrato.
 - El test oficial permanece sellado y no puede utilizarse durante nuevas decisiones de ajuste.
 
 ## Criterio de aceptación
 
-Lucas, como dueño del repositorio, debe revisar que el alcance, la candidata, la evidencia y las restricciones sean coherentes antes de integrar. Solo después de esa aceptación Cesar debe iniciar el Handoff 03 sobre la versión integrada.
+Ignacio debe realizar la revisión cruzada técnica definida por el flujo del proyecto. Después, Lucas, como dueño del repositorio, debe comprobar que el alcance, la candidata, la evidencia y las restricciones sean coherentes y autorizar la integración. Solo tras ambas validaciones Cesar debe iniciar el Handoff 03 sobre la versión integrada.
