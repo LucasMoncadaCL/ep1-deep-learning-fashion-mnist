@@ -8,6 +8,8 @@ La etapa inicial de Ignacio fue aceptada e integrada. La etapa de Lucas complet�
 
 Los puntos de entrada actuales son [`docs/handoffs/RUN_HANDOFF_02_LUCAS.md`](docs/handoffs/RUN_HANDOFF_02_LUCAS.md) para revisar la entrega de Lucas y [`docs/handoffs/RUN_HANDOFF_03_CESAR.md`](docs/handoffs/RUN_HANDOFF_03_CESAR.md) para preparar la etapa siguiente una vez aceptada la integración.
 
+El plan experimental vivo de la siguiente etapa está en [`docs/collaborators/cesar/PLAN.md`](docs/collaborators/cesar/PLAN.md); permanece bloqueado hasta que el Handoff 02 sea aceptado e integrado.
+
 ## Principios
 
 - justificar técnicamente cada decisión;

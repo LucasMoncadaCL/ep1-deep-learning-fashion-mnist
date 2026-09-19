@@ -1,6 +1,8 @@
 # Informe de colaborador - Cesar Rojas
 
-**Estado:** NOT_STARTED
+**Estado:** WAITING_ON_HANDOFF_02_ACCEPTANCE
+
+**Plan de referencia:** `docs/collaborators/cesar/PLAN.md`
 
 ## Metas orientativas
 

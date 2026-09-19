@@ -14,6 +14,8 @@ Este handoff contiene el contexto técnico necesario, pero Cesar no debe comenza
 
 Las metas siguientes son **mínimas y orientativas, ampliables con justificación técnica**. No constituyen una lista exhaustiva ni inmutable. Cualquier ampliación debe respetar la guía maestra, mantener el test sellado durante el ajuste y quedar respaldada en el informe de Cesar.
 
+El plan vivo de ejecución se encuentra en `docs/collaborators/cesar/PLAN.md`. El handoff define el contrato de entrada y salida; el plan organiza las etapas sin convertirlas en una receta rígida.
+
 ## Entrada técnica desde Lucas
 
 - configuración candidata: `configs/E5_capacity_256_128.json`;
