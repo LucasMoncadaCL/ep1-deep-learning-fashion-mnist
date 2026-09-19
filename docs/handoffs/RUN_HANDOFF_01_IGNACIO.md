@@ -9,7 +9,7 @@
 
 La revisión de la entrega solicitó reforzar reproducibilidad, trazabilidad y el contrato de métricas. Se corrigieron los comandos para usar `uv run`, se documentó la reproducción de E0/E1/E2, se añadieron métricas macro junto a las ponderadas, se actualizaron las referencias documentales y se corrigieron observaciones de Ruff. El estado permanece `READY_FOR_REVIEW`: esta actualización no convierte el handoff en aceptado.
 
-La política de commits en español queda como decisión de Lucas: debe acordar si reescribe los mensajes de esta rama con `--force-with-lease` o si la integración final a `main` se realizará por squash con un título y cuerpo completos en español. No se reescribió historial sin esa coordinación.
+El historial de la rama se reescribió mediante `--force-with-lease`. Todos los títulos y cuerpos de los commits quedaron en español; no quedan decisiones pendientes respecto de esta política.
 
 ### Evidencia de la corrección
 

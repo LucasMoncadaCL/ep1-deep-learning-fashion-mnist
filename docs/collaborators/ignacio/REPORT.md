@@ -21,6 +21,7 @@
 - Se creó y ejecutó desde kernel limpio `notebooks/01_ignacio_data_baseline.ipynb`, con EDA, contrato de datos y E0.
 - Se añadió un informe formal en LaTeX con resultados, figuras y rutas relativas verificadas; no se generó PDF porque este equipo no tiene instalado un motor LaTeX.
 - Se incorporaron Precision, Recall y F1 macro al contrato de métricas, conservando también las métricas ponderadas.
+- Se reescribió el historial de la rama mediante `--force-with-lease`; los títulos y cuerpos de todos los commits quedaron en español.
 
 ## Archivos creados o modificados
 
@@ -108,7 +109,6 @@ Durante E0, la accuracy de validation aumentó de 0,7592 a 0,8722 y la loss de v
 - Cesar debe revisar este bloque antes de que Lucas tome sus decisiones como base aceptada.
 - Las curvas comparativas de activación y pérdida ya están versionadas en `results/figures/` y se muestran en el notebook; el test sigue sin evaluación.
 - Confirmar el manifiesto en Colab durante la validación final del proyecto.
-- La política de mensajes de commit en español requiere que Lucas decida si se reescribe el historial de esta rama o si la integración final se hará mediante squash con mensaje completo en español. No se reescribió historial sin esa coordinación.
 
 ## Resumen para el handoff a Lucas
 
