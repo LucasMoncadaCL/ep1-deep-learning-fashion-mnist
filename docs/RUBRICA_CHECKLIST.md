@@ -13,9 +13,9 @@ Este archivo no declara cumplimiento por intención. Un indicador solo se marca 
 ### IEE 1.1 - Datos, entrenamiento y ajustes
 
 - [~] **IEE 1.1.1 (2%) - Carga y preprocesamiento.** Evidencia: `01_ignacio_data_baseline.ipynb` ejecutado, contrato validado y figuras D0; pendiente de revisión cruzada.
-- [ ] **IEE 1.1.2 (2%) - Épocas, learning rate y batch size.** Evidencia: configuración registrada y explicación técnica de los tres parámetros.
+- [~] **IEE 1.1.2 (2%) - Épocas, learning rate y batch size.** Evidencia: E3 compara tres learning rates con configuración, tabla, curvas y decisión D-014; batch size continúa pendiente en E4.
 - [~] **IEE 1.1.3 (2%) - Experimentos controlados.** Evidencia: E1/E2 varían exclusivamente activación o loss; tabla y figuras comparativas seleccionadas, pendiente de revisión.
-- [ ] **IEE 1.1.4 (1%) - Ajustes según resultados.** Evidencia: secuencia observación, hipótesis, cambio, resultado y conclusión.
+- [~] **IEE 1.1.4 (1%) - Ajustes según resultados.** Evidencia: E3 selecciona learning rate 0,1 y documenta el gap observado para orientar E4/E5 y Early Stopping.
 
 ### IEE 1.2 - Funciones de la red
 
@@ -27,7 +27,7 @@ Este archivo no declara cumplimiento por intención. Un indicador solo se marca 
 
 - [~] **IEE 1.3.1 (1%) - Arquitectura MLP.** Evidencia: E0 `[256,128]` con 235.146 parámetros y curvas seleccionadas; pendiente de revisión cruzada.
 - [ ] **IEE 1.3.2 (2%) - Optimización y regularización.** Evidencia: comparación con/sin técnica y análisis de estabilidad, convergencia y generalización.
-- [ ] **IEE 1.3.3 (2%) - Ajuste de hiperparámetros.** Evidencia: configuraciones comparadas y selección final fundamentada.
+- [~] **IEE 1.3.3 (2%) - Ajuste de hiperparámetros.** Evidencia: learning rate comparado y seleccionado en E3; batch size y capacidad continúan pendientes.
 
 ### IEE 1.4 - Evaluación
 

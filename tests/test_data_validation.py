@@ -224,6 +224,29 @@ class ModelAndConfigurationTests(unittest.TestCase):
                 config[field] = invalid_value
                 validate_config(config)
 
+    def test_e3_configs_change_only_the_learning_rate(self):
+        root = Path(__file__).resolve().parents[1]
+        baseline = load_config(root / "configs" / "baseline.json")
+        expected_learning_rates = {
+            "E3_lr_0_001": 0.001,
+            "E3_lr_0_01": 0.01,
+            "E3_lr_0_1": 0.1,
+        }
+        ignored_fields = {"experiment_id", "status", "learning_rate"}
+        baseline_control = {
+            key: value for key, value in baseline.items() if key not in ignored_fields
+        }
+
+        for experiment_id, expected_learning_rate in expected_learning_rates.items():
+            with self.subTest(experiment_id=experiment_id):
+                config = load_config(root / "configs" / f"{experiment_id}.json")
+                controlled_fields = {
+                    key: value for key, value in config.items() if key not in ignored_fields
+                }
+                self.assertEqual(controlled_fields, baseline_control)
+                self.assertEqual(config["experiment_id"], experiment_id)
+                self.assertEqual(config["learning_rate"], expected_learning_rate)
+
 
 class ValidationMetricsTests(unittest.TestCase):
     def test_reports_macro_and_weighted_metrics(self):

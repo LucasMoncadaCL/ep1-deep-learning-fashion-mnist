@@ -18,6 +18,8 @@
 - Se amplió la validación de configuraciones para rechazar tipos, rangos y estructuras inválidas antes de entrenar.
 - Se incorporó un registro autocontenido por corrida con configuración, métricas, parámetros y resumen de entrenamiento.
 - Se reprodujo E0 mediante el contrato ampliado sin modificar su configuración ni consultar test.
+- Se ejecutó E3 comparando `learning_rate` 0,001, 0,01 y 0,1 con una sola variable modificada.
+- Se seleccionó 0,1 como control para E4 y se documentó el mayor gap train-validation observado.
 
 ## Archivos creados o modificados
 
@@ -27,6 +29,10 @@
 - `src/ep1_fashion_mnist/experiment.py`.
 - `tests/test_data_validation.py` y `tests/README.md`.
 - `docs/ENVIRONMENT.md`.
+- `configs/E3_lr_0_001.json`, `configs/E3_lr_0_01.json` y `configs/E3_lr_0_1.json`.
+- `results/tables/E3_learning_rate_comparison.md`.
+- `results/figures/E3_learning_rate_validation_accuracy.png` y `results/figures/E3_learning_rate_validation_loss.png`.
+- `docs/DECISION_LOG.md` y `docs/RUBRICA_CHECKLIST.md`.
 
 ## Evidencia del entorno uv
 
@@ -34,7 +40,7 @@
 - `python --version` dentro de `.venv`: `Python 3.12.13`.
 - `sys.executable`: `C:\Users\lucas\Documents\Deep-Learning-ev1\.venv\Scripts\python.exe`.
 - comando de sincronización: `uv sync --frozen`.
-- resultado de pruebas dentro de `.venv`: 18/18 correctas.
+- resultado de pruebas dentro de `.venv`: 19/19 correctas.
 
 ## Decisiones técnicas
 
@@ -43,12 +49,16 @@
 | Búsqueda secuencial controlada | Grilla combinatoria | Permite atribuir cada efecto a una variable y limita costo computacional | `PLAN.md` y Handoff 02 |
 | Registro autocontenido por corrida | Depender solo de nombres de carpetas y archivos separados | Evita perder la configuración exacta que produjo cada métrica | Pruebas y JSON local de E0 |
 | Gaps con signo explícito | Diferencias absolutas | Conservan la dirección de la diferencia y facilitan interpretar sobreajuste o validation superior | `TrainingSummary` y `PLAN.md` |
+| Seleccionar learning rate 0,1 para E4 | 0,001 y 0,01 | Mejoró accuracy y F1 Macro en aproximadamente 2,1 puntos frente al control, con duración similar | Tabla y figuras E3; D-014 |
 
 ## Experimentos
 
 | ID | Configuración | Objetivo | Resultado | Evidencia |
 |---|---|---|---|---|
 | E0 — verificación de infraestructura | Configuración aceptada sin cambios | Comprobar compatibilidad y nuevo contrato de resultados | Accuracy 0,8722; F1 Macro 0,8726; 20 épocas; 23,82 s por CPU | `results/runs/stage1_e0_contract/` local e ignorado |
+| E3_lr_0_001 | LR 0,001; resto igual a E0 | Medir convergencia lenta | Accuracy 0,8053; F1 Macro 0,8034; mejor época 20 | Configuración y tabla E3 |
+| E3_lr_0_01 | LR 0,01; resto igual a E0 | Reproducir el control dentro de E3 | Accuracy 0,8722; F1 Macro 0,8726; mejor época 20 | Configuración y tabla E3 |
+| E3_lr_0_1 | LR 0,1; resto igual a E0 | Evaluar convergencia más rápida | Accuracy 0,8933; F1 Macro 0,8936; mejor val. accuracy en época 13 | Configuración, tabla y figuras E3 |
 
 ## Reproducción y verificaciones
 
@@ -59,6 +69,9 @@ $env:PYTHONPATH = "src"
 uv run python -m unittest discover -s tests -v
 uvx ruff check src tests
 uv run python -m ep1_fashion_mnist.experiment configs\baseline.json --output results\runs\stage1_e0_contract
+uv run python -m ep1_fashion_mnist.experiment configs\E3_lr_0_001.json --output results\runs\E3_lr_0_001
+uv run python -m ep1_fashion_mnist.experiment configs\E3_lr_0_01.json --output results\runs\E3_lr_0_01
+uv run python -m ep1_fashion_mnist.experiment configs\E3_lr_0_1.json --output results\runs\E3_lr_0_1
 ```
 
 ## Desviaciones respecto del plan
@@ -69,12 +82,14 @@ No hubo desviaciones materiales en la etapa 1.
 
 - La duración se midió en CPU local y sirve para comparaciones realizadas en el mismo entorno; no debe compararse directamente con GPU o Colab.
 - La validación mejoró ligeramente respecto de train al final de E0, por lo que los gaps con signo fueron negativos; esto no constituye evidencia de sobreajuste.
-- Todavía no se ejecutaron nuevas configuraciones de hiperparámetros.
+- `learning_rate=0.001` quedó subentrenado con 20 épocas. Aumentar solo sus épocas rompería el presupuesto común de E3, por lo que se conserva como resultado negativo.
+- `learning_rate=0.1` presentó gap final de accuracy de 0,0298 y gap de loss de 0,0885; debe vigilarse en E4/E5 y retomarse al evaluar Early Stopping.
+- E3 utiliza una seed. La diferencia principal no fue marginal; las repeticiones se reservarán para decisiones finales o comparaciones estrechas.
 
 ## Asuntos abiertos
 
-- Crear las configuraciones controladas de E3 y ejecutar la comparación de learning rate.
-- Definir evidencia seleccionada para versionar después de interpretar E3.
+- Crear las configuraciones E4 para batch 32, 128 y 512 usando learning rate 0,1.
+- Comprobar si el batch modifica el gap observado o la estabilidad de validation.
 
 ## Resumen para el handoff a Cesar
 

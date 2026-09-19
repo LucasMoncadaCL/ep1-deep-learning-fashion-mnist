@@ -77,7 +77,7 @@ El ejecutor debe producir resultados autocontenidos y comparables antes de inici
 
 ## Etapa 2 — E3: learning rate
 
-**Estado:** LISTA PARA INICIAR
+**Estado:** COMPLETADA
 
 ### Comparación inicial
 
@@ -89,9 +89,17 @@ El ejecutor debe producir resultados autocontenidos y comparables antes de inici
 
 Seleccionar el valor que entregue el mejor equilibrio entre métricas de validation, estabilidad, velocidad de convergencia y gap. Si una corrida diverge, se conserva como resultado negativo. No se ampliará el rango sin evidencia documentada.
 
+### Evidencia y decisión
+
+- `0.001`: accuracy `0,8053`, F1 Macro `0,8034`; continuó mejorando, pero quedó subentrenado con 20 épocas.
+- `0.01`: accuracy `0,8722`, F1 Macro `0,8726`; reprodujo exactamente el control.
+- `0.1`: accuracy `0,8933`, F1 Macro `0,8936`; mejor resultado con duración comparable.
+- Se selecciona `0.1` para E4. La mejora sobre `0.01` fue de 2,12 puntos porcentuales de accuracy y no se considera marginal.
+- Se conserva como riesgo un gap final de accuracy de `0,0298` y el mínimo de `val_loss` en la época 18; esta evidencia se retomará al evaluar capacidad y Early Stopping.
+
 ## Etapa 3 — E4: batch size
 
-**Estado:** PENDIENTE
+**Estado:** LISTA PARA INICIAR
 
 ### Comparación inicial
 

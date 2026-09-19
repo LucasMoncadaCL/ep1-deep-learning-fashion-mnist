@@ -32,8 +32,9 @@ Los tests no sustituyen el análisis experimental; protegen sus supuestos.
 - rechazo anticipado de tipos, rangos y estructuras inválidas en configuraciones.
 - resumen de convergencia, costo y gaps a partir del historial de entrenamiento.
 - construcción de un registro autocontenido con configuración, entrenamiento y métricas.
+- control de que las configuraciones E3 modifiquen únicamente learning rate.
 
-El total actual es 18 pruebas.
+El total actual es 19 pruebas.
 
 Ejecución:
 

@@ -282,3 +282,27 @@ Mantener ReLU en las capas ocultas y categorical crossentropy como control para 
 ### Evidencia
 
 Con seed 42 y las restantes condiciones de E0, ReLU obtuvo accuracy de validation 0,8722; Tanh 0,8643 y Sigmoid 0,7535. Con ReLU fija, categorical crossentropy obtuvo 0,8722 frente a 0,7370 de MSE. La tabla `results/tables/E1_E2_validation_comparison.md` y las figuras E1/E2 conservan los resultados. Esta decisión selecciona un control, no el modelo final y no utilizó test.
+
+---
+
+## D-014 - Learning rate candidato después de E3
+
+**Estado:** aceptada
+
+**Fecha:** 18-09-2026
+
+### Situación
+
+La etapa de Lucas debía comparar learning rates sin modificar arquitectura, activación, pérdida, optimizador, batch, épocas, partición ni seed.
+
+### Decisión
+
+Usar `learning_rate=0.1` como control para el experimento E4 de batch size. La decisión es provisional para la cadena de hiperparámetros y no selecciona el modelo final.
+
+### Evidencia
+
+Con 20 épocas, `0.001`, `0.01` y `0.1` obtuvieron respectivamente accuracy de validation 0,8053, 0,8722 y 0,8933; sus F1 Macro fueron 0,8034, 0,8726 y 0,8936. La duración fue comparable, entre 20,52 y 21,47 segundos por CPU. La mejora de `0.1` sobre `0.01` fue de 2,12 puntos porcentuales de accuracy.
+
+### Riesgo y seguimiento
+
+Con `0.1`, el gap final de accuracy fue 0,0298 y el de loss 0,0885; la mejor accuracy de validation apareció en la época 13 y la menor loss en la 18. E4 y E5 deberán comprobar si esta separación aumenta, y la etapa condicional de Early Stopping retomará estas curvas. El conjunto oficial de test permaneció sellado.
