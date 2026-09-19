@@ -29,6 +29,7 @@
 - Se completaron el cierre del Handoff 02 y la entrada técnica del Handoff 03 para Cesar.
 - La auditoría posterior cerró el contrato silencioso de Early Stopping, validó los metadatos efectivos de configuración y añadió evidencia versionada de Precision y Recall.
 - Ruff quedó bloqueado en `uv.lock` y se añadió un workflow de calidad para pruebas y lint en PR y `main`.
+- El workflow se verificó correctamente en GitHub y `main` quedó protegida con check obligatorio, revisión externa y conversaciones resueltas.
 
 ## Archivos creados o modificados
 
@@ -51,6 +52,7 @@
 - `docs/DECISION_LOG.md` y `docs/RUBRICA_CHECKLIST.md`.
 - `notebooks/02_lucas_hyperparameters.ipynb`.
 - `docs/handoffs/RUN_HANDOFF_02_LUCAS.md` y `docs/handoffs/RUN_HANDOFF_03_CESAR.md`.
+- `.github/workflows/quality.yml`.
 
 ## Evidencia del entorno uv
 
@@ -129,8 +131,8 @@ No hubo desviaciones materiales. La etapa de Early Stopping era condicional y no
 
 ## Asuntos abiertos
 
-- Construir y ejecutar `notebooks/02_lucas_hyperparameters.ipynb` como narrativa autocontenida de E3–E5.
-- Completar el handoff a Cesar con la configuración candidata, comandos, evidencia y condiciones para reevaluar Early Stopping.
+- No quedan tareas técnicas internas pendientes en esta etapa.
+- La PR requiere la revisión cruzada de Ignacio y, después, la aprobación de alcance e integración de Lucas.
 
 ## Resumen para el handoff a Cesar
 

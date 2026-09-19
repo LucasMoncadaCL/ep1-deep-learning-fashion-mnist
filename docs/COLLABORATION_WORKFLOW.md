@@ -87,6 +87,18 @@ El revisor no certifica que el modelo sea óptimo. Certifica que el trabajo es c
 
 La revisión cruzada no reemplaza la aprobación del dueño del repositorio. Lucas revisa además que cada handoff respete el alcance global y autoriza su integración; ambas funciones deben quedar diferenciadas para evitar que un colaborador figure como único revisor de su propia entrega.
 
+### Protección efectiva de `main`
+
+GitHub aplica estas condiciones antes de integrar cambios en `main`:
+
+- la PR debe estar actualizada respecto de `main`;
+- el check `pruebas-y-lint` debe finalizar correctamente;
+- debe existir al menos una aprobación de una persona distinta de quien realizó el último push;
+- las conversaciones de revisión deben estar resueltas;
+- no se permiten force-push ni eliminación de la rama.
+
+Estas reglas también se aplican al dueño del repositorio. La protección automatiza el mínimo verificable, pero no sustituye la revisión de alcance ni la justificación técnica exigida por este documento.
+
 ## 8. Actualización de handoffs posteriores
 
 Los handoffs de Lucas y Cesar comienzan como guías orientativas. El colaborador anterior debe completarlos con:
