@@ -64,6 +64,7 @@ Los materiales docentes y la rúbrica binaria permanecen disponibles localmente 
 - [`docs/RUBRICA_CHECKLIST.md`](docs/RUBRICA_CHECKLIST.md)
 - [`docs/DECISION_LOG.md`](docs/DECISION_LOG.md)
 - [`docs/COLLABORATION_WORKFLOW.md`](docs/COLLABORATION_WORKFLOW.md)
+- [`docs/reviews/REVIEW_02_LUCAS.md`](docs/reviews/REVIEW_02_LUCAS.md)
 - [`docs/latex/collaborators/lucas/main.tex`](docs/latex/collaborators/lucas/main.tex)
 
 ## Entorno obligatorio

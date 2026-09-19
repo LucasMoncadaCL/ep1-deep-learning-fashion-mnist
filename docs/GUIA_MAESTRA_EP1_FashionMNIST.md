@@ -1277,7 +1277,8 @@ EP1-FashionMNIST/
     ├── RUBRICA_CHECKLIST.md
     ├── COLLABORATION_WORKFLOW.md
     ├── collaborators/
-    └── handoffs/
+    ├── handoffs/
+    └── reviews/
 ```
 
 Los módulos todavía inexistentes se crearán cuando su colaborador responsable implemente y pruebe el contrato correspondiente. Las dependencias se fijarán después de validar el entorno mínimo común; no se versionarán listas de paquetes especulativas.

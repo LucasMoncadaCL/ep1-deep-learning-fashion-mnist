@@ -8,6 +8,8 @@
 
 **Aprobación de alcance e integración:** Lucas Moncada, como dueño del repositorio
 
+**Auditoría técnica asistida:** `APPROVED_TECHNICAL` en `docs/reviews/REVIEW_02_LUCAS.md`
+
 **Siguiente responsable:** Cesar Rojas
 
 ## Entrada aceptada desde Ignacio
@@ -69,6 +71,7 @@ Esta configuración es una candidata equilibrada para el siguiente control, no e
 - `docs/collaborators/lucas/REPORT.md`.
 - `docs/latex/collaborators/lucas/main.tex`, informe formal compilado y revisado visualmente.
 - Decisiones D-014–D-018 en `docs/DECISION_LOG.md`.
+- `docs/reviews/REVIEW_02_LUCAS.md`, auditoría técnica aprobada y hallazgos resueltos.
 
 ## Verificación y reproducción
 

@@ -87,6 +87,8 @@ El revisor no certifica que el modelo sea óptimo. Certifica que el trabajo es c
 
 La revisión cruzada no reemplaza la aprobación del dueño del repositorio. Lucas revisa además que cada handoff respete el alcance global y autoriza su integración; ambas funciones deben quedar diferenciadas para evitar que un colaborador figure como único revisor de su propia entrega.
 
+Cuando exista una auditoría técnica asistida, su evidencia y veredicto se registran en `docs/reviews/`. Esta auditoría complementa la revisión cruzada humana: puede aprobar técnicamente una entrega o solicitar cambios, pero no satisface por sí sola la aprobación externa exigida para integrar a `main`.
+
 ### Protección efectiva de `main`
 
 GitHub aplica estas condiciones antes de integrar cambios en `main`:
