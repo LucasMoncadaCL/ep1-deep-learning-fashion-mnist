@@ -1,75 +1,99 @@
 # Run Handoff 02 - Lucas Moncada
 
-**Estado:** READY_TO_START
+**Estado:** READY_FOR_REVIEW
 
-**Responsable:** Lucas Moncada  
-**Revisor de salida:** Ignacio Silva  
+**Responsable:** Lucas Moncada
+
+**Revisor técnico de salida:** Ignacio Silva
+
+**Aprobación de alcance e integración:** Lucas Moncada, como dueño del repositorio
+
+**Auditoría técnica asistida:** `APPROVED_TECHNICAL` en `docs/reviews/REVIEW_02_LUCAS.md`
+
 **Siguiente responsable:** Cesar Rojas
 
 ## Entrada aceptada desde Ignacio
 
-El Handoff 01 fue aceptado por Lucas Moncada, como dueño del repositorio, el 18-09-2026. La entrada disponible para esta etapa es:
+Lucas trabajó sobre el Handoff 01 aceptado e integrado: contrato de Fashion-MNIST, split estratificado seed 42 de 54.000/6.000, test oficial sellado, baseline E0 y controles ReLU + categorical crossentropy. El entorno se reconstruyó exclusivamente con `uv` y `.venv`.
 
-- estado revisado: la fuente aceptada es el tip de `feature/ignacio-data-baseline` registrado en la PR #1; después de su integración, `main` pasa a ser la fuente de verdad para iniciar este handoff;
-- entorno probado: `uv 0.12.10`, Python 3.12.14 en `.venv`; reconstruir con `uv sync --frozen`;
-- contrato de datos: `prepare_fashion_mnist()` en `src/ep1_fashion_mnist/data.py`; split estratificado seed 42 de 54.000/6.000, imágenes `float32 [0,1]`, test oficial sellado;
-- módulos públicos: `data.py` (carga/preprocesamiento), `model.py` (MLP/compilación), `experiment.py` (entrenamiento y métricas de validation) y `visualization.py`;
-- baseline de control: E0 en `configs/baseline.json`: `[256,128]`, ReLU, Softmax, categorical crossentropy, SGD 0,01, batch 128, 20 épocas, sin regularización;
-- métricas de referencia: E0 obtuvo accuracy validation 0,8722 y F1 macro/ponderado 0,8726; usar `results/tables/E0_validation_summary.md` y `results/figures/E0_curves.png`. Las métricas JSON incluyen Precision, Recall y F1 macro y ponderadas;
-- riesgos y decisiones abiertas: no usar test para ajuste; ReLU + categorical crossentropy queda como control (no modelo final); comparar learning rate, batch y capacidad con una variable por vez. La validación final de portabilidad en Colab continúa pendiente.
+## Alcance ejecutado
 
-### Comandos de reproducción recibidos
+Las metas fueron mínimas y orientativas, ampliables con justificación técnica. Se completó:
+
+- infraestructura autocontenida para validar configuraciones y registrar métricas, convergencia, gaps, parámetros y duración;
+- E3 con learning rates 0,001, 0,01 y 0,1;
+- E4 con batch sizes 32, 128 y 512;
+- E5 con capacidades `[64]`, `[256, 128]` y `[512, 256, 128]`;
+- evaluación condicional de Early Stopping;
+- notebook ejecutado, tablas, figuras, decisiones y pruebas automatizadas;
+- preparación del Handoff 03 sin utilizar test.
+
+## Configuración candidata
+
+Archivo: `configs/E5_capacity_256_128.json`.
+
+| Componente | Valor |
+|---|---|
+| Arquitectura | `[256, 128]` |
+| Activación oculta | ReLU |
+| Salida | 10 unidades Softmax |
+| Loss | categorical crossentropy |
+| Optimizador | SGD |
+| Learning rate | 0,1 |
+| Batch size | 128 |
+| Épocas | 20 |
+| Seed | 42 |
+| Regularización | ninguna |
+| Parámetros | 235.146 |
+| Accuracy validation | 0,8933 |
+| Precision Macro validation | 0,8949 |
+| Recall Macro validation | 0,8933 |
+| F1 Macro validation | 0,8936 |
+
+Esta configuración es una candidata equilibrada para el siguiente control, no el modelo final.
+
+## Decisiones técnicas
+
+- D-014 selecciona `learning_rate=0.1` por mejorar aproximadamente 2,1 puntos frente a 0,01 con duración comparable.
+- D-015 mantiene batch 128: batch 32 fue más lento y sobreajustó más; 512 fue eficiente, pero perdió 1,88 puntos de accuracy.
+- D-016 selecciona `[256, 128]`: la red grande mejoró 0,57 puntos, pero usó 2,41 veces más parámetros, tardó 1,60 veces más en la corrida de referencia y aumentó los gaps.
+- D-017 no activa Early Stopping: en la candidata, la diferencia entre la mejor `val_loss` y la final fue aproximadamente 0,0006 y el ahorro potencial era de dos épocas.
+- D-018 hace que el ejecutor rechace `early_stopping=true` hasta que exista un callback real y probado.
+
+## Evidencia verificable
+
+- `notebooks/02_lucas_hyperparameters.ipynb`: ejecutado completamente, 6/6 celdas de código y cero errores.
+- `results/tables/E3_learning_rate_comparison.md`.
+- `results/tables/E4_batch_size_comparison.md`.
+- `results/tables/E5_capacity_comparison.md`.
+- `results/tables/E3_E5_validation_metrics.md`, con métricas macro y ponderadas completas.
+- Figuras comparativas E3–E5 bajo `results/figures/`.
+- `docs/collaborators/lucas/REPORT.md`.
+- `docs/latex/collaborators/lucas/main.tex`, informe formal compilado y revisado visualmente.
+- Decisiones D-014–D-018 en `docs/DECISION_LOG.md`.
+- `docs/reviews/REVIEW_02_LUCAS.md`, auditoría técnica aprobada y hallazgos resueltos.
+
+## Verificación y reproducción
 
 ```powershell
 uv sync --frozen
 $env:PYTHONPATH = "src"
 uv run python -m unittest discover -s tests -v
-uv run python -m ep1_fashion_mnist.experiment configs\baseline.json --output results\runs\E0
-uv run python -m ep1_fashion_mnist.experiment configs\E1_tanh.json --output results\runs\E1_tanh
-uv run python -m ep1_fashion_mnist.experiment configs\E1_sigmoid.json --output results\runs\E1_sigmoid
-uv run python -m ep1_fashion_mnist.experiment configs\E2_mse.json --output results\runs\E2_mse
+uv run ruff check src tests
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks\02_lucas_hyperparameters.ipynb --ExecutePreprocessor.timeout=600
 ```
 
-Cada comando de experimento entrena solo con train/validation y deja historia CSV, métricas JSON y curva local en el directorio de salida. No ejecutar ningún flujo que llame a evaluación sobre `X_test` durante E3--E5.
+La verificación de cierre debe confirmar `uv lock --check`, 22/22 pruebas, Ruff 0.16.8 limpio, ejecución completa del notebook y ausencia de consultas al test.
 
-## Misión
+## Límites y riesgos
 
-Consolidar la infraestructura experimental y estudiar controladamente learning rate, batch size, capacidad y Early Stopping, manteniendo trazabilidad suficiente para entregar a Cesar una configuración candidata, no una conclusión incuestionable.
+- Las comparaciones usan una seed; las diferencias marginales deben repetirse antes de una decisión final.
+- Las duraciones corresponden a CPU local y solo son comparables dentro del mismo entorno.
+- La red grande conserva el mayor desempeño absoluto y puede revisitarse si el equipo decide priorizar métricas sobre costo y generalización.
+- Early Stopping debe reevaluarse si un nuevo optimizador o técnica de regularización cambia la dinámica de las curvas.
+- El ejecutor rechazará `early_stopping=true`; habilitarlo exige implementar primero el callback y ampliar su contrato.
+- El test oficial permanece sellado y no puede utilizarse durante nuevas decisiones de ajuste.
 
-Lucas debe reconstruir o sincronizar el entorno mediante `uv` y trabajar en el `.venv` del repositorio. No debe reutilizar un entorno personal distinto del aceptado en el handoff de Ignacio.
+## Criterio de aceptación
 
-## Metas orientativas
-
-Estas son **metas mínimas y orientativas, ampliables con justificación técnica**. No representan una lista exhaustiva ni inmutable: Lucas puede incorporar o reajustar pasos necesarios, siempre que respete el alcance de la guía maestra y documente las decisiones, la evidencia y su efecto sobre el siguiente handoff.
-
-- reutilizar el contrato de datos aceptado;
-- usar el entorno bloqueado y versionado recibido de Ignacio;
-- centralizar construcción, entrenamiento, evaluación y registro;
-- ejecutar E3, E4 y E5 con una variable por comparación;
-- incorporar Early Stopping solo después de comprender las curvas sin callback;
-- comparar desempeño, convergencia, gap, costo y complejidad;
-- repetir comparaciones críticas cuando diferencias marginales lo justifiquen.
-
-## Entregables
-
-- código reutilizable de entrenamiento y experimentos;
-- `notebooks/02_lucas_hyperparameters.ipynb`;
-- configuraciones identificables;
-- tabla comparativa trazable;
-- figuras seleccionadas;
-- `docs/collaborators/lucas/REPORT.md` completo;
-- actualización de decisiones y checklist;
-- este documento completado con evidencia recibida;
-- `RUN_HANDOFF_03_CESAR.md` actualizado con la configuración candidata real.
-
-## Criterios de salida
-
-- infraestructura común usada por todos los experimentos;
-- pruebas y experimentos ejecutados desde el `.venv` creado con `uv`;
-- cada comparación conserva un control explícito;
-- resultados incluyen configuración e ID;
-- conclusiones no dependen de test;
-- configuración candidata justificada por más de una métrica;
-- efectos de complejidad y Early Stopping están interpretados;
-- informe y asuntos abiertos completos;
-- Cesar puede continuar sin reconstruir el razonamiento desde cero.
+Ignacio debe realizar la revisión cruzada técnica definida por el flujo del proyecto. Después, Lucas, como dueño del repositorio, debe comprobar que el alcance, la candidata, la evidencia y las restricciones sean coherentes y autorizar la integración. Solo tras ambas validaciones Cesar debe iniciar el Handoff 03 sobre la versión integrada.

@@ -1,0 +1,39 @@
+name: Calidad
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  pruebas-y-lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Descarga el repositorio
+        uses: actions/checkout@v7
+
+      - name: Configura uv
+        uses: astral-sh/setup-uv@v10.1.0
+        with:
+          version: "0.11.8"
+          enable-cache: true
+
+      - name: Instala Python 3.12
+        run: uv python install 3.12
+
+      - name: Sincroniza el entorno bloqueado
+        run: uv sync --frozen
+
+      - name: Ejecuta las pruebas
+        env:
+          PYTHONPATH: src
+        run: uv run python -m unittest discover -s tests -v
+
+      - name: Ejecuta Ruff
+        run: uv run ruff check src tests

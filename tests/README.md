@@ -29,8 +29,16 @@ Los tests no sustituyen el análisis experimental; protegen sus supuestos.
 - construcción de E0 con 235.146 parámetros y diez probabilidades Softmax;
 - coherencia de configuración entre salida Softmax, etiquetas one-hot y categorical crossentropy.
 - cálculo explícito de Accuracy, Precision, Recall y F1 en sus variantes macro y ponderada.
+- rechazo anticipado de tipos, rangos y estructuras inválidas en configuraciones.
+- validación de que dataset, forma de entrada y estrategia de split coincidan con el ejecutor real.
+- rechazo explícito de Early Stopping mientras el callback no esté implementado.
+- resumen de convergencia, costo y gaps a partir del historial de entrenamiento.
+- construcción de un registro autocontenido con configuración, entrenamiento y métricas.
+- control de que las configuraciones E3 modifiquen únicamente learning rate.
+- control de que las configuraciones E4 modifiquen únicamente batch size respecto del control seleccionado en E3.
+- control de que las configuraciones E5 modifiquen únicamente las capas ocultas respecto del control seleccionado en E4.
 
-El total actual es 14 pruebas.
+El total actual es 22 pruebas.
 
 Ejecución:
 

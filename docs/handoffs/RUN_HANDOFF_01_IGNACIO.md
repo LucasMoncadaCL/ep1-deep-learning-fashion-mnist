@@ -21,7 +21,7 @@ El historial de la rama se reescribió mediante `--force-with-lease`. Todos los 
 - Archivos de implementación: `src/ep1_fashion_mnist/experiment.py`, `src/ep1_fashion_mnist/data.py` y `tests/test_data_validation.py`.
 - Documentación actualizada: índice de entrega, informe de Ignacio, informe LaTeX, entorno, README y handoff a Lucas.
 - `ValidationMetrics` y los JSON de cada corrida ahora contienen Accuracy, Precision, Recall y F1 tanto `macro` como `weighted`. En E0--E2 coinciden porque validation tiene 600 ejemplos por clase.
-- Reproducción confirmada: `uv sync --frozen`; 14 pruebas unitarias correctas; `uvx ruff check src tests` sin observaciones; notebook ejecutado mediante `uv run jupyter nbconvert --to notebook --execute --inplace notebooks\01_ignacio_data_baseline.ipynb --ExecutePreprocessor.timeout=120`.
+- Reproducción confirmada: `uv sync --frozen`; 14 pruebas unitarias correctas; Ruff sin observaciones; notebook ejecutado mediante `uv run jupyter nbconvert --to notebook --execute --inplace notebooks\01_ignacio_data_baseline.ipynb --ExecutePreprocessor.timeout=120`. El comando vigente para lint es `uv run ruff check src tests`.
 - E0, E1_tanh, E1_sigmoid y E2_mse se regeneraron desde sus JSON versionados. Sus métricas se mantuvieron, respectivamente, en accuracy 0,8722; 0,8643; 0,7535; y 0,7370. Los artefactos regenerables quedaron bajo `tmp/revision_runs/` durante la verificación y no se versionan.
 
 ## 1. Misión

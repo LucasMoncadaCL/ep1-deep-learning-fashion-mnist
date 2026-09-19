@@ -282,3 +282,119 @@ Mantener ReLU en las capas ocultas y categorical crossentropy como control para 
 ### Evidencia
 
 Con seed 42 y las restantes condiciones de E0, ReLU obtuvo accuracy de validation 0,8722; Tanh 0,8643 y Sigmoid 0,7535. Con ReLU fija, categorical crossentropy obtuvo 0,8722 frente a 0,7370 de MSE. La tabla `results/tables/E1_E2_validation_comparison.md` y las figuras E1/E2 conservan los resultados. Esta decisión selecciona un control, no el modelo final y no utilizó test.
+
+---
+
+## D-014 - Learning rate candidato después de E3
+
+**Estado:** aceptada
+
+**Fecha:** 18-09-2026
+
+### Situación
+
+La etapa de Lucas debía comparar learning rates sin modificar arquitectura, activación, pérdida, optimizador, batch, épocas, partición ni seed.
+
+### Decisión
+
+Usar `learning_rate=0.1` como control para el experimento E4 de batch size. La decisión es provisional para la cadena de hiperparámetros y no selecciona el modelo final.
+
+### Evidencia
+
+Con 20 épocas, `0.001`, `0.01` y `0.1` obtuvieron respectivamente accuracy de validation 0,8053, 0,8722 y 0,8933; sus F1 Macro fueron 0,8034, 0,8726 y 0,8936. La duración fue comparable, entre 20,52 y 21,47 segundos por CPU. La mejora de `0.1` sobre `0.01` fue de 2,12 puntos porcentuales de accuracy.
+
+### Riesgo y seguimiento
+
+Con `0.1`, el gap final de accuracy fue 0,0298 y el de loss 0,0885; la mejor accuracy de validation apareció en la época 13 y la menor loss en la 18. E4 y E5 deberán comprobar si esta separación aumenta, y la etapa condicional de Early Stopping retomará estas curvas. El conjunto oficial de test permaneció sellado.
+
+---
+
+## D-015 - Batch size candidato después de E4
+
+**Estado:** aceptada
+
+**Fecha:** 18-09-2026
+
+### Situación
+
+Después de seleccionar `learning_rate=0.1`, la etapa E4 debía comparar batch sizes sin modificar arquitectura, activación, pérdida, optimizador, épocas, partición ni seed.
+
+### Decisión
+
+Mantener `batch_size=128` como control para el experimento E5 de capacidad. La decisión es provisional para la cadena de hiperparámetros y no selecciona el modelo final.
+
+### Evidencia
+
+Con 20 épocas, los batch sizes 32, 128 y 512 obtuvieron respectivamente accuracy de validation 0,8860, 0,8933 y 0,8745; sus F1 Macro fueron 0,8864, 0,8936 y 0,8771. Las duraciones por CPU fueron 57,46, 20,98 y 10,01 segundos. Batch 128 logró el mejor desempeño con costo intermedio.
+
+### Alternativas y seguimiento
+
+Batch 32 presentó gaps finales de accuracy y loss de 0,0534 y 0,2022, además de deterioro de `val_loss` después de la época 9, por lo que se descarta por costo y sobreajuste. Batch 512 fue el más rápido y mostró los menores gaps, pero perdió 1,88 puntos porcentuales de accuracy frente a 128; queda como alternativa si el costo computacional se vuelve prioritario. E5 deberá comprobar si cambiar la capacidad modifica la separación train-validation. El conjunto oficial de test permaneció sellado.
+
+---
+
+## D-016 - Capacidad candidata después de E5
+
+**Estado:** aceptada
+
+**Fecha:** 18-09-2026
+
+### Situación
+
+E5 debía comparar capacidad manteniendo fijos datos, funciones, optimizador, `learning_rate=0.1`, batch 128, 20 épocas y seed 42.
+
+### Decisión
+
+Entregar `[256, 128]` como arquitectura candidata equilibrada para la etapa de Cesar. Esta decisión no congela el modelo final y puede revisarse con evidencia posterior.
+
+### Evidencia
+
+Las arquitecturas `[64]`, `[256, 128]` y `[512, 256, 128]` utilizaron 50.890, 235.146 y 567.434 parámetros; obtuvieron accuracy de validation 0,8873, 0,8933 y 0,8990, y F1 Macro 0,8881, 0,8936 y 0,8989. La red grande mejoró 0,57 puntos porcentuales de accuracy frente a la candidata, pero usó 2,41 veces más parámetros, tardó 1,60 veces más en la corrida de referencia y aumentó los gaps finales a 0,0379 de accuracy y 0,1215 de loss. La duración puede variar entre ejecuciones y no se utiliza como criterio aislado.
+
+### Alternativas y seguimiento
+
+`[64]` queda como alternativa compacta y `[512, 256, 128]` como alternativa de desempeño absoluto. Cesar recibirá `[256, 128]` para estudiar optimizadores y regularización sin asumir que sea una arquitectura definitiva. El conjunto oficial de test permaneció sellado.
+
+---
+
+## D-017 - Early Stopping no activado en la etapa de Lucas
+
+**Estado:** aceptada
+
+**Fecha:** 18-09-2026
+
+### Situación
+
+El plan permitía incorporar Early Stopping solo si las curvas sin callback mostraban una oportunidad material de controlar sobreajuste o costo.
+
+### Decisión
+
+No ejecutar una comparación adicional con Early Stopping sobre la candidata actual. Cesar deberá reevaluar la técnica si sus cambios de optimizador o regularización alteran sustancialmente la convergencia.
+
+### Evidencia
+
+Para `[256, 128]`, la menor `val_loss` fue 0,3009 en la época 18 y la final fue 0,3015; la diferencia aproximada de 0,0006 no representa deterioro material. La mejor accuracy fue 0,8938 en la época 13 y la final 0,8933. Con un máximo de 20 épocas, detener en la época 18 aportaría un ahorro pequeño.
+
+### Alcance
+
+La decisión evita añadir un callback sin evidencia suficiente y no sostiene que Early Stopping sea inútil. Si una configuración posterior presenta deterioro sostenido, deberá compararse con y sin callback, documentando `monitor`, `patience`, `min_delta`, restauración de pesos y presupuesto máximo.
+
+---
+
+## D-018 - Rechazo explícito de Early Stopping no implementado
+
+**Estado:** aceptada
+
+**Fecha:** 19-09-2026
+
+### Situación
+
+El esquema contenía el campo booleano `early_stopping`, pero el ejecutor no construía callbacks. Aceptar `true` habría permitido registrar una técnica que no se aplicaba realmente.
+
+### Decisión
+
+Mientras no exista una implementación completa, `validate_config` rechaza `early_stopping=true` mediante un error explícito. Las configuraciones actuales, todas con `false`, mantienen su comportamiento y resultados.
+
+### Justificación técnica
+
+Fallar anticipadamente preserva la correspondencia entre configuración efectiva y evidencia. Si Cesar encuentra justificación para Early Stopping, deberá implementar y probar el callback junto con `monitor`, `patience`, `min_delta`, máximo de épocas y restauración de pesos antes de aceptar una configuración activa.
