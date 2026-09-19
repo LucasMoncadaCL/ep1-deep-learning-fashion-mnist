@@ -11,6 +11,20 @@ EP1_FashionMNIST_FINAL.ipynb
 
 Los notebooks contienen narrativa, ejecución y evidencia; la lógica reutilizable debe vivir en `src/ep1_fashion_mnist/`.
 
+## Estado actual
+
+- `01_ignacio_data_baseline.ipynb`: bloque de datos, E0, E1 y E2.
+- `02_lucas_hyperparameters.ipynb`: E3, E4 y E5; ejecutado localmente desde `.venv` y listo para revisión.
+- `03_cesar_optimization_evaluation.ipynb`: pendiente del Handoff 03.
+- `EP1_FashionMNIST_FINAL.ipynb`: pendiente de integración grupal y validación limpia en Colab.
+
+Reproducción del notebook de Lucas desde la raíz:
+
+```powershell
+uv sync --frozen
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks\02_lucas_hyperparameters.ipynb --ExecutePreprocessor.timeout=600
+```
+
 Reglas:
 
 - no editar simultáneamente el notebook final;

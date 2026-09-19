@@ -2,7 +2,7 @@
 
 **Handoff:** 02 — hiperparámetros e infraestructura experimental
 
-**Estado:** EN EJECUCIÓN
+**Estado:** COMPLETADO — PENDIENTE DE REVISIÓN
 
 **Rama:** `feature/lucas-hyperparameters`
 
@@ -158,7 +158,7 @@ No se ejecuta una comparación adicional con callback. En la candidata `[256, 12
 
 ## Etapa 6 — Consolidación y handoff
 
-**Estado:** LISTA PARA INICIAR
+**Estado:** COMPLETADA — PENDIENTE DE REVISIÓN
 
 ### Entregables
 
@@ -169,6 +169,14 @@ No se ejecuta una comparación adicional con callback. En la candidata `[256, 12
 - Decisiones metodológicas actualizadas en `docs/DECISION_LOG.md`.
 - Checklist de rúbrica actualizado.
 - `docs/handoffs/RUN_HANDOFF_03_CESAR.md` completado con la configuración candidata, evidencia, límites y comandos de reproducción.
+
+### Evidencia de cierre
+
+- `notebooks/02_lucas_hyperparameters.ipynb` ejecutado de principio a fin desde `.venv`: 6/6 celdas de código con contador y cero errores.
+- Las nueve corridas E3–E5 reprodujeron sus métricas, 20 épocas y cantidades de parámetros.
+- Informe individual y decisiones D-014–D-017 actualizados.
+- Handoff 02 listo para revisión y Handoff 03 preparado, condicionado a la aceptación e integración de esta rama.
+- 21 pruebas correctas, Ruff limpio y lock verificado.
 
 ## Verificación general
 

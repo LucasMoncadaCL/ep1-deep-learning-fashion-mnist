@@ -1,6 +1,6 @@
 # Informe de colaborador - Lucas Moncada
 
-**Estado:** IN_PROGRESS
+**Estado:** READY_FOR_REVIEW
 
 ## Metas orientativas
 
@@ -25,6 +25,8 @@
 - Se ejecutó E5 comparando `[64]`, `[256, 128]` y `[512, 256, 128]` con una sola variable modificada.
 - Se seleccionó `[256, 128]` como candidata equilibrada para Cesar; la mejora de la red grande no compensó su costo, complejidad y mayores gaps.
 - Se evaluó la condición de Early Stopping y no se activó un experimento adicional porque la candidata no mostró deterioro material al final de 20 épocas.
+- Se creó y ejecutó `notebooks/02_lucas_hyperparameters.ipynb`, que reproduce E3–E5 y presenta tablas, curvas y decisiones técnicas sin consultar test.
+- Se completaron el cierre del Handoff 02 y la entrada técnica del Handoff 03 para Cesar.
 
 ## Archivos creados o modificados
 
@@ -44,6 +46,8 @@
 - `results/tables/E5_capacity_comparison.md`.
 - `results/figures/E5_capacity_validation_accuracy.png` y `results/figures/E5_capacity_validation_loss.png`.
 - `docs/DECISION_LOG.md` y `docs/RUBRICA_CHECKLIST.md`.
+- `notebooks/02_lucas_hyperparameters.ipynb`.
+- `docs/handoffs/RUN_HANDOFF_02_LUCAS.md` y `docs/handoffs/RUN_HANDOFF_03_CESAR.md`.
 
 ## Evidencia del entorno uv
 
@@ -98,11 +102,12 @@ uv run python -m ep1_fashion_mnist.experiment configs\E4_batch_512.json --output
 uv run python -m ep1_fashion_mnist.experiment configs\E5_capacity_64.json --output results\runs\E5_capacity_64
 uv run python -m ep1_fashion_mnist.experiment configs\E5_capacity_256_128.json --output results\runs\E5_capacity_256_128
 uv run python -m ep1_fashion_mnist.experiment configs\E5_capacity_512_256_128.json --output results\runs\E5_capacity_512_256_128
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks\02_lucas_hyperparameters.ipynb --ExecutePreprocessor.timeout=600
 ```
 
 ## Desviaciones respecto del plan
 
-No hubo desviaciones materiales en la etapa 1.
+No hubo desviaciones materiales. La etapa de Early Stopping era condicional y no se activó porque la candidata solo mostró una diferencia aproximada de 0,0006 entre su mejor `val_loss` y el valor final; la decisión y su condición de reevaluación quedaron registradas en D-017.
 
 ## Limitaciones y resultados negativos
 
@@ -125,4 +130,4 @@ No hubo desviaciones materiales en la etapa 1.
 
 ## Resumen para el handoff a Cesar
 
-Pendiente.
+Cesar recibe como control una MLP `[256, 128]`, ReLU, Softmax, categorical crossentropy, SGD con `learning_rate=0.1`, batch 128, 20 épocas, seed 42 y sin regularización. En validation obtuvo accuracy `0,8933` y F1 Macro `0,8936` con 235.146 parámetros. La configuración es candidata, no definitiva: debe usarse como control para comparar optimizadores y regularización. Si esas técnicas cambian la convergencia, corresponde reevaluar learning rate y Early Stopping en etapas separadas. El test oficial continúa sellado hasta congelar configuración y protocolo final.

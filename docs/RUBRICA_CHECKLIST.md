@@ -13,9 +13,9 @@ Este archivo no declara cumplimiento por intención. Un indicador solo se marca 
 ### IEE 1.1 - Datos, entrenamiento y ajustes
 
 - [~] **IEE 1.1.1 (2%) - Carga y preprocesamiento.** Evidencia: `01_ignacio_data_baseline.ipynb` ejecutado, contrato validado y figuras D0; pendiente de revisión cruzada.
-- [~] **IEE 1.1.2 (2%) - Épocas, learning rate y batch size.** Evidencia: E3 y E4 comparan tres learning rates y tres batch sizes mediante configuraciones, tablas, curvas y decisiones D-014/D-015; pendiente de integración en el notebook final.
+- [~] **IEE 1.1.2 (2%) - Épocas, learning rate y batch size.** Evidencia: E3 y E4 comparan tres learning rates y tres batch sizes mediante configuraciones, tablas, curvas y decisiones D-014/D-015; integrado en el notebook de Lucas y pendiente del notebook final.
 - [~] **IEE 1.1.3 (2%) - Experimentos controlados.** Evidencia: E1/E2 varían exclusivamente activación o loss; tabla y figuras comparativas seleccionadas, pendiente de revisión.
-- [~] **IEE 1.1.4 (1%) - Ajustes según resultados.** Evidencia: E3–E5 seleccionan learning rate 0,1, batch 128 y capacidad `[256,128]`; D-017 descarta condicionalmente Early Stopping por falta de beneficio material. Pendiente de integración final.
+- [~] **IEE 1.1.4 (1%) - Ajustes según resultados.** Evidencia: E3–E5 seleccionan learning rate 0,1, batch 128 y capacidad `[256,128]`; D-017 descarta condicionalmente Early Stopping por falta de beneficio material. Integrado en el notebook de Lucas y pendiente del cierre grupal.
 
 ### IEE 1.2 - Funciones de la red
 
@@ -25,9 +25,9 @@ Este archivo no declara cumplimiento por intención. Un indicador solo se marca 
 
 ### IEE 1.3 - Arquitectura, optimización y regularización
 
-- [~] **IEE 1.3.1 (1%) - Arquitectura MLP.** Evidencia: E5 compara tres capacidades, parámetros, métricas, costo y gaps; selecciona `[256,128]` como candidata equilibrada. Pendiente de integración final.
+- [~] **IEE 1.3.1 (1%) - Arquitectura MLP.** Evidencia: E5 compara tres capacidades, parámetros, métricas, costo y gaps; selecciona `[256,128]` como candidata equilibrada en el notebook de Lucas. Pendiente del cierre grupal.
 - [ ] **IEE 1.3.2 (2%) - Optimización y regularización.** Evidencia: comparación con/sin técnica y análisis de estabilidad, convergencia y generalización.
-- [~] **IEE 1.3.3 (2%) - Ajuste de hiperparámetros.** Evidencia: E3–E5 comparan y seleccionan learning rate, batch size y capacidad mediante tablas, curvas y decisiones D-014–D-017; pendiente de integración final.
+- [~] **IEE 1.3.3 (2%) - Ajuste de hiperparámetros.** Evidencia: E3–E5 comparan y seleccionan learning rate, batch size y capacidad mediante tablas, curvas, notebook ejecutado y decisiones D-014–D-017; pendiente del cierre grupal.
 
 ### IEE 1.4 - Evaluación
 
@@ -64,11 +64,11 @@ Este archivo no declara cumplimiento por intención. Un indicador solo se marca 
 ## Requisitos transversales
 
 - [ ] Notebook final ejecutado de principio a fin en Google Colab.
-- [ ] Markdown antes y después de cada experimento.
+- [~] Markdown antes y después de E0–E5 en los notebooks de Ignacio y Lucas; pendiente de verificar el notebook final.
 - [ ] Código modularizado y sin duplicación innecesaria.
 - [ ] Tabla maestra de configuraciones y resultados.
 - [ ] Test utilizado solo después de congelar decisiones.
-- [ ] Instrucciones reproducibles de ejecución.
+- [~] Instrucciones reproducibles en entorno, informes y handoffs; pendiente de validar la ruta final de Colab.
 - [ ] Historial Git con contribuciones trazables.
 - [ ] Revisión cruzada completada.
 - [ ] Ensayo individual de defensa y control del tiempo.
