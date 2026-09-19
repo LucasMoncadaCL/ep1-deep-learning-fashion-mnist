@@ -1,5 +1,5 @@
 {
-  "experiment_id": "E0",
+  "experiment_id": "E1_tanh",
   "status": "validated_on_validation",
   "seed": 42,
   "dataset": "fashion_mnist",
@@ -7,7 +7,7 @@
   "stratified_split": true,
   "input_shape": [28, 28],
   "hidden_layers": [256, 128],
-  "hidden_activation": "relu",
+  "hidden_activation": "tanh",
   "output_units": 10,
   "output_activation": "softmax",
   "label_encoding": "one_hot",

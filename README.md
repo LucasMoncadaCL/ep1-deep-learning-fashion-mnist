@@ -4,7 +4,9 @@ Proyecto colaborativo para estudiar cómo la arquitectura, las funciones, los hi
 
 ## Estado
 
-El repositorio se encuentra en la fase de diseño metodológico. La guía, la auditoría, el checklist y los handoffs están definidos; todavía no se declara ningún resultado experimental.
+La etapa inicial de Ignacio está implementada y `READY_FOR_REVIEW`: contrato de datos, EDA, baseline E0 y comparaciones E1/E2 se ejecutaron exclusivamente sobre train/validation. El conjunto oficial de test continúa sellado. La guía, auditoría, checklist y handoffs siguen siendo documentos vivos para las etapas de Lucas, Cesar e integración.
+
+El punto de entrada para revisar o continuar este bloque es [`docs/IGNACIO_DELIVERY_INDEX.md`](docs/IGNACIO_DELIVERY_INDEX.md).
 
 ## Principios
 
@@ -73,4 +75,4 @@ uv venv --python 3.12 .venv
 
 No se permite desarrollar con Python global, `python -m venv`, Conda, Poetry ni instalaciones directas con `pip`.
 
-La rama menor queda fijada en `.python-version`; `uv` resuelve el parche estable disponible. Las dependencias se bloquearán en `uv.lock` después de comprobarlas conjuntamente. El procedimiento y la justificación completa están en [`docs/ENVIRONMENT.md`](docs/ENVIRONMENT.md).
+La rama menor queda fijada en `.python-version`; `uv` resuelve el parche estable disponible. Las dependencias declaradas en `pyproject.toml` ya están resueltas con versiones exactas en `uv.lock`; reconstruirlas con `uv sync --frozen`. El procedimiento y la justificación completa están en [`docs/ENVIRONMENT.md`](docs/ENVIRONMENT.md).

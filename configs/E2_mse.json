@@ -1,5 +1,5 @@
 {
-  "experiment_id": "E0",
+  "experiment_id": "E2_mse",
   "status": "validated_on_validation",
   "seed": 42,
   "dataset": "fashion_mnist",
@@ -11,7 +11,7 @@
   "output_units": 10,
   "output_activation": "softmax",
   "label_encoding": "one_hot",
-  "loss": "categorical_crossentropy",
+  "loss": "mse",
   "optimizer": "sgd",
   "learning_rate": 0.01,
   "batch_size": 128,

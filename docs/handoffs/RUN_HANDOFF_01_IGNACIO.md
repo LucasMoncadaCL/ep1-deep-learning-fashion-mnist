@@ -1,9 +1,28 @@
 # Run Handoff 01 - Ignacio Silva
 
-**Estado:** READY_TO_START  
+**Estado:** ACCEPTED
 **Responsable:** Ignacio Silva  
-**Revisor de salida:** Cesar Rojas  
+**Revisor de salida:** Lucas Moncada, como dueño del repositorio
+
 **Siguiente responsable:** Lucas Moncada
+
+## Cierre de revisión
+
+Lucas Moncada aceptó este handoff el 18-09-2026 como dueño del repositorio, después de reproducir el entorno, las 14 pruebas, el notebook y los experimentos E0, E1 y E2; revisar el contrato de métricas; y comprobar las correcciones documentales. Esta aceptación habilita el Handoff 02 sin convertir E0 en modelo final ni autorizar el uso del conjunto de test para ajuste.
+
+## Corrección posterior a revisión
+
+La revisión de la entrega solicitó reforzar reproducibilidad, trazabilidad y el contrato de métricas. Se corrigieron los comandos para usar `uv run`, se documentó la reproducción de E0/E1/E2, se añadieron métricas macro junto a las ponderadas, se actualizaron las referencias documentales y se corrigieron observaciones de Ruff. Tras verificar estas correcciones, el estado cambió de `READY_FOR_REVIEW` a `ACCEPTED`.
+
+El historial de la rama se reescribió mediante `--force-with-lease`. Todos los títulos y cuerpos de los commits quedaron en español; no quedan decisiones pendientes respecto de esta política.
+
+### Evidencia de la corrección
+
+- Archivos de implementación: `src/ep1_fashion_mnist/experiment.py`, `src/ep1_fashion_mnist/data.py` y `tests/test_data_validation.py`.
+- Documentación actualizada: índice de entrega, informe de Ignacio, informe LaTeX, entorno, README y handoff a Lucas.
+- `ValidationMetrics` y los JSON de cada corrida ahora contienen Accuracy, Precision, Recall y F1 tanto `macro` como `weighted`. En E0--E2 coinciden porque validation tiene 600 ejemplos por clase.
+- Reproducción confirmada: `uv sync --frozen`; 14 pruebas unitarias correctas; `uvx ruff check src tests` sin observaciones; notebook ejecutado mediante `uv run jupyter nbconvert --to notebook --execute --inplace notebooks\01_ignacio_data_baseline.ipynb --ExecutePreprocessor.timeout=120`.
+- E0, E1_tanh, E1_sigmoid y E2_mse se regeneraron desde sus JSON versionados. Sus métricas se mantuvieron, respectivamente, en accuracy 0,8722; 0,8643; 0,7535; y 0,7370. Los artefactos regenerables quedaron bajo `tmp/revision_runs/` durante la verificación y no se versionan.
 
 ## 1. Misión
 
@@ -156,7 +175,7 @@ El handoff puede pasar a `READY_FOR_REVIEW` cuando:
 - las desviaciones y preguntas abiertas están explícitas;
 - Lucas puede identificar exactamente qué configuración usar como control.
 
-El estado cambia a `ACCEPTED` cuando Cesar revisa la documentación, ejecuta las verificaciones acordadas y puede explicar cómo continuar.
+El estado cambia a `ACCEPTED` cuando el revisor de salida designado o el dueño del repositorio revisa la documentación, ejecuta las verificaciones acordadas y puede explicar cómo continuar.
 
 ## 8. Condiciones que obligan a detenerse y documentar
 

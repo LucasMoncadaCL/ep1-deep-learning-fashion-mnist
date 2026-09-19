@@ -242,3 +242,43 @@ TensorFlow soporta Python 3.9–3.12 y los runtimes actuales de Colab utilizan P
 ### Evidencia de validación
 
 El 15-09-2026, `uv 0.11.8` creó `.venv` con CPython 3.12.13. Las 8 pruebas automatizadas existentes pasaron usando el intérprete de ese entorno. Las versiones del stack científico se decidirán y bloquearán por separado.
+
+---
+
+## D-012 - Stack inicial bloqueado y carga reutilizable
+
+**Estado:** aceptada
+
+**Fecha:** 16-09-2026
+
+### Situación
+
+La primera etapa necesitaba un entorno reproducible, una única implementación de carga/preprocesamiento y una forma comprobable de construir E0 antes de ejecutar experimentos.
+
+### Decisión
+
+Versionar `pyproject.toml` y `uv.lock`; centralizar la preparación en `ep1_fashion_mnist.data` y la MLP en `ep1_fashion_mnist.model`. El stack resuelto inicialmente es TensorFlow 2.21.0, NumPy 2.5.3, Pandas 3.0.5 y scikit-learn 1.9.1 con Python 3.12.14.
+
+### Evidencia
+
+La carga efectiva mediante Keras validó los splits oficiales y el contrato. El código produce la partición estratificada 54.000/6.000 con seed 42 y las pruebas automatizadas pasan dentro de `.venv`. E0 se construye con 235.146 parámetros y salida de diez probabilidades; todavía no se ha entrenado ni evaluado sobre test.
+
+---
+
+## D-013 - Funciones de control posteriores a E1/E2
+
+**Estado:** aceptada
+
+**Fecha:** 16-09-2026
+
+### Situación
+
+Se debía comparar activaciones y función de pérdida sin modificar simultáneamente arquitectura, partición, optimizador, learning rate, batch size ni épocas.
+
+### Decisión
+
+Mantener ReLU en las capas ocultas y categorical crossentropy como control para los experimentos posteriores.
+
+### Evidencia
+
+Con seed 42 y las restantes condiciones de E0, ReLU obtuvo accuracy de validation 0,8722; Tanh 0,8643 y Sigmoid 0,7535. Con ReLU fija, categorical crossentropy obtuvo 0,8722 frente a 0,7370 de MSE. La tabla `results/tables/E1_E2_validation_comparison.md` y las figuras E1/E2 conservan los resultados. Esta decisión selecciona un control, no el modelo final y no utilizó test.
