@@ -5,6 +5,7 @@ import random
 from argparse import ArgumentParser
 from dataclasses import asdict, dataclass
 from pathlib import Path
+from time import perf_counter
 
 import matplotlib
 
@@ -31,26 +32,98 @@ class ValidationMetrics:
     f1_weighted: float
 
 
-def load_config(config_path: str | Path) -> dict:
-    """Carga una configuración JSON y comprueba los campos mínimos de un experimento."""
-    with Path(config_path).open(encoding="utf-8") as config_file:
-        config = json.load(config_file)
+@dataclass(frozen=True)
+class TrainingSummary:
+    """Resumen de convergencia y costo calculado únicamente desde el historial."""
+
+    duration_seconds: float
+    epochs_completed: int
+    best_epoch_by_validation_loss: int
+    best_validation_loss: float
+    best_epoch_by_validation_accuracy: int
+    best_validation_accuracy: float
+    final_train_loss: float
+    final_validation_loss: float
+    final_train_accuracy: float
+    final_validation_accuracy: float
+    final_accuracy_gap: float
+    final_loss_gap: float
+
+
+def validate_config(config: dict) -> dict:
+    """Valida anticipadamente el contrato estructural y numérico de una corrida."""
     required = {
         "experiment_id", "seed", "validation_fraction", "hidden_layers",
         "hidden_activation", "dropout", "batch_normalization", "l2_strength",
         "optimizer", "learning_rate", "loss", "batch_size", "epochs",
-        "output_units", "output_activation", "label_encoding",
+        "output_units", "output_activation", "label_encoding", "early_stopping",
     }
     missing = required.difference(config)
     if missing:
         raise ValueError(f"Configuración incompleta; faltan: {', '.join(sorted(missing))}")
+    if not isinstance(config["experiment_id"], str):
+        raise TypeError("experiment_id debe ser texto")
+    if not config["experiment_id"].strip():
+        raise ValueError("experiment_id debe ser un texto no vacío")
+    if not isinstance(config["seed"], int) or isinstance(config["seed"], bool):
+        raise TypeError("seed debe ser un entero")
+    if not isinstance(config["validation_fraction"], (int, float)) or isinstance(
+        config["validation_fraction"], bool
+    ):
+        raise TypeError("validation_fraction debe ser numérico")
+    if not 0.0 < config["validation_fraction"] < 1.0:
+        raise ValueError("validation_fraction debe estar entre 0 y 1")
+    if not isinstance(config["hidden_layers"], list):
+        raise TypeError("hidden_layers debe ser una lista")
+    if any(
+        not isinstance(units, int) or isinstance(units, bool)
+        for units in config["hidden_layers"]
+    ):
+        raise TypeError("hidden_layers debe contener enteros")
+    if not config["hidden_layers"] or any(units <= 0 for units in config["hidden_layers"]):
+        raise ValueError("hidden_layers debe ser una lista no vacía de enteros positivos")
+    if not isinstance(config["learning_rate"], (int, float)) or isinstance(
+        config["learning_rate"], bool
+    ):
+        raise TypeError("learning_rate debe ser numérico")
+    if config["learning_rate"] <= 0:
+        raise ValueError("learning_rate debe ser positivo")
+    for field in ("batch_size", "epochs"):
+        if not isinstance(config[field], int) or isinstance(config[field], bool):
+            raise TypeError(f"{field} debe ser un entero")
+        if config[field] <= 0:
+            raise ValueError(f"{field} debe ser un entero positivo")
+    if not isinstance(config["dropout"], (int, float)) or isinstance(
+        config["dropout"], bool
+    ):
+        raise TypeError("dropout debe ser numérico")
+    if not 0.0 <= config["dropout"] < 1.0:
+        raise ValueError("dropout debe estar en [0, 1)")
+    if not isinstance(config["l2_strength"], (int, float)) or isinstance(
+        config["l2_strength"], bool
+    ):
+        raise TypeError("l2_strength debe ser numérico")
+    if config["l2_strength"] < 0:
+        raise ValueError("l2_strength no puede ser negativo")
+    for field in ("batch_normalization", "early_stopping"):
+        if not isinstance(config[field], bool):
+            raise TypeError(f"{field} debe ser booleano")
     if config["output_units"] != 10 or config["output_activation"] != "softmax":
         raise ValueError("La configuración requiere 10 salidas Softmax para Fashion-MNIST")
     if config["label_encoding"] != "one_hot":
         raise ValueError("El pipeline actual requiere etiquetas one-hot")
     if config["loss"] not in {"categorical_crossentropy", "mse"}:
         raise ValueError("La loss debe ser categorical_crossentropy o mse en este pipeline")
+    if str(config["optimizer"]).lower() not in {"sgd", "adam", "rmsprop"}:
+        raise ValueError("optimizer debe ser sgd, adam o rmsprop")
     return config
+
+
+def load_config(config_path: str | Path) -> dict:
+    """Carga una configuración JSON y valida el contrato del experimento."""
+    with Path(config_path).open(encoding="utf-8") as config_file:
+        config = json.load(config_file)
+    return validate_config(config)
 
 
 def set_reproducible_seed(seed: int) -> None:
@@ -115,6 +188,59 @@ def calculate_validation_metrics(actual: np.ndarray, predicted: np.ndarray) -> V
     )
 
 
+def summarize_training_history(
+    history: dict[str, list[float]], *, duration_seconds: float
+) -> TrainingSummary:
+    """Resume convergencia, costo y gaps finales de un entrenamiento."""
+    required_metrics = ("loss", "val_loss", "accuracy", "val_accuracy")
+    missing = [metric for metric in required_metrics if metric not in history]
+    if missing:
+        raise ValueError(f"Historial incompleto; faltan: {', '.join(missing)}")
+    lengths = {len(history[metric]) for metric in required_metrics}
+    if lengths == {0} or len(lengths) != 1:
+        raise ValueError("Las series del historial deben ser no vacías y tener igual longitud")
+    if duration_seconds < 0:
+        raise ValueError("La duración del entrenamiento no puede ser negativa")
+
+    best_loss_index = int(np.argmin(history["val_loss"]))
+    best_accuracy_index = int(np.argmax(history["val_accuracy"]))
+    final_train_loss = float(history["loss"][-1])
+    final_validation_loss = float(history["val_loss"][-1])
+    final_train_accuracy = float(history["accuracy"][-1])
+    final_validation_accuracy = float(history["val_accuracy"][-1])
+    return TrainingSummary(
+        duration_seconds=float(duration_seconds),
+        epochs_completed=lengths.pop(),
+        best_epoch_by_validation_loss=best_loss_index + 1,
+        best_validation_loss=float(history["val_loss"][best_loss_index]),
+        best_epoch_by_validation_accuracy=best_accuracy_index + 1,
+        best_validation_accuracy=float(history["val_accuracy"][best_accuracy_index]),
+        final_train_loss=final_train_loss,
+        final_validation_loss=final_validation_loss,
+        final_train_accuracy=final_train_accuracy,
+        final_validation_accuracy=final_validation_accuracy,
+        final_accuracy_gap=final_train_accuracy - final_validation_accuracy,
+        final_loss_gap=final_validation_loss - final_train_loss,
+    )
+
+
+def build_experiment_record(
+    *,
+    config: dict,
+    model_parameters: int,
+    metrics: ValidationMetrics,
+    training: TrainingSummary,
+) -> dict:
+    """Construye el registro autocontenido que se persiste para comparar corridas."""
+    return {
+        "experiment_id": config["experiment_id"],
+        "config": dict(config),
+        "model_parameters": int(model_parameters),
+        "training": asdict(training),
+        "metrics": asdict(metrics),
+    }
+
+
 def run_validation_experiment(
     config_path: str | Path,
     *,
@@ -135,10 +261,14 @@ def run_validation_experiment(
         ),
         optimizer=config["optimizer"], learning_rate=config["learning_rate"], loss=config["loss"],
     )
+    training_started = perf_counter()
     history = model.fit(
         data.X_train, data.y_train, validation_data=(data.X_val, data.y_val),
         batch_size=config["batch_size"], epochs=config["epochs"], verbose=2,
     ).history
+    training_summary = summarize_training_history(
+        history, duration_seconds=perf_counter() - training_started
+    )
     probabilities = model.predict(data.X_val, verbose=0)
     actual = data.y_val.argmax(axis=1)
     predicted = probabilities.argmax(axis=1)
@@ -147,8 +277,16 @@ def run_validation_experiment(
     output_path.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(history).rename_axis("epoch").to_csv(output_path / f"{experiment_id}_history.csv")
     with (output_path / f"{experiment_id}_validation_metrics.json").open("w", encoding="utf-8") as metrics_file:
-        json.dump({"experiment_id": experiment_id, "model_parameters": model.count_params(),
-                   "metrics": asdict(metrics)}, metrics_file, indent=2)
+        json.dump(
+            build_experiment_record(
+                config=config,
+                model_parameters=model.count_params(),
+                metrics=metrics,
+                training=training_summary,
+            ),
+            metrics_file,
+            indent=2,
+        )
     plot_history(history, experiment_id=experiment_id, output_path=output_path / f"{experiment_id}_curves.png")
     return metrics
 

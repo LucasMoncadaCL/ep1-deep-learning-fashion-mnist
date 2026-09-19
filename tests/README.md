@@ -29,8 +29,11 @@ Los tests no sustituyen el análisis experimental; protegen sus supuestos.
 - construcción de E0 con 235.146 parámetros y diez probabilidades Softmax;
 - coherencia de configuración entre salida Softmax, etiquetas one-hot y categorical crossentropy.
 - cálculo explícito de Accuracy, Precision, Recall y F1 en sus variantes macro y ponderada.
+- rechazo anticipado de tipos, rangos y estructuras inválidas en configuraciones.
+- resumen de convergencia, costo y gaps a partir del historial de entrenamiento.
+- construcción de un registro autocontenido con configuración, entrenamiento y métricas.
 
-El total actual es 14 pruebas.
+El total actual es 18 pruebas.
 
 Ejecución:
 

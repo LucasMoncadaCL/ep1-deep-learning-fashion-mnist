@@ -44,7 +44,7 @@ La salida debe comenzar con `Python 3.12.`.
 
 ### Validación inicial del repositorio
 
-El 15-09-2026 se recreó correctamente `.venv` con `uv 0.11.8`; `uv` resolvió CPython 3.12.13. La validación posterior del bloque inicial actualizó el entorno a `uv 0.12.10` y CPython 3.12.14, con TensorFlow 2.21.0, NumPy 2.5.3, Pandas 3.0.5 y scikit-learn 1.9.1 declarados como dependencias directas en `pyproject.toml` y resueltos con versiones exactas en `uv.lock`. Las 14 pruebas automatizadas pasan con ese entorno.
+El 15-09-2026 se recreó correctamente `.venv` con `uv 0.11.8`; `uv` resolvió CPython 3.12.13. La validación posterior del bloque inicial actualizó el entorno a `uv 0.12.10` y CPython 3.12.14, con TensorFlow 2.21.0, NumPy 2.5.3, Pandas 3.0.5 y scikit-learn 1.9.1 declarados como dependencias directas en `pyproject.toml` y resueltos con versiones exactas en `uv.lock`. La etapa de Lucas volvió a reconstruir el entorno con `uv 0.11.8` y Python 3.12.13; las 18 pruebas automatizadas pasan, confirmando compatibilidad dentro de Python 3.12.x.
 
 ### Activación en Windows PowerShell
 

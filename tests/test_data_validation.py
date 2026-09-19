@@ -13,7 +13,13 @@ from ep1_fashion_mnist.data_validation import (
     validate_image_classification_split,
     validate_train_validation_partition,
 )
-from ep1_fashion_mnist.experiment import calculate_validation_metrics, load_config
+from ep1_fashion_mnist.experiment import (
+    build_experiment_record,
+    calculate_validation_metrics,
+    load_config,
+    summarize_training_history,
+    validate_config,
+)
 from ep1_fashion_mnist.model import build_mlp, compile_model
 
 
@@ -198,6 +204,26 @@ class ModelAndConfigurationTests(unittest.TestCase):
         self.assertEqual(config["output_activation"], "softmax")
         self.assertEqual(config["loss"], "categorical_crossentropy")
 
+    def test_rejects_invalid_numeric_and_structural_configuration_values(self):
+        root = Path(__file__).resolve().parents[1]
+        baseline = load_config(root / "configs" / "baseline.json")
+        invalid_cases = (
+            ("learning_rate", 0, ValueError, "learning_rate"),
+            ("batch_size", 0, ValueError, "batch_size"),
+            ("epochs", 0, ValueError, "epochs"),
+            ("validation_fraction", 1.0, ValueError, "validation_fraction"),
+            ("hidden_layers", [], ValueError, "hidden_layers"),
+            ("dropout", 1.0, ValueError, "dropout"),
+            ("l2_strength", -0.1, ValueError, "l2_strength"),
+            ("early_stopping", "false", TypeError, "early_stopping"),
+        )
+
+        for field, invalid_value, exception, message in invalid_cases:
+            with self.subTest(field=field), self.assertRaisesRegex(exception, message):
+                config = dict(baseline)
+                config[field] = invalid_value
+                validate_config(config)
+
 
 class ValidationMetricsTests(unittest.TestCase):
     def test_reports_macro_and_weighted_metrics(self):
@@ -214,6 +240,78 @@ class ValidationMetricsTests(unittest.TestCase):
         self.assertAlmostEqual(metrics.recall_weighted, 0.75)
         self.assertAlmostEqual(metrics.f1_weighted, 23 / 30)
         self.assertNotEqual(metrics.f1_macro, metrics.f1_weighted)
+
+
+class TrainingSummaryTests(unittest.TestCase):
+    def test_rejects_incomplete_or_misaligned_history(self):
+        with self.assertRaisesRegex(ValueError, "faltan: val_accuracy"):
+            summarize_training_history(
+                {"loss": [0.5], "val_loss": [0.4], "accuracy": [0.8]},
+                duration_seconds=1.0,
+            )
+
+        with self.assertRaisesRegex(ValueError, "igual longitud"):
+            summarize_training_history(
+                {
+                    "loss": [0.5, 0.4],
+                    "val_loss": [0.4],
+                    "accuracy": [0.8, 0.9],
+                    "val_accuracy": [0.9, 0.91],
+                },
+                duration_seconds=1.0,
+            )
+
+    def test_summarizes_convergence_cost_and_final_gaps(self):
+        history = {
+            "loss": [0.8, 0.5, 0.3],
+            "val_loss": [0.7, 0.4, 0.45],
+            "accuracy": [0.6, 0.8, 0.9],
+            "val_accuracy": [0.65, 0.85, 0.84],
+        }
+
+        summary = summarize_training_history(history, duration_seconds=12.5)
+
+        self.assertEqual(summary.epochs_completed, 3)
+        self.assertEqual(summary.best_epoch_by_validation_loss, 2)
+        self.assertAlmostEqual(summary.best_validation_loss, 0.4)
+        self.assertEqual(summary.best_epoch_by_validation_accuracy, 2)
+        self.assertAlmostEqual(summary.best_validation_accuracy, 0.85)
+        self.assertAlmostEqual(summary.final_train_loss, 0.3)
+        self.assertAlmostEqual(summary.final_validation_loss, 0.45)
+        self.assertAlmostEqual(summary.final_train_accuracy, 0.9)
+        self.assertAlmostEqual(summary.final_validation_accuracy, 0.84)
+        self.assertAlmostEqual(summary.final_accuracy_gap, 0.06)
+        self.assertAlmostEqual(summary.final_loss_gap, 0.15)
+        self.assertAlmostEqual(summary.duration_seconds, 12.5)
+
+    def test_builds_a_self_contained_experiment_record(self):
+        root = Path(__file__).resolve().parents[1]
+        config = load_config(root / "configs" / "baseline.json")
+        metrics = calculate_validation_metrics(
+            np.array([0, 1]), np.array([0, 1])
+        )
+        training = summarize_training_history(
+            {
+                "loss": [0.5],
+                "val_loss": [0.4],
+                "accuracy": [0.8],
+                "val_accuracy": [0.9],
+            },
+            duration_seconds=2.0,
+        )
+
+        record = build_experiment_record(
+            config=config,
+            model_parameters=235_146,
+            metrics=metrics,
+            training=training,
+        )
+
+        self.assertEqual(record["experiment_id"], "E0")
+        self.assertEqual(record["config"], config)
+        self.assertEqual(record["model_parameters"], 235_146)
+        self.assertEqual(record["training"]["epochs_completed"], 1)
+        self.assertEqual(record["metrics"]["f1_macro"], 1.0)
 
 
 if __name__ == "__main__":

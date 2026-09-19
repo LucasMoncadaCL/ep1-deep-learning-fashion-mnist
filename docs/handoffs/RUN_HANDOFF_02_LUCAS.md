@@ -1,6 +1,6 @@
 # Run Handoff 02 - Lucas Moncada
 
-**Estado:** READY_TO_START
+**Estado:** IN_PROGRESS
 
 **Responsable:** Lucas Moncada  
 **Revisor de salida:** Ignacio Silva  
