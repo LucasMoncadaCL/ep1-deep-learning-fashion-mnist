@@ -24,7 +24,7 @@ Las metas siguientes son **mínimas y orientativas, ampliables con justificació
 - Accuracy `0,8933`, Precision Macro `0,8949`, Recall Macro `0,8933` y F1 Macro `0,8936` sobre validation;
 - test oficial no evaluado.
 
-La candidata es un control trazable, no una arquitectura definitiva. La alternativa `[512, 256, 128]` obtuvo accuracy `0,8990`, pero no fue seleccionada porque la mejora de 0,57 puntos implicó 2,41 veces más parámetros, 1,60 veces más tiempo y mayores gaps.
+La candidata es un control trazable, no una arquitectura definitiva. La alternativa `[512, 256, 128]` obtuvo accuracy `0,8990`, pero no fue seleccionada porque la mejora de 0,57 puntos implicó 2,41 veces más parámetros, 1,60 veces más tiempo en la corrida de referencia y mayores gaps. Los tiempos pueden variar entre ejecuciones y no deben usarse como único criterio.
 
 ## Infraestructura pública
 

@@ -30,6 +30,7 @@
 - La auditoría posterior cerró el contrato silencioso de Early Stopping, validó los metadatos efectivos de configuración y añadió evidencia versionada de Precision y Recall.
 - Ruff quedó bloqueado en `uv.lock` y se añadió un workflow de calidad para pruebas y lint en PR y `main`.
 - El workflow se verificó correctamente en GitHub y `main` quedó protegida con check obligatorio, revisión externa y conversaciones resueltas.
+- Se creó y revisó visualmente el informe formal `docs/latex/collaborators/lucas/main.tex`; compila en tres páginas y complementa este registro operativo.
 
 ## Archivos creados o modificados
 
@@ -53,6 +54,7 @@
 - `notebooks/02_lucas_hyperparameters.ipynb`.
 - `docs/handoffs/RUN_HANDOFF_02_LUCAS.md` y `docs/handoffs/RUN_HANDOFF_03_CESAR.md`.
 - `.github/workflows/quality.yml`.
+- `docs/latex/collaborators/lucas/main.tex` y su `README.md`.
 
 ## Evidencia del entorno uv
 
@@ -71,7 +73,7 @@
 | Gaps con signo explícito | Diferencias absolutas | Conservan la dirección de la diferencia y facilitan interpretar sobreajuste o validation superior | `TrainingSummary` y `PLAN.md` |
 | Seleccionar learning rate 0,1 para E4 | 0,001 y 0,01 | Mejoró accuracy y F1 Macro en aproximadamente 2,1 puntos frente al control, con duración similar | Tabla y figuras E3; D-014 |
 | Mantener batch size 128 para E5 | 32 y 512 | Entregó la mejor accuracy y F1 Macro, con menor costo y gaps que 32; 512 fue más rápido, pero perdió desempeño relevante | Tabla y figuras E4; D-015 |
-| Seleccionar capacidad `[256, 128]` para Cesar | `[64]` y `[512, 256, 128]` | Conserva un mejor equilibrio que la red grande: 58,6 % menos parámetros y 37,7 % menos tiempo a cambio de 0,57 puntos de accuracy | Tabla y figuras E5; D-016 |
+| Seleccionar capacidad `[256, 128]` para Cesar | `[64]` y `[512, 256, 128]` | Conserva un mejor equilibrio que la red grande: 58,6 % menos parámetros y, en la corrida de referencia, 37,7 % menos tiempo a cambio de 0,57 puntos de accuracy | Tabla y figuras E5; D-016 |
 | No activar Early Stopping en esta etapa | Ejecutar una comparación adicional con callback | La candidata solo empeoró `val_loss` en aproximadamente 0,0006 entre su mínimo y el final; el ahorro potencial es de dos épocas y no hay degradación material de accuracy | Curvas E5; D-017 |
 | Rechazar `early_stopping=true` mientras no exista callback | Aceptar el campo como indicador sin efecto | Evita que una corrida declare una técnica que el ejecutor no aplicó | Prueba de contrato; D-018 |
 
@@ -125,7 +127,7 @@ No hubo desviaciones materiales. La etapa de Early Stopping era condicional y no
 - El batch 32 presentó deterioro de validation después de sus mejores épocas y fue aproximadamente 2,74 veces más lento que 128; se conserva como resultado negativo.
 - El batch 512 redujo a la mitad el tiempo respecto de 128 y mostró menor gap, pero perdió 1,88 puntos porcentuales de accuracy; se conserva como alternativa de eficiencia.
 - E4 utiliza una seed. La selección se apoya en desempeño, costo y generalización conjuntamente; las repeticiones se reservarán para una decisión final estrecha.
-- La red `[512, 256, 128]` obtuvo el mayor desempeño, pero con 2,41 veces más parámetros, 1,60 veces más duración y gaps mayores que `[256, 128]`; no se seleccionó como candidata equilibrada.
+- La red `[512, 256, 128]` obtuvo el mayor desempeño, pero con 2,41 veces más parámetros, 1,60 veces más duración en la corrida de referencia y gaps mayores que `[256, 128]`; no se seleccionó como candidata equilibrada. Los tiempos fluctúan entre ejecuciones y no sostienen por sí solos la decisión.
 - La red `[64]` seguía mejorando al finalizar las 20 épocas, pero ampliar solo su presupuesto rompería el control de E5.
 - Early Stopping no se probó como callback porque la candidata solo mostró una variación final de `val_loss` cercana a 0,0006. Esta decisión debe revisarse si Cesar cambia la dinámica de entrenamiento.
 

@@ -54,7 +54,7 @@ Esta configuración es una candidata equilibrada para el siguiente control, no e
 
 - D-014 selecciona `learning_rate=0.1` por mejorar aproximadamente 2,1 puntos frente a 0,01 con duración comparable.
 - D-015 mantiene batch 128: batch 32 fue más lento y sobreajustó más; 512 fue eficiente, pero perdió 1,88 puntos de accuracy.
-- D-016 selecciona `[256, 128]`: la red grande mejoró 0,57 puntos, pero usó 2,41 veces más parámetros, tardó 1,60 veces más y aumentó los gaps.
+- D-016 selecciona `[256, 128]`: la red grande mejoró 0,57 puntos, pero usó 2,41 veces más parámetros, tardó 1,60 veces más en la corrida de referencia y aumentó los gaps.
 - D-017 no activa Early Stopping: en la candidata, la diferencia entre la mejor `val_loss` y la final fue aproximadamente 0,0006 y el ahorro potencial era de dos épocas.
 - D-018 hace que el ejecutor rechace `early_stopping=true` hasta que exista un callback real y probado.
 
@@ -67,6 +67,7 @@ Esta configuración es una candidata equilibrada para el siguiente control, no e
 - `results/tables/E3_E5_validation_metrics.md`, con métricas macro y ponderadas completas.
 - Figuras comparativas E3–E5 bajo `results/figures/`.
 - `docs/collaborators/lucas/REPORT.md`.
+- `docs/latex/collaborators/lucas/main.tex`, informe formal compilado y revisado visualmente.
 - Decisiones D-014–D-018 en `docs/DECISION_LOG.md`.
 
 ## Verificación y reproducción

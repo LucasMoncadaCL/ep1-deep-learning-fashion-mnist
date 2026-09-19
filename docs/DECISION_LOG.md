@@ -349,7 +349,7 @@ Entregar `[256, 128]` como arquitectura candidata equilibrada para la etapa de C
 
 ### Evidencia
 
-Las arquitecturas `[64]`, `[256, 128]` y `[512, 256, 128]` utilizaron 50.890, 235.146 y 567.434 parámetros; obtuvieron accuracy de validation 0,8873, 0,8933 y 0,8990, y F1 Macro 0,8881, 0,8936 y 0,8989. La red grande mejoró 0,57 puntos porcentuales de accuracy frente a la candidata, pero usó 2,41 veces más parámetros, tardó 1,60 veces más y aumentó los gaps finales a 0,0379 de accuracy y 0,1215 de loss.
+Las arquitecturas `[64]`, `[256, 128]` y `[512, 256, 128]` utilizaron 50.890, 235.146 y 567.434 parámetros; obtuvieron accuracy de validation 0,8873, 0,8933 y 0,8990, y F1 Macro 0,8881, 0,8936 y 0,8989. La red grande mejoró 0,57 puntos porcentuales de accuracy frente a la candidata, pero usó 2,41 veces más parámetros, tardó 1,60 veces más en la corrida de referencia y aumentó los gaps finales a 0,0379 de accuracy y 0,1215 de loss. La duración puede variar entre ejecuciones y no se utiliza como criterio aislado.
 
 ### Alternativas y seguimiento
 

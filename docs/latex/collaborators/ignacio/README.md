@@ -5,6 +5,7 @@
 Compilar desde esta carpeta con un motor LaTeX instalado:
 
 ```powershell
+New-Item -ItemType Directory -Force build | Out-Null
 pdflatex -output-directory build main.tex
 pdflatex -output-directory build main.tex
 ```

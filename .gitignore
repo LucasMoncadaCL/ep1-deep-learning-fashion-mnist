@@ -32,6 +32,14 @@ tmp/
 *.log
 superpowers/
 
+# Compilación local de informes LaTeX
+docs/latex/**/build/
+docs/latex/**/*.aux
+docs/latex/**/*.fls
+docs/latex/**/*.fdb_latexmk
+docs/latex/**/*.synctex.gz
+docs/latex/**/*.toc
+
 # Material académico y documentación de uso exclusivamente local
 docs/material-ea1/
 docs/ref/
