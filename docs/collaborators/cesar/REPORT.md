@@ -23,8 +23,8 @@
 - Se ejecutó E7 con y sin Dropout; Dropout `0,2` mejoró Accuracy/F1 Macro y redujo los gaps, por lo que queda como control para E8.
 - Se corrigió y probó el orden Batch Normalization→ReLU. E8 mostró que activar Batch Normalization empeora las métricas y gaps bajo este control, por lo que queda desactivada para E9.
 - Se ejecutó E9 con L2 `0` y `1e-4`; L2 no superó el control ya regularizado con Dropout, por lo que queda en cero.
-- Se repitieron las candidatas L2 con seed 7; ambas seeds mantuvieron ventaja de la configuración sin L2. Se descartó Early Stopping por falta de oportunidad material y se congeló el protocolo F0 antes de test.
-- Se ejecutó F1 una única vez mediante el evaluador separado: Accuracy de test 0,8838 y F1 Macro 0,8836. No se realizaron ajustes posteriores.
+- Las corridas canónicas L2 con seeds 42 y 7 favorecieron la configuración sin L2. Una revisión externa observó una diferencia marginal e inversión, por lo que L2 cero se reporta como opción prudente y no como ventaja robusta entre entornos. Se descartó Early Stopping por falta de oportunidad material y se congeló F0 antes de test.
+- F1 se ejecutó una única vez mediante el evaluador separado: Accuracy de test 0,8838 y F1 Macro 0,8836. El resultado decisorio quedó versionado junto al hash de F0 y sus versiones; el notebook de Colab lo presenta sin volver a consultar test.
 
 ## Archivos creados o modificados
 
@@ -136,9 +136,8 @@ No hay desviaciones metodológicas. La documentación aún debe registrar la ace
 
 ## Asuntos abiertos
 
-- Solicitar revisión humana de cierre a Lucas y registrar su resultado.
-- Ejecutar `EP1_FashionMNIST_FINAL.ipynb` desde cero en Google Colab antes de entregar.
-- Crear un commit con estos cambios una vez aceptada la revisión.
+- Ejecutar `EP1_FashionMNIST_FINAL.ipynb` desde cero en Google Colab como verificación técnica de presentación, sin ejecutar F1 ni consultar test.
+- Solicitar revisión humana de cierre sobre el notebook canónico, el contrato F1 y la documentación corregida.
 
 ## Resumen para la integración grupal
 

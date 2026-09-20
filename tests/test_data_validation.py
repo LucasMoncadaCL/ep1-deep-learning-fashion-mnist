@@ -1,3 +1,5 @@
+import hashlib
+import json
 import unittest
 from pathlib import Path
 
@@ -462,6 +464,29 @@ class ModelAndConfigurationTests(unittest.TestCase):
         self.assertEqual(frozen["status"], "frozen_pre_test")
         self.assertEqual(frozen["final_evaluation_strategy"], "evaluate_selected_54k_model")
         self.assertEqual(frozen["test_evaluation_budget"], 1)
+
+    def test_f1_decisory_record_is_bound_to_frozen_config_and_notebook_avoids_test(self):
+        root = Path(__file__).resolve().parents[1]
+        record_path = root / "results" / "records" / "F1_final_evaluation_record.json"
+        frozen_path = root / "configs" / "F0_frozen_config.json"
+        notebook_path = root / "notebooks" / "EP1_FashionMNIST_FINAL.ipynb"
+
+        record = json.loads(record_path.read_text(encoding="utf-8"))
+        frozen_hash = hashlib.sha256(frozen_path.read_bytes()).hexdigest()
+        notebook = json.loads(notebook_path.read_text(encoding="utf-8"))
+        notebook_code = "\n".join(
+            "".join(cell["source"])
+            for cell in notebook["cells"]
+            if cell["cell_type"] == "code"
+        )
+
+        self.assertEqual(record["decision_contract"], "local_decisory_evaluation_once")
+        self.assertEqual(record["frozen_config_sha256"], frozen_hash)
+        self.assertEqual(record["test_examples"], 10_000)
+        self.assertAlmostEqual(record["metrics"]["f1_macro"], 0.8836)
+        self.assertNotIn("X_test", notebook_code)
+        self.assertNotIn("model.fit(", notebook_code)
+        self.assertNotIn(".predict(", notebook_code)
 
 
 class ValidationMetricsTests(unittest.TestCase):

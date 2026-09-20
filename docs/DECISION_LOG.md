@@ -559,7 +559,7 @@ Se evaluará una única vez el modelo seleccionado que conserva el split 54.000/
 
 ### Justificación técnica
 
-La configuración reúne la mejor evidencia disponible de validation y las repeticiones disponibles sostienen mantener L2 apagada. Conservar el split permite evaluar el modelo cuya configuración y número de épocas fueron seleccionados sin convertir test en sustituto de validation.
+La configuración reúne la mejor evidencia disponible de validation. Las corridas canónicas disponibles favorecen mantener L2 apagada, mientras una revisión externa observó una diferencia marginal e inversión; por ello se adopta L2 cero como opción prudente, sin atribuirle estabilidad robusta entre entornos. Conservar el split permite evaluar el modelo cuya configuración y número de épocas fueron seleccionados sin convertir test en sustituto de validation.
 
 ### Evidencia y restricción
 
@@ -574,3 +574,25 @@ La configuración reúne la mejor evidencia disponible de validation y las repet
 **Fecha:** 19-09-2026
 
 La configuración congelada se evaluó una única vez sobre los 10.000 ejemplos oficiales de test. Alcanzó Accuracy 0,8838 y F1 Macro 0,8836. Las mayores dificultades se concentran en Shirt y en confusiones visualmente plausibles entre prendas superiores. Estos resultados se registran como evaluación final; no habilitan ajustes posteriores.
+
+---
+
+## D-027 - Fuente canónica y contrato de presentación de F1
+
+**Estado:** aceptada
+
+**Fecha:** 20-09-2026
+
+### Decisión
+
+La implementación canónica es exclusivamente el paquete bajo `src/ep1_fashion_mnist/`. El registro local de F1 ya evaluado es la única evaluación decisoria de test y queda versionado en `results/records/F1_final_evaluation_record.json`, vinculado al hash de `configs/F0_frozen_config.json`.
+
+El notebook final de Colab clona esta rama y presenta configuraciones, tablas, figuras y el registro F1. Puede reproducir validación si se requiere, pero no debe entrenar F1, predecir ni evaluar sobre test.
+
+### Justificación técnica
+
+Una segunda consulta de test sería otra evaluación y no debe confundirse con la medición decisoria ya registrada. Centralizar la implementación evita que un notebook con un modelo alternativo produzca métricas no comparables o cambie decisiones como la selección del optimizador.
+
+### Evidencia
+
+`docs/FINAL_EVALUATION_CONTRACT.md`, `results/records/F1_final_evaluation_record.json`, `results/tables/R03_canonical_validation_reproduction.md` y `notebooks/EP1_FashionMNIST_FINAL.ipynb`.

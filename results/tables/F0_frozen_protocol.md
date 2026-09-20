@@ -19,7 +19,7 @@
 
 ## Criterio y protocolo de selección
 
-La candidata se seleccionó por Accuracy, F1 Macro, curvas de validation, gaps, complejidad y evidencia de E6-E9. E7 eligió Dropout `0,2`; E8 y E9 descartaron Batch Normalization y L2 en las condiciones evaluadas. La repetición con seed 7 confirmó que L2 `1e-4` quedó por debajo del control sin L2 en ambas seeds disponibles.
+La candidata se seleccionó por Accuracy, F1 Macro, curvas de validation, gaps, complejidad y evidencia de E6-E9. E7 eligió Dropout `0,2`; E8 y E9 descartaron Batch Normalization y L2 en las condiciones canónicas evaluadas. Las corridas locales con seed 42 y 7 favorecieron L2 `0`, pero una revisión externa mostró una diferencia marginal e inversión; por ello L2 `0` se congela como opción prudente bajo incertidumbre, sin afirmar estabilidad robusta entre entornos.
 
 Se adopta la estrategia **evaluar el modelo seleccionado que conserva el split 54.000/6.000**. No se reentrenará con los 60.000 ejemplos oficiales: el modelo final se entrenará una vez con la configuración congelada y se evaluará sobre los 10.000 ejemplos de test exactamente una vez. Las 20 épocas se fijan antes de test porque la mejor validation loss/accuracy del control aparece al final del presupuesto y no existe evidencia material para Early Stopping.
 

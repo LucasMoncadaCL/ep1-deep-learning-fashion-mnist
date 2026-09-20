@@ -85,13 +85,13 @@ Dropout 0,2 mejoró simultáneamente Accuracy/F1 y generalización, por lo que s
 
 \section{F0: congelamiento}
 
-La decisión L2 se repitió con seed 7: sin L2 obtuvo Accuracy 0,8902 frente a 0,8863 con L2 $10^{-4}$. Con ambas seeds, los promedios fueron 0,8949 sin L2 y 0,8915 con L2. Early Stopping no se implementó porque el control alcanzó su mejor validation accuracy y loss al final de las 20 épocas, sin deterioro sostenido ni ahorro material.
+La decisión L2 se repitió con seed 7: sin L2 obtuvo Accuracy 0,8902 frente a 0,8863 con L2 $10^{-4}$. Los promedios locales fueron 0,8949 sin L2 y 0,8915 con L2. Una revisión externa observó una diferencia marginal e inversión en otra ejecución, por lo que L2 cero se conserva como opción prudente y trazable, sin afirmar estabilidad robusta entre entornos. Early Stopping no se implementó porque el control alcanzó su mejor validation accuracy y loss al final de las 20 épocas, sin deterioro sostenido ni ahorro material.
 
 Por tanto, F0 congeló la MLP $[256,128]$, ReLU, Softmax, categorical crossentropy, SGD LR 0,1, batch 128, 20 épocas, seed 42, Dropout 0,2 y sin Batch Normalization, L2 ni Early Stopping. Después de esta decisión no se ajustó ningún parámetro tras observar test.
 
 \section{F1: evaluación final única}
 
-La configuración congelada se entrenó con train 54.000/validation 6.000 y se evaluó una única vez sobre los 10.000 ejemplos oficiales de test.
+La configuración congelada se entrenó con train 54.000/validation 6.000 y se evaluó una única vez sobre los 10.000 ejemplos oficiales de test. El registro decisorio conserva el hash de F0 y las versiones del entorno; el notebook de Colab lo presenta sin volver a consultar test.
 
 \begin{table}[H]
 \centering
@@ -129,6 +129,6 @@ La matriz de confusión evidencia dificultades entre prendas superiores visualme
 
 La etapa demuestra que Dropout 0,2 aportó la mejora de generalización más clara bajo el control recibido. SGD LR 0,1 mantuvo el mejor compromiso ante los optimizadores estudiados, mientras que BatchNorm y L2 no mejoraron las métricas en este régimen. La evaluación final obtuvo Accuracy 0,8838 y F1 Macro 0,8836 sin retroalimentar ajustes desde test.
 
-El código reutilizable, las configuraciones, tablas y figuras se mantienen en el repositorio. La versión final pasa 31 pruebas automatizadas y Ruff. El informe consolidado de las tres etapas se encuentra en \texttt{docs/latex/final/main.tex}.
+El código reutilizable, las configuraciones, tablas y figuras se mantienen en el repositorio. La versión final pasa 31 pruebas automatizadas y Ruff. La fuente canónica es \texttt{src/ep1\_fashion\_mnist/}; el informe consolidado de las tres etapas se encuentra en \texttt{docs/latex/final/main.tex}.
 
 \end{document}

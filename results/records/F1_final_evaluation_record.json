@@ -1,0 +1,29 @@
+{
+  "record_type": "decisory_final_test_evaluation",
+  "experiment_id": "F1_final_test",
+  "decision_contract": "local_decisory_evaluation_once",
+  "evaluated_at": "2026-09-19",
+  "frozen_config": "configs/F0_frozen_config.json",
+  "frozen_config_sha256": "6803517d6777b56f3c4d88639aacdb8a4ab3b993f903bb97d91945dc5e55fd1c",
+  "strategy": "evaluate_selected_54k_model",
+  "test_examples": 10000,
+  "model_parameters": 235146,
+  "metrics": {
+    "accuracy": 0.8838,
+    "precision_macro": 0.8844,
+    "recall_macro": 0.8838,
+    "f1_macro": 0.8836,
+    "precision_weighted": 0.8844,
+    "recall_weighted": 0.8838,
+    "f1_weighted": 0.8836
+  },
+  "environment": {
+    "python": "3.12.13",
+    "tensorflow": "2.21.0",
+    "numpy": "2.5.3",
+    "pandas": "3.0.5",
+    "scikit_learn": "1.9.1"
+  },
+  "post_test_adjustments": false,
+  "colab_contract": "Colab puede presentar este registro y reproducir validation; no debe volver a predecir sobre test para la entrega."
+}

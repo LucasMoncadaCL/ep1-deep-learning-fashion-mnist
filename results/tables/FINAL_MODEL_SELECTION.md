@@ -12,10 +12,10 @@ La selección se realizó exclusivamente con train/validation y quedó congelada
 | Batch size / épocas | `128` / `20` | E4 y curvas E7/E9: la mejor validation accuracy y loss quedan al final de las 20 épocas. |
 | Dropout | `0,2` | E7: Accuracy `0,8997`, F1 Macro `0,8997` y gaps menores que sin Dropout. |
 | Batch Normalization | desactivada | E8: activarla redujo Accuracy y F1 Macro, y aumentó gaps. |
-| L2 | `0` | E9 y repetición seed 7: `1e-4` no mejoró Accuracy ni F1 Macro. |
+| L2 | `0` | En la ejecución canónica E9 y seed 7, `1e-4` no mejoró Accuracy ni F1 Macro; ante variación externa marginal, se mantiene la opción prudente. |
 | Early Stopping | desactivado | No había deterioro ni ahorro material; no se implementó sin una comparación interpretable. |
 
-Las dos repeticiones de la decisión L2 conservaron la dirección de la selección: sin L2 obtuvo Accuracy de validation `0,8997` y `0,8902` (promedio `0,8949`); con L2 `1e-4`, `0,8967` y `0,8863` (promedio `0,8915`).
+En el entorno canónico, las dos corridas disponibles favorecieron L2 `0`: Accuracy de validation `0,8997` y `0,8902` (promedio `0,8949`), frente a `0,8967` y `0,8863` con L2 `1e-4` (promedio `0,8915`). Una revisión externa observó una diferencia marginal e inversión en otra ejecución; por ello no se afirma estabilidad robusta entre entornos. L2 `0` se conserva como decisión prudente y trazable, no como superioridad universal.
 
 ## Evaluación final única
 

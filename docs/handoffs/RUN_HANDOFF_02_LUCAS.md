@@ -1,12 +1,14 @@
 # Run Handoff 02 - Lucas Moncada
 
-**Estado:** READY_FOR_REVIEW
+**Estado:** ACCEPTED
 
 **Responsable:** Lucas Moncada
 
 **Revisor técnico de salida:** Ignacio Silva
 
-**Aprobación de alcance e integración:** Lucas Moncada, como dueño del repositorio
+**Aprobación de alcance e integración:** Cesar Rojas, revisión humana registrada tras la integración en la rama de trabajo
+
+**Integración:** PR #2
 
 **Auditoría técnica asistida:** `APPROVED_TECHNICAL` en `docs/reviews/REVIEW_02_LUCAS.md`
 
@@ -96,4 +98,4 @@ La verificación de cierre debe confirmar `uv lock --check`, 22/22 pruebas, Ruff
 
 ## Criterio de aceptación
 
-Ignacio debe realizar la revisión cruzada técnica definida por el flujo del proyecto. Después, Lucas, como dueño del repositorio, debe comprobar que el alcance, la candidata, la evidencia y las restricciones sean coherentes y autorizar la integración. Solo tras ambas validaciones Cesar debe iniciar el Handoff 03 sobre la versión integrada.
+La auditoría técnica fue aprobada y la aceptación humana de alcance fue registrada por Cesar tras la integración. El Handoff 03 se ejecutó sobre la versión integrada y su trazabilidad de cierre se encuentra en `docs/handoffs/RUN_HANDOFF_03_CESAR.md`.

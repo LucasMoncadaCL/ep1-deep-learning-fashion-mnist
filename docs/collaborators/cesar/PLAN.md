@@ -1,8 +1,8 @@
 # Plan experimental vivo - Cesar Rojas
 
-**Estado:** WAITING_ON_HANDOFF_02_ACCEPTANCE
+**Estado:** COMPLETED_PENDING_REVIEW
 
-**Entrada prevista:** `main` después de integrar el Handoff 02.
+**Entrada utilizada:** versión integrada del Handoff 02.
 
 **Naturaleza:** metas mínimas y orientativas, ampliables con justificación técnica. El orden puede adaptarse si aparece evidencia nueva, pero no se pueden mezclar variables ni abrir test antes de congelar configuración y protocolo.
 

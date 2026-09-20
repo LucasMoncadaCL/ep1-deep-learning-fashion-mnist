@@ -179,9 +179,9 @@ E9 & L2 $10^{-4}$ & 0,8967 & 0,8970 & 0,0025 & \textbf{0,0102} \\
 
 \section{F0, F1 y análisis final}
 
-La decisión L2 se repitió con seed 7: sin L2 obtuvo Accuracy 0,8902 y con L2 0,8863. Los promedios con dos seeds son 0,8949 y 0,8915 respectivamente. No se activa Early Stopping porque el control alcanza su mejor validation accuracy y loss al final de las 20 épocas, sin deterioro sostenido ni ahorro material.
+La decisión L2 se repitió con seed 7: sin L2 obtuvo Accuracy 0,8902 y con L2 0,8863. Los promedios locales con dos seeds son 0,8949 y 0,8915 respectivamente. Una revisión externa observó una diferencia marginal e inversión en otra ejecución; por ello se mantiene L2 cero como opción prudente y trazable, sin afirmar estabilidad robusta entre entornos. No se activa Early Stopping porque el control alcanza su mejor validation accuracy y loss al final de las 20 épocas, sin deterioro sostenido ni ahorro material.
 
-F0 congela: MLP $[256,128]$, ReLU, Softmax, categorical crossentropy, SGD LR 0,1, batch 128, 20 épocas, seed 42, Dropout 0,2, sin BatchNorm, L2 ni Early Stopping. F1 entrena esta configuración conservando el split 54.000/6.000 y la evalúa una única vez sobre test.
+F0 congela: MLP $[256,128]$, ReLU, Softmax, categorical crossentropy, SGD LR 0,1, batch 128, 20 épocas, seed 42, Dropout 0,2, sin BatchNorm, L2 ni Early Stopping. F1 entrenó esta configuración conservando el split 54.000/6.000 y la evaluó una única vez sobre test. Esa evaluación decisoria queda registrada con el hash de F0 y las versiones del entorno; el notebook de Colab presenta dicho registro y no vuelve a consultar test.
 
 \begin{table}[H]
 \centering
@@ -238,6 +238,6 @@ El estudio respalda una MLP compacta y trazable. ReLU, Softmax y categorical cro
 
 F1 Macro 0,8836 confirma desempeño equilibrado globalmente, pero el análisis por clase revela una limitación importante: Shirt alcanza F1 0,6975 y se confunde con prendas superiores parecidas. Esta evidencia se comunica como limitación; no se usa para modificar el modelo tras test.
 
-La ejecución se reproduce con Python 3.12, \texttt{uv sync --frozen} y las versiones bloqueadas en \texttt{uv.lock}. El proyecto cuenta con 31 pruebas automatizadas y lint correcto. El notebook final autónomo reúne código, experimentos, gráficos y conclusiones para ejecutarse desde un runtime nuevo de Google Colab.
+La ejecución canónica se identifica con Python 3.12, \texttt{uv sync --frozen} y las versiones bloqueadas en \texttt{uv.lock}. El proyecto cuenta con 31 pruebas automatizadas y lint correcto. El notebook final para Colab clona la rama versionada, presenta código, experimentos, gráficos y conclusiones, y conserva el presupuesto de test al mostrar el registro F1 sin repetirlo.
 
 \end{document}
