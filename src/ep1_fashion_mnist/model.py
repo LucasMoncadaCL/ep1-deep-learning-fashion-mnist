@@ -26,14 +26,22 @@ def build_mlp(
     model.add(keras.layers.Input(shape=(28, 28), name="image"))
     model.add(keras.layers.Flatten(name="flatten"))
     for index, units in enumerate(hidden_layers, start=1):
-        model.add(
-            keras.layers.Dense(
-                units, activation=hidden_activation, kernel_regularizer=regularizer,
-                name=f"hidden_{index}",
-            )
-        )
         if batch_normalization:
+            model.add(
+                keras.layers.Dense(
+                    units, activation=None, kernel_regularizer=regularizer,
+                    name=f"hidden_{index}",
+                )
+            )
             model.add(keras.layers.BatchNormalization(name=f"batch_norm_{index}"))
+            model.add(keras.layers.Activation(hidden_activation, name=f"activation_{index}"))
+        else:
+            model.add(
+                keras.layers.Dense(
+                    units, activation=hidden_activation, kernel_regularizer=regularizer,
+                    name=f"hidden_{index}",
+                )
+            )
         if dropout:
             model.add(keras.layers.Dropout(dropout, seed=seed + index, name=f"dropout_{index}"))
     model.add(keras.layers.Dense(10, activation="softmax", name="classification"))

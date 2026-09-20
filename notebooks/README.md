@@ -15,8 +15,8 @@ Los notebooks contienen narrativa, ejecución y evidencia; la lógica reutilizab
 
 - `01_ignacio_data_baseline.ipynb`: bloque de datos, E0, E1 y E2.
 - `02_lucas_hyperparameters.ipynb`: E3, E4 y E5; ejecutado localmente desde `.venv` y listo para revisión.
-- `03_cesar_optimization_evaluation.ipynb`: pendiente del Handoff 03.
-- `EP1_FashionMNIST_FINAL.ipynb`: pendiente de integración grupal y validación limpia en Colab.
+- `03_cesar_optimization_evaluation.ipynb`: integra E6–F1 como evidencia de solo lectura; no vuelve a entrenar ni consulta test.
+- `EP1_FashionMNIST_FINAL.ipynb`: notebook autónomo de entrega; contiene datos, código, experimentos, gráficos, decisiones y F1. No depende de módulos, configuraciones, tablas ni figuras del repositorio y debe ejecutarse desde un runtime nuevo de Colab.
 
 Reproducción del notebook de Lucas desde la raíz:
 

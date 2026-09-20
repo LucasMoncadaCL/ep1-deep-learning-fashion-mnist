@@ -26,14 +26,14 @@ Este archivo no declara cumplimiento por intención. Un indicador solo se marca 
 ### IEE 1.3 - Arquitectura, optimización y regularización
 
 - [~] **IEE 1.3.1 (1%) - Arquitectura MLP.** Evidencia: E5 compara tres capacidades, parámetros, métricas, costo y gaps; selecciona `[256,128]` como candidata equilibrada en el notebook de Lucas. Pendiente del cierre grupal.
-- [ ] **IEE 1.3.2 (2%) - Optimización y regularización.** Evidencia: comparación con/sin técnica y análisis de estabilidad, convergencia y generalización.
+- [x] **IEE 1.3.2 (2%) - Optimización y regularización.** Evidencia: E6/E6b y E7–E9 comparan una variable por vez; tablas, curvas y D-019–D-024 documentan estabilidad, convergencia, gaps y resultados negativos.
 - [~] **IEE 1.3.3 (2%) - Ajuste de hiperparámetros.** Evidencia: E3–E5 comparan y seleccionan learning rate, batch size y capacidad mediante tablas, curvas, notebook ejecutado y decisiones D-014–D-017; pendiente del cierre grupal.
 
 ### IEE 1.4 - Evaluación
 
-- [~] **IEE 1.4.1 (2%) - Métricas pertinentes.** Evidencia: E3–E5 conservan Accuracy, Precision, Recall y F1 macro y ponderadas en una tabla versionada y en el notebook de Lucas; pendiente del análisis final por clase.
-- [ ] **IEE 1.4.2 (1%) - Uso de métricas para mejorar.** Evidencia: propuestas o decisiones derivadas de métricas globales y por clase.
-- [ ] **IEE 1.4.3 (1%) - Comparación y solución final.** Evidencia: tabla global y elección de configuración basada en evidencia experimental.
+- [x] **IEE 1.4.1 (2%) - Métricas pertinentes.** Evidencia: F1 informa Accuracy, Precision, Recall y F1 macro/ponderadas, más métricas por clase y matriz de confusión.
+- [x] **IEE 1.4.2 (1%) - Uso de métricas para mejorar.** Evidencia: E6b, E7–E9 y F0 usan métricas de validation, gaps y repeticiones para seleccionar sin usar test.
+- [x] **IEE 1.4.3 (1%) - Comparación y solución final.** Evidencia: `FINAL_MODEL_SELECTION.md`, F0 y F1 enlazan las comparaciones con la configuración final y su evaluación única.
 
 ## Presentación individual - 80%
 
@@ -64,10 +64,10 @@ Este archivo no declara cumplimiento por intención. Un indicador solo se marca 
 ## Requisitos transversales
 
 - [ ] Notebook final ejecutado de principio a fin en Google Colab.
-- [~] Markdown antes y después de E0–E5 en los notebooks de Ignacio y Lucas; pendiente de verificar el notebook final.
-- [~] Código reutilizable centralizado en `src/ep1_fashion_mnist/`; pendiente de revisar los módulos que añada Cesar.
-- [~] Tabla consolidada de métricas E3–E5 disponible; pendiente de incorporar optimización, regularización y evaluación final.
-- [ ] Test utilizado solo después de congelar decisiones.
+- [~] Markdown antes y después de E0–E5 y narrativa final integrada en `EP1_FashionMNIST_FINAL.ipynb`; pendiente de validación limpia en Colab.
+- [x] Código reutilizable centralizado en `src/ep1_fashion_mnist/`; `final_evaluation.py` añade la guardia de F1 y está cubierto por pruebas.
+- [x] Tabla consolidada disponible en `results/tables/FINAL_MODEL_SELECTION.md`, con vínculos a la evidencia por etapa.
+- [x] Test utilizado solo después de congelar decisiones: F0, D-025 y el registro único F1 lo respaldan.
 - [~] Instrucciones reproducibles en entorno, informes y handoffs; pendiente de validar la ruta final de Colab.
 - [ ] Historial Git con contribuciones trazables.
 - [ ] Revisión cruzada completada.

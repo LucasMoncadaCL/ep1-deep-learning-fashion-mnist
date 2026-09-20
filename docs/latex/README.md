@@ -33,7 +33,7 @@ No es obligatorio utilizar todas estas carpetas. Deben incorporarse únicamente 
 
 - `collaborators/ignacio/`: informe formal del bloque inicial.
 - `collaborators/lucas/`: informe formal compilado y revisado de E3--E5.
-- `collaborators/cesar/`: pendiente del Handoff 03.
+- `collaborators/cesar/`: informe operativo E6–F1 completo; aún no se solicitó una versión formal en LaTeX.
 - `final/`: se creará cuando exista una configuración final congelada y evidencia de evaluación sobre test.
 
 ## Reglas

@@ -1,0 +1,23 @@
+{
+  "experiment_id": "E6_optimizer_sgd",
+  "status": "validated_on_validation",
+  "seed": 42,
+  "dataset": "fashion_mnist",
+  "validation_fraction": 0.1,
+  "stratified_split": true,
+  "input_shape": [28, 28],
+  "hidden_layers": [256, 128],
+  "hidden_activation": "relu",
+  "output_units": 10,
+  "output_activation": "softmax",
+  "label_encoding": "one_hot",
+  "loss": "categorical_crossentropy",
+  "optimizer": "sgd",
+  "learning_rate": 0.1,
+  "batch_size": 128,
+  "epochs": 20,
+  "dropout": 0.0,
+  "batch_normalization": false,
+  "l2_strength": 0.0,
+  "early_stopping": false
+}

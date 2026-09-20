@@ -38,7 +38,15 @@ Los tests no sustituyen el análisis experimental; protegen sus supuestos.
 - control de que las configuraciones E4 modifiquen únicamente batch size respecto del control seleccionado en E3.
 - control de que las configuraciones E5 modifiquen únicamente las capas ocultas respecto del control seleccionado en E4.
 
-El total actual es 22 pruebas.
+- control de que las configuraciones E6 modifiquen únicamente el optimizador respecto de la candidata recibida.
+- control de que las configuraciones E6b modifiquen únicamente learning rate respecto de su optimizador de E6.
+- control de que las configuraciones E7 modifiquen únicamente Dropout respecto del control SGD.
+- control de que las configuraciones E8 modifiquen únicamente Batch Normalization respecto del control E7.
+- control de que las configuraciones E9 modifiquen únicamente la fuerza L2 respecto del control E8.
+- control de que las repeticiones modifiquen únicamente la seed y de que F0 preserve el control seleccionado y el presupuesto de test.
+- validación del protocolo congelado y de las métricas finales sin volver a consultar test.
+
+El total actual es 31 pruebas.
 
 Ejecución:
 
