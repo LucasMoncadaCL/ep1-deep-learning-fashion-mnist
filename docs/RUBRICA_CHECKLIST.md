@@ -63,12 +63,12 @@ Este archivo no declara cumplimiento por intención. Un indicador solo se marca 
 
 ## Requisitos transversales
 
-- [ ] Notebook final ejecutado de principio a fin en Google Colab.
-- [~] Markdown antes y después de E0–E5 y narrativa final integrada en `EP1_FashionMNIST_FINAL.ipynb`; pendiente de validación limpia en Colab.
+- [x] Notebook final ejecutado de principio a fin en Google Colab; confirma la carga de evidencia versionada sin ejecutar F1 ni consultar test.
+- [x] Markdown antes y después de E0–E5 y narrativa final integrada en `EP1_FashionMNIST_FINAL.ipynb`; validado en ejecución limpia de Colab.
 - [x] Código reutilizable centralizado en `src/ep1_fashion_mnist/`; `final_evaluation.py` añade la guardia de F1 y está cubierto por pruebas.
 - [x] Tabla consolidada disponible en `results/tables/FINAL_MODEL_SELECTION.md`, con vínculos a la evidencia por etapa.
 - [x] Test utilizado solo después de congelar decisiones: F0, D-025 y el registro único F1 lo respaldan.
-- [~] Instrucciones reproducibles en entorno, informes y handoffs; pendiente de validar la ruta final de Colab.
+- [x] Instrucciones reproducibles en entorno, informes y handoffs; ruta final de Colab validada con la rama publicada.
 - [ ] Historial Git con contribuciones trazables.
 - [ ] Revisión cruzada completada.
 - [ ] Ensayo individual de defensa y control del tiempo.

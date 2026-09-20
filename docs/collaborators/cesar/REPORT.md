@@ -1,6 +1,6 @@
 # Informe de colaborador - Cesar Rojas
 
-**Estado:** READY_FOR_REVIEW — E6–F1 y la integración documental están completos; queda la revisión humana de cierre.
+**Estado:** READY_FOR_REVIEW — E6–F1, la integración documental y la validación limpia en Colab están completos; queda la revisión humana de cierre.
 
 **Plan de referencia:** `docs/collaborators/cesar/PLAN.md`
 
@@ -136,9 +136,9 @@ No hay desviaciones metodológicas. La documentación aún debe registrar la ace
 
 ## Asuntos abiertos
 
-- Ejecutar `EP1_FashionMNIST_FINAL.ipynb` desde cero en Google Colab como verificación técnica de presentación, sin ejecutar F1 ni consultar test.
+- La ejecución limpia de `EP1_FashionMNIST_FINAL.ipynb` en Google Colab fue verificada después de publicar la rama; presentó la evidencia sin ejecutar F1 ni consultar test.
 - Solicitar revisión humana de cierre sobre el notebook canónico, el contrato F1 y la documentación corregida.
 
 ## Resumen para la integración grupal
 
-E6-F1 están completos e integrados en los notebooks de evidencia. La evaluación única de test obtuvo Accuracy `0,8838` y F1 Macro `0,8836`; Shirt fue la clase más difícil. No se hicieron ajustes posteriores; resta la revisión humana, la ejecución limpia en Colab y el commit de entrega.
+E6-F1 están completos e integrados en los notebooks de evidencia. La evaluación única de test obtuvo Accuracy `0,8838` y F1 Macro `0,8836`; Shirt fue la clase más difícil. No se hicieron ajustes posteriores. La ejecución limpia en Colab y los commits de corrección fueron completados; resta la revisión humana de cierre.

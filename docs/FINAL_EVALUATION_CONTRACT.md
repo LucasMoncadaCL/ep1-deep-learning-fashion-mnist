@@ -16,6 +16,8 @@ El notebook final puede clonarse desde la rama del repositorio y presentar la ev
 
 Una repetición de F1 para fines técnicos no puede modificar F0, escoger nuevas métricas ni reemplazar el registro decisorio. Si el docente exige una nueva F1 oficial en Colab, el equipo debe abrir un nuevo protocolo, documentarlo antes de ejecutarlo y regenerar todos los artefactos desde esa única corrida; no se puede elegir entre resultados según su valor.
 
+La ejecución limpia de entrega en Google Colab fue validada tras publicar la rama de corrección. Presentó la evidencia versionada sin entrenar F1, predecir ni consultar test.
+
 ## Variabilidad de validation
 
 Una seed fija mejora la repetibilidad dentro de un mismo entorno, pero no garantiza identidad bit a bit entre hardware, kernels o versiones. La reproducción canónica actual con Python 3.12.13 y TensorFlow 2.21.0 coincide con los registros originales de las cuatro comparaciones auditadas. Una revisión externa observó diferencias marginales en seed 7; por ello L2 se mantiene en cero como decisión prudente de simplicidad y rendimiento agregado, no como confirmación robusta por dos seeds.

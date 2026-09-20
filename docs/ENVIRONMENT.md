@@ -115,7 +115,7 @@ No es necesario copiar listas extensas de paquetes si ya existe un `uv.lock` ver
 
 ## 7. Colab
 
-Colab no utiliza el `.venv` local. El notebook final debe instalar versiones compatibles a partir del manifiesto del proyecto y ejecutarse desde cero.
+Colab no utiliza el `.venv` local. El notebook final de entrega presenta evidencia versionada y debe ejecutarse desde cero sin depender de rutas locales. Si se solicita reproducir validation en Colab, debe instalar versiones compatibles a partir del manifiesto del proyecto; no debe repetir F1 ni consultar test.
 
 La validación en Colab no reemplaza la regla local de `uv venv`; comprueba portabilidad hacia el entorno de entrega.
 
