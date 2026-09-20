@@ -1589,7 +1589,7 @@ El proyecto estará completo cuando exista evidencia de:
 - [ ] README de ejecución.
 - [ ] Commits reales de los tres.
 - [ ] PR/revisión cruzada.
-- [ ] Notebook final ejecutable en Colab.
+- [x] Notebook final ejecutado correctamente en Colab sin repetir F1 ni consultar test.
 - [ ] Los tres pueden defender todo el proyecto.
 - [ ] Presentación construida desde hallazgos.
 - [x] Autorización de grupo de tres confirmada.

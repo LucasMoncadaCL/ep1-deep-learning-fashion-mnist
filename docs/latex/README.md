@@ -8,9 +8,9 @@ Este directorio almacenará las fuentes de los informes formales del proyecto. P
 
 Los documentos LaTeX complementan, pero no reemplazan, los archivos `docs/collaborators/<nombre>/REPORT.md`. Los `REPORT.md` mantienen la trazabilidad operativa, las decisiones y los handoffs; los documentos LaTeX se destinan a entregables formales y versiones presentables.
 
-## Estructura propuesta
+## Estructura
 
-La estructura se creará a medida que existan documentos reales:
+La estructura ya contiene los informes formales versionados:
 
 ```text
 docs/latex/
@@ -33,8 +33,8 @@ No es obligatorio utilizar todas estas carpetas. Deben incorporarse únicamente 
 
 - `collaborators/ignacio/`: informe formal del bloque inicial.
 - `collaborators/lucas/`: informe formal compilado y revisado de E3--E5.
-- `collaborators/cesar/`: pendiente del Handoff 03.
-- `final/`: se creará cuando exista una configuración final congelada y evidencia de evaluación sobre test.
+- `collaborators/cesar/`: informe formal E6--F1 y PDF compilado.
+- `final/`: informe consolidado de las tres etapas y PDF compilado.
 
 ## Reglas
 

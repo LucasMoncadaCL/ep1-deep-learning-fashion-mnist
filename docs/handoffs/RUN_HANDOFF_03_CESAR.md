@@ -1,6 +1,6 @@
 # Run Handoff 03 - Cesar Rojas
 
-**Estado:** WAITING_ON_HANDOFF_02_ACCEPTANCE
+**Estado:** READY_FOR_REVIEW
 
 **Responsable:** Cesar Rojas
 
@@ -10,7 +10,7 @@
 
 ## Condición de inicio
 
-Este handoff contiene el contexto técnico necesario, pero Cesar no debe comenzar hasta que Ignacio complete la revisión cruzada, Lucas apruebe el alcance e integre la rama correspondiente. Al comenzar, la fuente de verdad será `main` actualizado, no una rama intermedia.
+El Handoff 02 fue aceptado e integrado. Cesar ejecutó E6--F1 sobre la fuente canónica del repositorio; este documento conserva el contrato de entrada y queda listo para revisión de cierre.
 
 Las metas siguientes son **mínimas y orientativas, ampliables con justificación técnica**. No constituyen una lista exhaustiva ni inmutable. Cualquier ampliación debe respetar la guía maestra, mantener el test sellado durante el ajuste y quedar respaldada en el informe de Cesar.
 

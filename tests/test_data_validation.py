@@ -1,3 +1,5 @@
+import hashlib
+import json
 import unittest
 from pathlib import Path
 
@@ -19,6 +21,10 @@ from ep1_fashion_mnist.experiment import (
     load_config,
     summarize_training_history,
     validate_config,
+)
+from ep1_fashion_mnist.final_evaluation import (
+    calculate_final_metrics,
+    validate_frozen_config,
 )
 from ep1_fashion_mnist.model import build_mlp, compile_model
 
@@ -196,6 +202,17 @@ class ModelAndConfigurationTests(unittest.TestCase):
         self.assertEqual(probabilities.shape, (2, 10))
         np.testing.assert_allclose(probabilities.sum(axis=1), np.ones(2), atol=1e-6)
 
+    def test_batch_normalization_precedes_hidden_activation(self):
+        model = build_mlp([16], batch_normalization=True, seed=42)
+        layer_names = [layer.name for layer in model.layers]
+
+        self.assertEqual(
+            layer_names,
+            ["flatten", "hidden_1", "batch_norm_1", "activation_1", "classification"],
+        )
+        self.assertEqual(model.get_layer("hidden_1").activation.__name__, "linear")
+        self.assertEqual(model.get_layer("activation_1").activation.__name__, "relu")
+
     def test_e0_config_matches_the_supported_label_output_loss_contract(self):
         root = Path(__file__).resolve().parents[1]
         config = load_config(root / "configs" / "baseline.json")
@@ -304,6 +321,173 @@ class ModelAndConfigurationTests(unittest.TestCase):
                 self.assertEqual(config["experiment_id"], experiment_id)
                 self.assertEqual(config["hidden_layers"], hidden_layers)
 
+    def test_e6_configs_change_only_the_optimizer(self):
+        root = Path(__file__).resolve().parents[1]
+        e5_control = load_config(root / "configs" / "E5_capacity_256_128.json")
+        expected_optimizers = {
+            "E6_optimizer_sgd": "sgd",
+            "E6_optimizer_rmsprop": "rmsprop",
+            "E6_optimizer_adam": "adam",
+        }
+        ignored_fields = {"experiment_id", "status", "optimizer"}
+        control_fields = {
+            key: value for key, value in e5_control.items() if key not in ignored_fields
+        }
+
+        for experiment_id, optimizer in expected_optimizers.items():
+            with self.subTest(experiment_id=experiment_id):
+                config = load_config(root / "configs" / f"{experiment_id}.json")
+                controlled_fields = {
+                    key: value for key, value in config.items() if key not in ignored_fields
+                }
+                self.assertEqual(controlled_fields, control_fields)
+                self.assertEqual(config["experiment_id"], experiment_id)
+                self.assertEqual(config["optimizer"], optimizer)
+
+    def test_e6b_configs_change_only_the_learning_rate_for_their_optimizer(self):
+        root = Path(__file__).resolve().parents[1]
+        cases = {
+            "E6b_adam_lr_0_001": "E6_optimizer_adam",
+            "E6b_rmsprop_lr_0_001": "E6_optimizer_rmsprop",
+        }
+        ignored_fields = {"experiment_id", "status", "learning_rate"}
+
+        for experiment_id, control_id in cases.items():
+            with self.subTest(experiment_id=experiment_id):
+                control = load_config(root / "configs" / f"{control_id}.json")
+                config = load_config(root / "configs" / f"{experiment_id}.json")
+                control_fields = {
+                    key: value for key, value in control.items() if key not in ignored_fields
+                }
+                adjusted_fields = {
+                    key: value for key, value in config.items() if key not in ignored_fields
+                }
+                self.assertEqual(adjusted_fields, control_fields)
+                self.assertEqual(config["learning_rate"], 0.001)
+
+    def test_e7_configs_change_only_dropout(self):
+        root = Path(__file__).resolve().parents[1]
+        control = load_config(root / "configs" / "E6_optimizer_sgd.json")
+        expected_dropout = {
+            "E7_dropout_0": 0.0,
+            "E7_dropout_0_2": 0.2,
+        }
+        ignored_fields = {"experiment_id", "status", "dropout"}
+        control_fields = {
+            key: value for key, value in control.items() if key not in ignored_fields
+        }
+
+        for experiment_id, dropout in expected_dropout.items():
+            with self.subTest(experiment_id=experiment_id):
+                config = load_config(root / "configs" / f"{experiment_id}.json")
+                compared_fields = {
+                    key: value for key, value in config.items() if key not in ignored_fields
+                }
+                self.assertEqual(compared_fields, control_fields)
+                self.assertEqual(config["dropout"], dropout)
+
+    def test_e8_configs_change_only_batch_normalization(self):
+        root = Path(__file__).resolve().parents[1]
+        control = load_config(root / "configs" / "E7_dropout_0_2.json")
+        expected_batch_normalization = {
+            "E8_batch_norm_off": False,
+            "E8_batch_norm_on": True,
+        }
+        ignored_fields = {"experiment_id", "status", "batch_normalization"}
+        control_fields = {
+            key: value for key, value in control.items() if key not in ignored_fields
+        }
+
+        for experiment_id, batch_normalization in expected_batch_normalization.items():
+            with self.subTest(experiment_id=experiment_id):
+                config = load_config(root / "configs" / f"{experiment_id}.json")
+                compared_fields = {
+                    key: value for key, value in config.items() if key not in ignored_fields
+                }
+                self.assertEqual(compared_fields, control_fields)
+                self.assertEqual(config["batch_normalization"], batch_normalization)
+
+    def test_e9_configs_change_only_l2_strength(self):
+        root = Path(__file__).resolve().parents[1]
+        control = load_config(root / "configs" / "E8_batch_norm_off.json")
+        expected_l2_strengths = {
+            "E9_l2_0": 0.0,
+            "E9_l2_1e-4": 0.0001,
+        }
+        ignored_fields = {"experiment_id", "status", "l2_strength"}
+        control_fields = {
+            key: value for key, value in control.items() if key not in ignored_fields
+        }
+
+        for experiment_id, l2_strength in expected_l2_strengths.items():
+            with self.subTest(experiment_id=experiment_id):
+                config = load_config(root / "configs" / f"{experiment_id}.json")
+                compared_fields = {
+                    key: value for key, value in config.items() if key not in ignored_fields
+                }
+                self.assertEqual(compared_fields, control_fields)
+                self.assertEqual(config["l2_strength"], l2_strength)
+
+    def test_l2_repetitions_change_only_the_seed_from_their_candidate(self):
+        root = Path(__file__).resolve().parents[1]
+        cases = {
+            "R_e9_l2_0_seed_7": "E9_l2_0",
+            "R_e9_l2_1e-4_seed_7": "E9_l2_1e-4",
+        }
+        ignored_fields = {"experiment_id", "status", "seed"}
+
+        for experiment_id, candidate_id in cases.items():
+            with self.subTest(experiment_id=experiment_id):
+                candidate = load_config(root / "configs" / f"{candidate_id}.json")
+                repetition = load_config(root / "configs" / f"{experiment_id}.json")
+                candidate_fields = {
+                    key: value for key, value in candidate.items() if key not in ignored_fields
+                }
+                repetition_fields = {
+                    key: value for key, value in repetition.items() if key not in ignored_fields
+                }
+                self.assertEqual(repetition_fields, candidate_fields)
+                self.assertEqual(repetition["seed"], 7)
+
+    def test_f0_freezes_the_selected_control_and_test_budget(self):
+        root = Path(__file__).resolve().parents[1]
+        selected = load_config(root / "configs" / "E9_l2_0.json")
+        frozen = load_config(root / "configs" / "F0_frozen_config.json")
+
+        selected_fields = {
+            key: value for key, value in selected.items() if key not in {"experiment_id", "status"}
+        }
+        frozen_fields = {
+            key: frozen[key] for key in selected_fields
+        }
+        self.assertEqual(frozen_fields, selected_fields)
+        self.assertEqual(frozen["status"], "frozen_pre_test")
+        self.assertEqual(frozen["final_evaluation_strategy"], "evaluate_selected_54k_model")
+        self.assertEqual(frozen["test_evaluation_budget"], 1)
+
+    def test_f1_decisory_record_is_bound_to_frozen_config_and_notebook_avoids_test(self):
+        root = Path(__file__).resolve().parents[1]
+        record_path = root / "results" / "records" / "F1_final_evaluation_record.json"
+        frozen_path = root / "configs" / "F0_frozen_config.json"
+        notebook_path = root / "notebooks" / "EP1_FashionMNIST_FINAL.ipynb"
+
+        record = json.loads(record_path.read_text(encoding="utf-8"))
+        frozen_hash = hashlib.sha256(frozen_path.read_bytes()).hexdigest()
+        notebook = json.loads(notebook_path.read_text(encoding="utf-8"))
+        notebook_code = "\n".join(
+            "".join(cell["source"])
+            for cell in notebook["cells"]
+            if cell["cell_type"] == "code"
+        )
+
+        self.assertEqual(record["decision_contract"], "local_decisory_evaluation_once")
+        self.assertEqual(record["frozen_config_sha256"], frozen_hash)
+        self.assertEqual(record["test_examples"], 10_000)
+        self.assertAlmostEqual(record["metrics"]["f1_macro"], 0.8836)
+        self.assertNotIn("X_test", notebook_code)
+        self.assertNotIn("model.fit(", notebook_code)
+        self.assertNotIn(".predict(", notebook_code)
+
 
 class ValidationMetricsTests(unittest.TestCase):
     def test_reports_macro_and_weighted_metrics(self):
@@ -320,6 +504,17 @@ class ValidationMetricsTests(unittest.TestCase):
         self.assertAlmostEqual(metrics.recall_weighted, 0.75)
         self.assertAlmostEqual(metrics.f1_weighted, 23 / 30)
         self.assertNotEqual(metrics.f1_macro, metrics.f1_weighted)
+
+    def test_final_metrics_and_frozen_protocol_guard(self):
+        root = Path(__file__).resolve().parents[1]
+        frozen = load_config(root / "configs" / "F0_frozen_config.json")
+        self.assertEqual(validate_frozen_config(frozen), frozen)
+        metrics = calculate_final_metrics(np.array([0, 0, 1, 1]), np.array([0, 1, 1, 1]))
+        self.assertAlmostEqual(metrics.accuracy, 0.75)
+        broken = dict(frozen)
+        broken["status"] = "validated_on_validation"
+        with self.assertRaisesRegex(ValueError, "frozen_pre_test"):
+            validate_frozen_config(broken)
 
 
 class TrainingSummaryTests(unittest.TestCase):

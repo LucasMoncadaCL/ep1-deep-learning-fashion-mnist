@@ -398,3 +398,201 @@ Mientras no exista una implementación completa, `validate_config` rechaza `earl
 ### Justificación técnica
 
 Fallar anticipadamente preserva la correspondencia entre configuración efectiva y evidencia. Si Cesar encuentra justificación para Early Stopping, deberá implementar y probar el callback junto con `monitor`, `patience`, `min_delta`, máximo de épocas y restauración de pesos antes de aceptar una configuración activa.
+
+---
+
+## D-019 - Retuning separado para optimizadores adaptativos
+
+**Estado:** aceptada
+
+**Fecha:** 19-09-2026
+
+### Situación
+
+E6 comparó SGD, RMSProp y Adam sobre la candidata `[256, 128]` con el mismo `learning_rate=0.1`, batch 128, 20 épocas, seed 42 y sin regularización. SGD obtuvo Accuracy de validation 0,8952 y F1 Macro 0,8954; RMSProp obtuvo 0,1985 y 0,0684; Adam obtuvo 0,4722 y 0,4166.
+
+### Decisión
+
+No declarar RMSProp ni Adam inferiores de forma global a partir de E6. Abrir E6b como comparaciones separadas de learning rate por optimizador, manteniendo cada optimizador, arquitectura, funciones, batch, épocas, seed y regularización constantes.
+
+### Justificación técnica
+
+E6 identifica el efecto de sustituir exclusivamente el optimizador bajo un presupuesto común. La degradación marcada de los adaptativos con `0.1` indica que esa escala puede no ser adecuada para ellos. Retunear learning rate dentro de E6 mezclaría dos variables; E6b conserva la trazabilidad necesaria para comparar el comportamiento inicial y el régimen ajustado.
+
+### Evidencia
+
+`results/tables/E6_optimizer_initial_comparison.md`, las figuras E6 y `notebooks/03_cesar_optimization_evaluation.ipynb`. El conjunto oficial de test no fue evaluado ni utilizado para esta decisión.
+
+---
+
+## D-020 - Control provisional después de E6b
+
+**Estado:** aceptada
+
+**Fecha:** 19-09-2026
+
+### Situación
+
+E6b ajustó `learning_rate=0.001` por separado para Adam y RMSProp, manteniendo las restantes condiciones de E6. Adam recuperó Accuracy de validation 0,8912 y F1 Macro 0,8916; RMSProp obtuvo 0,8933 y 0,8929. SGD con `learning_rate=0.1` conservó 0,8952 y 0,8954, respectivamente.
+
+### Decisión
+
+Mantener SGD con `learning_rate=0.1` como control provisional para los experimentos de regularización E7-E9. La configuración no queda congelada ni se selecciona todavía como modelo final.
+
+### Justificación técnica
+
+SGD presenta la mayor Accuracy y F1 Macro de las tres configuraciones retuneadas y los gaps finales más bajos. RMSProp quedó cerca en Accuracy, por lo que la diferencia debe repetirse con seeds adicionales antes de F0 si la selección final sigue dependiendo de ella. La elección actual permite evaluar regularización contra un control explícito sin demorar el flujo ni confundir las variables.
+
+### Evidencia
+
+`results/tables/E6b_retuned_optimizer_comparison.md` y sus figuras comparativas. El conjunto oficial de test no fue evaluado ni utilizado para esta decisión.
+
+---
+
+## D-021 - Dropout 0,2 como control para Batch Normalization
+
+**Estado:** aceptada
+
+**Fecha:** 19-09-2026
+
+### Situación
+
+E7 comparó la configuración SGD recibida con Dropout `0,0` y `0,2`, manteniendo fija arquitectura, funciones, learning rate, batch, épocas, seed, Batch Normalization y L2. Dropout `0,2` obtuvo Accuracy de validation 0,8997 y F1 Macro 0,8997 frente a 0,8952 y 0,8954 sin Dropout. Sus gaps finales de accuracy/loss fueron 0,0021 y 0,0135, frente a 0,0287 y 0,0851.
+
+### Decisión
+
+Mantener Dropout `0,2` como control para E8. Batch Normalization se comparará sobre esta configuración, manteniendo L2 en cero.
+
+### Justificación técnica
+
+La mejora conjunta de métricas y la reducción marcada de los gaps respaldan que el dropout empleado tras cada capa oculta favoreció la generalización en esta corrida. La selección no atribuye todavía efectos a combinaciones de regularizadores: E8 y E9 deben evaluar sus técnicas de manera controlada.
+
+### Evidencia
+
+`results/tables/E7_dropout_comparison.md` y sus figuras comparativas. El conjunto oficial de test no fue evaluado ni utilizado para esta decisión.
+
+---
+
+## D-022 - Batch Normalization desactivada para L2
+
+**Estado:** aceptada
+
+**Fecha:** 19-09-2026
+
+### Situación
+
+Antes de E8 se modificó `build_mlp` para que los bloques con Batch Normalization tengan el orden `Dense lineal → BatchNormalization → activación → Dropout`, y se añadió una prueba que comprueba esa estructura. E8 comparó Batch Normalization OFF/ON sobre el control de E7 con Dropout `0,2` y L2 `0`.
+
+### Decisión
+
+Mantener Batch Normalization desactivada para E9. E8 con Batch Normalization OFF obtuvo Accuracy de validation 0,8997 y F1 Macro 0,8997; con la técnica activa obtuvo 0,8922 y 0,8911, además de gaps mayores.
+
+### Justificación técnica
+
+El orden implementado aplica la normalización antes de ReLU y evita declarar una técnica con comportamiento ambiguo. Bajo las condiciones controladas de E8, añadir Batch Normalization no compensó su costo adicional ni mejoró generalización. La decisión es contextual y no descarta la técnica en otros regímenes de aprendizaje.
+
+### Evidencia
+
+`results/tables/E8_batch_norm_comparison.md`, sus figuras comparativas y la prueba `test_batch_normalization_precedes_hidden_activation`. El conjunto oficial de test no fue evaluado ni utilizado para esta decisión.
+
+---
+
+## D-023 - L2 desactivada para decidir Early Stopping
+
+**Estado:** aceptada
+
+**Fecha:** 19-09-2026
+
+### Situación
+
+E9 comparó L2 `0` y `1e-4` sobre el control con SGD, Dropout `0,2` y Batch Normalization apagada. Sin L2 se obtuvo Accuracy de validation 0,8997 y F1 Macro 0,8997; con L2 `1e-4`, 0,8967 y 0,8970. El gap de loss disminuyó levemente con L2, pero la loss incluye la penalización regularizadora.
+
+### Decisión
+
+Mantener `l2_strength=0` como control para decidir E10. No se incorporará L2 a menos que aparezca nueva evidencia después de evaluar el protocolo de Early Stopping.
+
+### Justificación técnica
+
+El control sin L2 presenta la mayor Accuracy y F1 Macro y ya tiene gaps pequeños debido a Dropout. La reducción marginal del gap de loss no compensa la pérdida de métricas ni permite interpretar la loss regularizada como un costo directamente equivalente.
+
+### Evidencia
+
+`results/tables/E9_l2_comparison.md` y sus figuras comparativas. El conjunto oficial de test no fue evaluado ni utilizado para esta decisión.
+
+---
+
+## D-024 - Early Stopping no implementado para la configuración seleccionada
+
+**Estado:** aceptada
+
+**Fecha:** 19-09-2026
+
+### Situación
+
+El control seleccionado con SGD, Dropout `0,2`, sin Batch Normalization y sin L2 alcanza su mejor validation accuracy y validation loss al final de las 20 épocas. El ejecutor rechaza explícitamente `early_stopping=true` porque el callback aún no está implementado.
+
+### Decisión
+
+No implementar ni ejecutar Early Stopping en esta etapa. Mantener el máximo de 20 épocas para la configuración que se congelará antes de test.
+
+### Justificación técnica
+
+No existe deterioro sostenido ni ahorro material de épocas que justifique ampliar el ejecutor y el contrato de callbacks. Activarlo sin una comparación interpretable agregaría complejidad sin evidencia de beneficio.
+
+### Evidencia
+
+Curvas y resúmenes de E7/E9. El conjunto oficial de test no fue evaluado ni utilizado para esta decisión.
+
+---
+
+## D-025 - Configuración congelada y estrategia de evaluación final
+
+**Estado:** aceptada
+
+**Fecha:** 19-09-2026
+
+### Decisión
+
+Congelar la configuración `F0_frozen_config`: MLP `[256, 128]`, ReLU, Softmax, categorical crossentropy, SGD con `learning_rate=0.1`, batch 128, 20 épocas, seed 42, Dropout `0.2`, sin Batch Normalization, L2 ni Early Stopping.
+
+Se evaluará una única vez el modelo seleccionado que conserva el split 54.000/6.000, sin reentrenar con los 60.000 ejemplos oficiales.
+
+### Justificación técnica
+
+La configuración reúne la mejor evidencia disponible de validation. Las corridas canónicas disponibles favorecen mantener L2 apagada, mientras una revisión externa observó una diferencia marginal e inversión; por ello se adopta L2 cero como opción prudente, sin atribuirle estabilidad robusta entre entornos. Conservar el split permite evaluar el modelo cuya configuración y número de épocas fueron seleccionados sin convertir test en sustituto de validation.
+
+### Evidencia y restricción
+
+`configs/F0_frozen_config.json` y `results/tables/F0_frozen_protocol.md`. A partir de esta decisión no se ajustarán arquitectura, funciones, optimizador, hiperparámetros, regularización ni épocas después de observar test.
+
+---
+
+## D-026 - Registro de evaluación final única
+
+**Estado:** aceptada
+
+**Fecha:** 19-09-2026
+
+La configuración congelada se evaluó una única vez sobre los 10.000 ejemplos oficiales de test. Alcanzó Accuracy 0,8838 y F1 Macro 0,8836. Las mayores dificultades se concentran en Shirt y en confusiones visualmente plausibles entre prendas superiores. Estos resultados se registran como evaluación final; no habilitan ajustes posteriores.
+
+---
+
+## D-027 - Fuente canónica y contrato de presentación de F1
+
+**Estado:** aceptada
+
+**Fecha:** 20-09-2026
+
+### Decisión
+
+La implementación canónica es exclusivamente el paquete bajo `src/ep1_fashion_mnist/`. El registro local de F1 ya evaluado es la única evaluación decisoria de test y queda versionado en `results/records/F1_final_evaluation_record.json`, vinculado al hash de `configs/F0_frozen_config.json`.
+
+El notebook final de Colab clona esta rama y presenta configuraciones, tablas, figuras y el registro F1. Puede reproducir validación si se requiere, pero no debe entrenar F1, predecir ni evaluar sobre test.
+
+### Justificación técnica
+
+Una segunda consulta de test sería otra evaluación y no debe confundirse con la medición decisoria ya registrada. Centralizar la implementación evita que un notebook con un modelo alternativo produzca métricas no comparables o cambie decisiones como la selección del optimizador.
+
+### Evidencia
+
+`docs/FINAL_EVALUATION_CONTRACT.md`, `results/records/F1_final_evaluation_record.json`, `results/tables/R03_canonical_validation_reproduction.md` y `notebooks/EP1_FashionMNIST_FINAL.ipynb`.

@@ -4,11 +4,11 @@ Proyecto colaborativo para estudiar cómo la arquitectura, las funciones, los hi
 
 ## Estado
 
-La etapa inicial de Ignacio fue aceptada e integrada. La etapa de Lucas completó la infraestructura experimental y las comparaciones E3–E5; permanece `READY_FOR_REVIEW` antes de integrarse y habilitar el trabajo de Cesar. Todos los ajustes se ejecutaron exclusivamente sobre train/validation y el conjunto oficial de test continúa sellado.
+Las etapas de Ignacio y Lucas están integradas. Cesar completó las comparaciones E6–E9, congeló la configuración F0 exclusivamente con train/validation y ejecutó la evaluación F1 una sola vez sobre test. La configuración final, sus métricas y limitaciones están resumidas en [`results/tables/FINAL_MODEL_SELECTION.md`](results/tables/FINAL_MODEL_SELECTION.md); no se permiten ajustes posteriores a F1.
 
-Los puntos de entrada actuales son [`docs/handoffs/RUN_HANDOFF_02_LUCAS.md`](docs/handoffs/RUN_HANDOFF_02_LUCAS.md) para revisar la entrega de Lucas y [`docs/handoffs/RUN_HANDOFF_03_CESAR.md`](docs/handoffs/RUN_HANDOFF_03_CESAR.md) para preparar la etapa siguiente una vez aceptada la integración.
+Los puntos de entrada para revisar el cierre son [`docs/collaborators/cesar/REPORT.md`](docs/collaborators/cesar/REPORT.md), [`results/tables/FINAL_MODEL_SELECTION.md`](results/tables/FINAL_MODEL_SELECTION.md) y [`docs/DECISION_LOG.md`](docs/DECISION_LOG.md).
 
-El plan experimental vivo de la siguiente etapa está en [`docs/collaborators/cesar/PLAN.md`](docs/collaborators/cesar/PLAN.md); permanece bloqueado hasta que el Handoff 02 sea aceptado e integrado.
+El plan ejecutado de Cesar está en [`docs/collaborators/cesar/PLAN.md`](docs/collaborators/cesar/PLAN.md). El archivo `notebooks/EP1_FashionMNIST_FINAL.ipynb` es el cuaderno de entrega para Colab: obtiene la evidencia versionada de esta rama, usa `src/` como implementación canónica y presenta el registro F1 sin volver a evaluar test. El contrato está en [`docs/FINAL_EVALUATION_CONTRACT.md`](docs/FINAL_EVALUATION_CONTRACT.md).
 
 ## Principios
 
