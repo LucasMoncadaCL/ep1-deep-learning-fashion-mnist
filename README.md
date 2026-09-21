@@ -8,7 +8,7 @@ Las etapas de Ignacio y Lucas están integradas. Cesar completó las comparacion
 
 Los puntos de entrada para revisar el cierre son [`docs/collaborators/cesar/REPORT.md`](docs/collaborators/cesar/REPORT.md), [`results/tables/FINAL_MODEL_SELECTION.md`](results/tables/FINAL_MODEL_SELECTION.md) y [`docs/DECISION_LOG.md`](docs/DECISION_LOG.md).
 
-El plan ejecutado de Cesar está en [`docs/collaborators/cesar/PLAN.md`](docs/collaborators/cesar/PLAN.md). El archivo `notebooks/EP1_FashionMNIST_FINAL.ipynb` es el cuaderno de entrega para Colab: obtiene la evidencia versionada de esta rama, usa `src/` como implementación canónica y presenta el registro F1 sin volver a evaluar test. El contrato está en [`docs/FINAL_EVALUATION_CONTRACT.md`](docs/FINAL_EVALUATION_CONTRACT.md).
+El plan ejecutado de Cesar está en [`docs/collaborators/cesar/PLAN.md`](docs/collaborators/cesar/PLAN.md). El archivo `notebooks/EP1_FashionMNIST_FINAL.ipynb` es el cuaderno de entrega para Colab: obtiene la evidencia versionada de esta rama, usa `src/` como implementación canónica y ejecuta una demostración de preprocesamiento, MLP, entrenamiento y métricas sobre validation. Presenta el registro F1 sin volver a evaluar test. El contrato está en [`docs/FINAL_EVALUATION_CONTRACT.md`](docs/FINAL_EVALUATION_CONTRACT.md).
 
 ## Principios
 

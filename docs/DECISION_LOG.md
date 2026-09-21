@@ -587,7 +587,7 @@ La configuración congelada se evaluó una única vez sobre los 10.000 ejemplos 
 
 La implementación canónica es exclusivamente el paquete bajo `src/ep1_fashion_mnist/`. El registro local de F1 ya evaluado es la única evaluación decisoria de test y queda versionado en `results/records/F1_final_evaluation_record.json`, vinculado al hash de `configs/F0_frozen_config.json`.
 
-El notebook final de Colab clona esta rama y presenta configuraciones, tablas, figuras y el registro F1. Puede reproducir validación si se requiere, pero no debe entrenar F1, predecir ni evaluar sobre test.
+El notebook final de Colab clona esta rama, importa la implementación canónica y ejecuta una demostración reproducible de preprocesamiento, MLP, entrenamiento y métricas sobre validation. Además presenta configuraciones, tablas, figuras y el registro F1. Puede reproducir validation si se requiere, pero no debe entrenar F1, predecir ni evaluar sobre test.
 
 ### Justificación técnica
 

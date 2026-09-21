@@ -484,9 +484,14 @@ class ModelAndConfigurationTests(unittest.TestCase):
         self.assertEqual(record["frozen_config_sha256"], frozen_hash)
         self.assertEqual(record["test_examples"], 10_000)
         self.assertAlmostEqual(record["metrics"]["f1_macro"], 0.8836)
-        self.assertNotIn("X_test", notebook_code)
-        self.assertNotIn("model.fit(", notebook_code)
-        self.assertNotIn(".predict(", notebook_code)
+        self.assertNotIn("data.X_test", notebook_code)
+        self.assertNotIn("data.y_test", notebook_code)
+        self.assertNotIn("final_evaluation import", notebook_code)
+        self.assertNotIn("model.evaluate(", notebook_code)
+        self.assertIn("prepare_fashion_mnist", notebook_code)
+        self.assertIn("f0_model.summary()", notebook_code)
+        self.assertIn("model.fit(", notebook_code)
+        self.assertIn("calculate_validation_metrics", notebook_code)
 
 
 class ValidationMetricsTests(unittest.TestCase):

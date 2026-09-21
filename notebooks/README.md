@@ -16,7 +16,7 @@ Los notebooks contienen narrativa, ejecución y evidencia; la lógica reutilizab
 - `01_ignacio_data_baseline.ipynb`: bloque de datos, E0, E1 y E2.
 - `02_lucas_hyperparameters.ipynb`: E3, E4 y E5; ejecutado localmente desde `.venv` y listo para revisión.
 - `03_cesar_optimization_evaluation.ipynb`: integra E6–F1 como evidencia de solo lectura; no vuelve a entrenar ni consulta test.
-- `EP1_FashionMNIST_FINAL.ipynb`: notebook de entrega para Colab. Clona esta rama para presentar la evidencia versionada y usa `src/` como implementación canónica; muestra el registro F1 decisorio, pero no vuelve a consultar test.
+- `EP1_FashionMNIST_FINAL.ipynb`: notebook de entrega para Colab. Clona esta rama, usa `src/` como implementación canónica y ejecuta una demostración reproducible de preprocesamiento, MLP, entrenamiento y métricas sobre validation. Muestra el registro F1 decisorio, pero no vuelve a evaluarlo ni usa test para ajustes.
 
 Reproducción del notebook de Lucas desde la raíz:
 

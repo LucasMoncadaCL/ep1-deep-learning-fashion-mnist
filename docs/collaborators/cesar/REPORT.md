@@ -24,7 +24,7 @@
 - Se corrigió y probó el orden Batch Normalization→ReLU. E8 mostró que activar Batch Normalization empeora las métricas y gaps bajo este control, por lo que queda desactivada para E9.
 - Se ejecutó E9 con L2 `0` y `1e-4`; L2 no superó el control ya regularizado con Dropout, por lo que queda en cero.
 - Las corridas canónicas L2 con seeds 42 y 7 favorecieron la configuración sin L2. Una revisión externa observó una diferencia marginal e inversión, por lo que L2 cero se reporta como opción prudente y no como ventaja robusta entre entornos. Se descartó Early Stopping por falta de oportunidad material y se congeló F0 antes de test.
-- F1 se ejecutó una única vez mediante el evaluador separado: Accuracy de test 0,8838 y F1 Macro 0,8836. El resultado decisorio quedó versionado junto al hash de F0 y sus versiones; el notebook de Colab lo presenta sin volver a consultar test.
+- F1 se ejecutó una única vez mediante el evaluador separado: Accuracy de test 0,8838 y F1 Macro 0,8836. El resultado decisorio quedó versionado junto al hash de F0 y sus versiones; el notebook de Colab ejecuta una demostración sobre validation y presenta F1 sin volver a consultar test.
 
 ## Archivos creados o modificados
 
@@ -136,7 +136,7 @@ No hay desviaciones metodológicas. La documentación aún debe registrar la ace
 
 ## Asuntos abiertos
 
-- La ejecución limpia de `EP1_FashionMNIST_FINAL.ipynb` en Google Colab fue verificada después de publicar la rama; presentó la evidencia sin ejecutar F1 ni consultar test.
+- La ejecución limpia de `EP1_FashionMNIST_FINAL.ipynb` en Google Colab debe verificar la demostración de preprocesamiento, MLP, entrenamiento y métricas sobre validation, sin ejecutar F1 ni consultar test.
 - Solicitar revisión humana de cierre sobre el notebook canónico, el contrato F1 y la documentación corregida.
 
 ## Resumen para la integración grupal
