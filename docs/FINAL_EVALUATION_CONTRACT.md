@@ -16,7 +16,7 @@ El notebook final puede clonarse desde la rama del repositorio y presentar la ev
 
 Una repetición de F1 para fines técnicos no puede modificar F0, escoger nuevas métricas ni reemplazar el registro decisorio. Si el docente exige una nueva F1 oficial en Colab, el equipo debe abrir un nuevo protocolo, documentarlo antes de ejecutarlo y regenerar todos los artefactos desde esa única corrida; no se puede elegir entre resultados según su valor.
 
-La ejecución limpia de entrega en Google Colab fue validada tras publicar la rama de corrección. Presentó la evidencia versionada sin entrenar F1, predecir ni consultar test.
+La ejecución limpia de entrega en Google Colab fue validada tras publicar la rama de corrección. El cuaderno ejecuta una demostración didáctica y reproducible sobre train/validation para mostrar preprocesamiento, MLP, entrenamiento y métricas. Esta demostración no entrena F1, no predice sobre test y no modifica las decisiones oficiales.
 
 ## Variabilidad de validation
 
